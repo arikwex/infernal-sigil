@@ -1,17 +1,20 @@
 const path = require('path');
 const esbuild = require('esbuild');
-const { optimize, html, zip, stats } = require('./packager');
+const { minify, optimize, html, zip, stats } = require('./packager');
 
 const entry = path.resolve('./src/main.js');
-const watch = process.argv.includes('--watch');
-const minify = process.argv.includes('--minify');
-const roadroll = process.argv.includes('--roadroll');
+const useWatch = process.argv.includes('--watch');
+const useMinify = process.argv.includes('--minify');
+const useRoadroller = process.argv.includes('--roadroll');
 
 let postBuildPlugin = {
     name: 'Post-Build',
     setup(build) {
         build.onEnd(async() => {
-            if (roadroll) {
+            if (useMinify) {
+                minify();
+            }
+            if (useRoadroller) {
                 await optimize();
             }
             html();
@@ -25,7 +28,6 @@ const buildProcess = esbuild.build({
     entryPoints: [entry],
     outfile: './dist/build.js',
     bundle: true,
-    watch,
-    minify,
+    watch: useWatch,
     plugins: [postBuildPlugin],
 });

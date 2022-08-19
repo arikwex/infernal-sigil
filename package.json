@@ -4,26 +4,18 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "node tools/esbuild.js --watch --minify --roadroll",
-        "dev:mid": "node tools/esbuild.js --watch --minify",
-        "dev:fast": "node tools/esbuild.js --watch",
-        "build": "node tools/esbuild.js --minify --roadroll",
-        "build:mid": "node tools/esbuild.js --minify",
-        "build:fast": "node tools/esbuild.js"
+        "dev:optimize": "node tools/esbuild.js --watch --minify --roadroll",
+        "dev:minify": "node tools/esbuild.js --watch --minify",
+        "dev": "node tools/esbuild.js --watch",
+        "build": "node tools/esbuild.js --minify --roadroll"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/arikwex/infernal-sigil.git"
-    },
-    "author": "",
     "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/arikwex/infernal-sigil/issues"
-    },
     "homepage": "https://github.com/arikwex/infernal-sigil#readme",
     "devDependencies": {
         "bestzip": "^2.2.1",
+        "chalk": "^4.1.2",
         "esbuild": "^0.15.5",
-        "roadroller": "git+https://github.com/lifthrasiir/roadroller.git"
+        "roadroller": "git+https://github.com/lifthrasiir/roadroller.git",
+        "uglify-js": "^3.17.0"
     }
 }
