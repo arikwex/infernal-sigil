@@ -1,2 +1,4 @@
 import { canvas } from './canvas';
-console.log('helloz');
+import { StringDecoder } from 'string_decoder';
+console.log('helloqz');
+console.log(StringDecoder())

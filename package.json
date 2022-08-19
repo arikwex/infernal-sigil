@@ -4,20 +4,12 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon --watch src --exec \"npm run build\"",
-        "dev:mid": "nodemon --watch src --exec \"npm run build:mid\"",
-        "dev:fast": "nodemon --watch src --exec \"npm run build:fast\"",
-        "build": "npm run compile && npm run package",
-        "build:mid": "npm run compile && npm run package:mid",
-        "build:fast": "npm run compile && cat dist/bundle.js > dist/bundle.min.js && npm run html",
-        "compile": "rollup src/main.js --format es --no-strict --file dist/bundle.js",
-        "package": "npm run minify && npm run roadroller && npm run html && npm run zip && npm run status",
-        "package:mid": "npm run minify && npm run html && npm run zip && npm run status",
-        "minify": "uglifyjs --compress --mangle -o dist/bundle.min.js -- dist/bundle.js",
-        "roadroller": "roadroller dist/bundle.min.js -o dist/bundle.min.js --optimize 2",
-        "html": "node src/build-html.js",
-        "zip": "bestzip dist/build.zip index.html",
-        "status": "node src/file-size.js"
+        "dev": "node tools/esbuild.js --watch --minify --roadroll",
+        "dev:mid": "node tools/esbuild.js --watch --minify",
+        "dev:fast": "node tools/esbuild.js --watch",
+        "build": "node tools/esbuild.js --minify --roadroll",
+        "build:mid": "node tools/esbuild.js --minify",
+        "build:fast": "node tools/esbuild.js"
     },
     "repository": {
         "type": "git",
@@ -31,10 +23,7 @@
     "homepage": "https://github.com/arikwex/infernal-sigil#readme",
     "devDependencies": {
         "bestzip": "^2.2.1",
-        "nodemon": "^2.0.19",
-        "onchange": "^7.1.0",
-        "roadroller": "git+https://github.com/lifthrasiir/roadroller.git",
-        "rollup": "^2.78.0",
-        "uglify-js": "^3.17.0"
+        "esbuild": "^0.15.5",
+        "roadroller": "git+https://github.com/lifthrasiir/roadroller.git"
     }
 }
