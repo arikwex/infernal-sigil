@@ -1,0 +1,39 @@
+{
+    "name": "death-js13k2022",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "onchange -i 'src/**/*.js' -- npm run build",
+        "dev:mid": "onchange -i 'src/**/*.js' -- npm run build:mid",
+        "dev:fast": "onchange -i 'src/**/*.js' -- npm run build:fast",
+        "build": "npm run compile && npm run package",
+        "build:mid": "npm run compile && npm run package:mid",
+        "build:fast": "npm run compile && cat dist/bundle.js > dist/bundle.min.js && npm run html",
+        "compile": "rollup src/main.js --format es --no-strict --file dist/bundle.js",
+        "package": "npm run minify && npm run roadroller && npm run html && npm run zip && npm run status",
+        "package:mid": "npm run minify && npm run html && npm run zip && npm run status",
+        "minify": "uglifyjs --compress --mangle -o dist/bundle.min.js -- dist/bundle.js",
+        "roadroller": "roadroller dist/bundle.min.js -o dist/bundle.min.js --optimize 2",
+        "html": "node src/build-html.js",
+        "zip": "bestzip dist/build.zip index.html",
+        "status": "node src/file-size.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/arikwex/infernal-sigil.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/arikwex/infernal-sigil/issues"
+    },
+    "homepage": "https://github.com/arikwex/infernal-sigil#readme",
+    "devDependencies": {
+        "bestzip": "^2.2.1",
+        "onchange": "^7.1.0",
+        "roadroller": "git+https://github.com/lifthrasiir/roadroller.git",
+        "rollup": "^2.78.0",
+        "uglify-js": "^3.17.0"
+    }
+}
