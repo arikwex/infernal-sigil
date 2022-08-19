@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "onchange -i 'src/**/*.js' -- npm run build",
-        "dev:mid": "onchange -i 'src/**/*.js' -- npm run build:mid",
-        "dev:fast": "onchange -i 'src/**/*.js' -- npm run build:fast",
+        "dev": "nodemon --watch src --exec \"npm run build\"",
+        "dev:mid": "nodemon --watch src --exec \"npm run build:mid\"",
+        "dev:fast": "nodemon --watch src --exec \"npm run build:fast\"",
         "build": "npm run compile && npm run package",
         "build:mid": "npm run compile && npm run package:mid",
         "build:fast": "npm run compile && cat dist/bundle.js > dist/bundle.min.js && npm run html",
@@ -31,6 +31,7 @@
     "homepage": "https://github.com/arikwex/infernal-sigil#readme",
     "devDependencies": {
         "bestzip": "^2.2.1",
+        "nodemon": "^2.0.19",
         "onchange": "^7.1.0",
         "roadroller": "git+https://github.com/lifthrasiir/roadroller.git",
         "rollup": "^2.78.0",

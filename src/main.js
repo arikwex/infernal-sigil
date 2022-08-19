@@ -1,1 +1,2 @@
-console.log('hello');
+import { canvas } from './canvas';
+console.log('helloz');
