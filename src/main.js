@@ -1,3 +1,5 @@
-import { start } from './engine';
-import * as bus from './bus';
+import { start, add } from './engine';
+import Player from './player';
+
 start();
+add(new Player(400, 300));
