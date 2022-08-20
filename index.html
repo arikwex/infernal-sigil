@@ -3,8 +3,27 @@
   var canvas = document.getElementsByTagName("canvas")[0];
   canvas.width = 800;
   canvas.height = 600;
+  var ctx = canvas.getContext("2d");
+
+  // src/engine.js
+  var gameObjects = [];
+  var lastFrameMs = 0;
+  function tick(currentFrameMs) {
+    const dT = (currentFrameMs - lastFrameMs) * 1e-3;
+    gameObjects.map((g) => {
+      g.update(dT);
+    });
+    gameObjects.map((g) => {
+      g.render(dT);
+    });
+    requestAnimationFrame(tick);
+    lastFrameMs = currentFrameMs;
+  }
+  function start() {
+    requestAnimationFrame(tick);
+  }
 
   // src/main.js
-  console.log("hello");
+  start();
 })();
 </script></html>

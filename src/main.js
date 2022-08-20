@@ -1,2 +1,2 @@
-import { canvas } from './canvas';
-console.log('hello');
+import { start } from './engine';
+start();
