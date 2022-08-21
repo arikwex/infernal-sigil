@@ -15,9 +15,9 @@ function Player(x, y) {
     ];
     const bodyMesh = [
         ['#e22', thickness, 0],
-        [0, 0, 0, 20],
-        [0, 20, 7, 37],
-        [0, 20, -7, 37],
+        [0, -37, 0, 20-37],
+        [0, 20-37, 7, 0],
+        [0, 20-37, -7, 0],
     ];
     const handMesh = [
         ['#e22', thickness, 0],
@@ -28,28 +28,63 @@ function Player(x, y) {
     ];
     const tailMesh = [
         ['#e22', thickness, 0],
-        [0, 20, -16, 31, -26, 31, -32, 22, -34, 15]
+        [0, 20-37, -16, 31-37, -26, 31-37, -32, 22-37, -34, 15-37]
     ];
 
     function update(dT) {
         anim += dT;
+        pos.x += dT * 300 * Math.cos(anim * 2);
     }
 
     function render(ctx) {
-        const t = Math.cos(anim) * 0.7;
-        const a = anim * 6;
+        renderRun(ctx);
+    }
+
+    function renderRun(ctx) {
+        const heading = Math.cos(anim * 2);
+        const a = anim * 18;
+        const t = -0.6 * heading + Math.cos(a*0.5) * 0.1;
+        const p = 0.4;
 
         renderMesh(tailMesh, { x: pos.x, y: pos.y - 8, z: 0 }, { t: t + 1.57 + t * 0.3, p: 0 });
-        renderMesh(handMesh, { x: pos.x, y: pos.y - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t, p: 0 });
+        renderMesh(handMesh, { x: pos.x + 5 * heading, y: pos.y - 31 - heading - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t, p: -0.5 });
         renderMesh(bodyMesh, { x: pos.x, y: pos.y - 8, z: 0 }, { t: t, p: 0 });
-        renderMesh(handMesh, { x: pos.x, y: pos.y - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t+3.14, p: 0 });
-        renderMesh(headMesh, { x: pos.x, y: pos.y + Math.cos(a + 1) * 1.5 + 1, z: 10 }, { t: t, p: t*0.3 });
+        renderMesh(handMesh, { x: pos.x + 4 * heading, y: pos.y - 31 + heading - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t+3.14, p: 0.5 });
+        renderMesh(headMesh, { x: pos.x + 10 * heading, y: pos.y - 23 + Math.cos(a + 1) * 1.5 + 1, z: 10 }, { t: t, p: t*0.3 + 0.2 * heading });
 
-        //[0, 20, -16, 31, -26, 31, -32, 22, -34, 15]
-        tailMesh[1][3] = Math.cos(a) * 1 + 31;
-        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31;
-        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22;
-        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15;
+        // Body animation
+        bodyMesh[1][0] = 10 * heading;
+        bodyMesh[1][1] = -23;
+
+        // Leg animation
+        bodyMesh[2][2] = (Math.cos(a) * 7 - 4) * heading;
+        bodyMesh[2][3] = Math.min(Math.sin(a) * 7, 0);
+        bodyMesh[3][2] = (Math.cos(a + 3.2) * 7 - 4) * heading;
+        bodyMesh[3][3] = Math.min(Math.sin(a + 3.2) * 7, 0);
+
+        // Tail animation while running
+        tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
+        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37;
+        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37;
+        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
+    }
+
+    function renderIdle(ctx) {
+        const t = Math.cos(anim) * 0.7;
+        const a = anim * 6;
+        const p = 0.4;
+
+        renderMesh(tailMesh, { x: pos.x, y: pos.y - 8, z: 0 }, { t: t + 1.57 + t * 0.3, p: 0 });
+        renderMesh(handMesh, { x: pos.x, y: pos.y - 37 - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t, p: 0 });
+        renderMesh(bodyMesh, { x: pos.x, y: pos.y - 8, z: 0 }, { t: t, p: 0 });
+        renderMesh(handMesh, { x: pos.x, y: pos.y - 37 - Math.cos(a + 3) * 1.5 + 1, z: 0 }, { t: t+3.14, p: 0 });
+        renderMesh(headMesh, { x: pos.x, y: pos.y - 37 + Math.cos(a + 1) * 1.5 + 1, z: 10 }, { t: t, p: t*0.3 + 0 });
+
+        // Tail animation at rest
+        tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
+        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37;
+        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37;
+        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
     }
 
     return {
