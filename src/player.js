@@ -10,13 +10,19 @@ function Player(x, y) {
         [-9, -11, -3, -9],
         [9, -11, 3, -9],
     ];
+    const bodyMesh = [
+        ['#e22', 10, 0],
+        [0, 0, 0, 20],
+        [0, 20, 7, 36],
+        [0, 20, -7, 37],
+    ];
 
     function update(dT) {
     }
 
     function render(ctx) {
-        const rot = { t: -0.6, p: -0.1 };
-        renderMesh(headMesh, pos, rot);
+        renderMesh(bodyMesh, { x: pos.x - 6, y: pos.y - 4 }, { t: -0.6, p: 0.1 });
+        renderMesh(headMesh, pos, { t: -0.6, p: -0.1 });
     }
 
     return {
