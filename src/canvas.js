@@ -6,21 +6,20 @@ const ctx = canvas.getContext('2d');
 function thickness(t) { ctx.lineWidth = t; }
 function color(c) { ctx.strokeStyle = c; ctx.fillStyle = c; }
 
-function renderMesh(mesh, pos, rot) {
+function renderMesh(mesh, x, y, baseZ, theta, phi) {
     const xfm = ctx.getTransform();
-    ctx.translate(pos.x, pos.y);
-    ctx.rotate(rot.p);
-    const d = Math.cos(rot.t);
-    const d2 = Math.sin(rot.t);
-    let z = pos.z;
-    // x' = cos * x - sin * z
+    ctx.translate(x, y);
+    ctx.rotate(phi);
+    const d = Math.cos(theta);
+    const d2 = Math.sin(theta);
+    let z = baseZ;
 
     for (let r = 0; r < mesh.length; r++) {
         const data = mesh[r];
         if (data.length == 3) {
             color(data[0]);
             thickness(data[1]);
-            z = pos.z + data[2];
+            z = baseZ + data[2];
         } else {
             ctx.beginPath();
             ctx.moveTo(data[0] * d - z * d2, data[1]);
