@@ -1,7 +1,6 @@
 import { color, renderMesh } from './canvas';
 
 function Player(x, y) {
-    const pos = { x, y };
     const thickness = 9;
     let anim = 0;
 
@@ -33,7 +32,7 @@ function Player(x, y) {
 
     function update(dT) {
         anim += dT;
-        // pos.x += dT * 300 * Math.cos(anim * 2);
+        // x += dT * 300 * Math.cos(anim * 2);
     }
 
     function render(ctx) {
@@ -46,11 +45,11 @@ function Player(x, y) {
         const t = -0.6 * heading + Math.cos(a*0.5) * 0.1;
         const p = 0.4;
 
-        renderMesh(tailMesh, pos.x, pos.y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, pos.x + 5 * heading, pos.y - 31 - heading - Math.cos(a + 3) * 1.5 + 1, 0, t, -0.5);
-        renderMesh(bodyMesh, pos.x, pos.y - 8, 0, t, 0);
-        renderMesh(handMesh, pos.x + 4 * heading, pos.y - 31 + heading - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0.5);
-        renderMesh(headMesh, pos.x + 10 * heading, pos.y - 23 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading);
+        renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
+        renderMesh(handMesh, x + 5 * heading, y - 31 - heading - Math.cos(a + 3) * 1.5 + 1, 0, t, -0.5);
+        renderMesh(bodyMesh, x, y - 8, 0, t, 0);
+        renderMesh(handMesh, x + 4 * heading, y - 31 + heading - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0.5);
+        renderMesh(headMesh, x + 10 * heading, y - 23 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading);
 
         // Body animation
         bodyMesh[1][0] = 10 * heading;
@@ -74,11 +73,11 @@ function Player(x, y) {
         const a = anim * 6;
         const p = 0.4;
 
-        renderMesh(tailMesh, pos.x, pos.y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, pos.x, pos.y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t, 0);
-        renderMesh(bodyMesh, pos.x, pos.y - 8, 0, t, 0);
-        renderMesh(handMesh, pos.x, pos.y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0);
-        renderMesh(headMesh, pos.x, pos.y - 37 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0);
+        renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
+        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t, 0);
+        renderMesh(bodyMesh, x, y - 8, 0, t, 0);
+        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0);
+        renderMesh(headMesh, x, y - 37 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0);
 
         // Tail animation at rest
         tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
