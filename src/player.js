@@ -13,7 +13,7 @@ function Player(x, y) {
     let grounded = 0;
     let smoothGrounded = 0;
     
-    const MAX_SPEED = 500;
+    const MAX_SPEED = 400;
     const TERMINAL_VELOCITY = 800;
 
     const headMesh = [
@@ -61,7 +61,7 @@ function Player(x, y) {
 
         // jumping
         if (jump() && vy == 0) {
-            vy = -700;
+            vy = -800;
             grounded = 0;
         }
         if (y < 300 || vy < 0) {
@@ -126,29 +126,6 @@ function Player(x, y) {
         tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
         tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
         tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
-    }
-
-    function renderIdle(ctx) {
-        const t = -0.6 * facing;
-        const a = anim * 6;
-
-        renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t, -1.2 * tailWhip/800);
-        renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 1.2 * tailWhip/800);
-        renderMesh(headMesh, x, y - 37 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + facing * tailWhip/1000);
-
-        // Tail animation at rest
-        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
-        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
-        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
-        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
-
-        // legs
-        bodyMesh[2][2] = 5 + tailWhip/50;
-        bodyMesh[2][3] = -4 - tailWhip/70;
-        bodyMesh[3][2] = -6 + tailWhip/50;
-        bodyMesh[3][3] = 2 - tailWhip/70;
     }
 
     return {

@@ -1,6 +1,6 @@
 const canvas = document.getElementsByTagName('canvas')[0];
-canvas.width = 800;
-canvas.height = 600;
+canvas.width = 1200;
+canvas.height = window.innerHeight * 800 / window.innerWidth;
 const ctx = canvas.getContext('2d');
 
 function thickness(t) { ctx.lineWidth = t; }
