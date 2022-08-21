@@ -1,3 +1,4 @@
+import { horizontal } from './controls';
 import { color, renderMesh } from './canvas';
 
 function Player(x, y) {
@@ -32,15 +33,20 @@ function Player(x, y) {
 
     function update(dT) {
         anim += dT;
-        // x += dT * 300 * Math.cos(anim * 2);
+        //x += dT * 300 * Math.cos(anim * 2);
+        x += dT * 300 * horizontal();
     }
 
     function render(ctx) {
-        renderIdle(ctx);
+        if (horizontal()) {
+            renderRun(ctx);
+        } else {
+            renderIdle(ctx);
+        }
     }
 
     function renderRun(ctx) {
-        const heading = Math.cos(anim * 2);
+        const heading = horizontal();//Math.cos(anim * 2);
         const a = anim * 18;
         const t = -0.6 * heading + Math.cos(a*0.5) * 0.1;
         const p = 0.4;
