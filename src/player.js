@@ -124,7 +124,9 @@ function Player(x, y) {
         // Tail animation while running
         tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
         tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
+        tailMesh[1][6] = -32-Math.abs(tailWhip/190);
         tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
+        tailMesh[1][8] = -34+tailWhip/70;
         tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
     }
 
