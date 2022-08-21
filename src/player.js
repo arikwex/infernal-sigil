@@ -8,7 +8,8 @@ function Player(x, y) {
     let vy = 0;
     let facing = 1;
     let targetFacing = 1;
-    let running = 0;
+    let targetRunning = 0;
+    let tailWhip = 0;
     const MAX_SPEED = 500;
 
     const headMesh = [
@@ -45,10 +46,10 @@ function Player(x, y) {
         if (Math.abs(h) > 0.3) {
             vx += 3000 * Math.sign(h) * dT;
             anim += 2 * dT;
-            running += (1 - running) * 4 * dT;
+            targetRunning += (1 - targetRunning) * 4 * dT;
             targetFacing = Math.sign(h);
         } else {
-            running += (0 - running) * 4 * dT;
+            targetRunning += (0 - targetRunning) * 4 * dT;
         }
         if (Math.sign(h) != Math.sign(vx)) {
             vx -= vx * 14 * dT;
@@ -71,13 +72,18 @@ function Player(x, y) {
 
         facing += (targetFacing - facing) * 15 * dT;
         vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+        tailWhip += (vy - tailWhip) * 10 * dT;
         y += dT * vy;
         x += dT * vx;
     }
 
     function render(ctx) {
+        renderIdle(ctx);
+        return;
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
-        const idle = 1 - running;
+        const jumping = Math.max(Math.min(vy / 200, 1), -1);
+        const running = targetRunning * (1 - jumping);
+        const idle = (1 - running) * (1 - jumping);
 
         const a = anim * 6;
         const t = (-facing * 0.7 + Math.cos(anim * 2) * 0.2) * idle + (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running;
@@ -115,52 +121,28 @@ function Player(x, y) {
         tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
     }
 
-    // function renderRun(ctx) {
-    //     const heading = vx / MAX_SPEED;
-    //     const a = anim * 18;
-    //     const t = -0.6 * heading + Math.cos(a*0.5) * 0.1;
-    //     const p = 0.4;
+    function renderIdle(ctx) {
+        const t = -0.6 * facing;
+        const a = anim * 6;
 
-    //     renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-    //     renderMesh(handMesh, x + 5 * heading, y - 31 - heading - Math.cos(a + 3) * 1.5 + 1, 0, t, -0.5);
-    //     renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-    //     renderMesh(handMesh, x + 4 * heading, y - 31 + heading - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0.5);
-    //     renderMesh(headMesh, x + 10 * heading, y - 23 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading);
+        renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
+        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t, -1.2 * tailWhip/800);
+        renderMesh(bodyMesh, x, y - 8, 0, t, 0);
+        renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 1.2 * tailWhip/800);
+        renderMesh(headMesh, x, y - 37 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + facing * tailWhip/1000);
 
-    //     // Body animation
-    //     bodyMesh[1][0] = 10 * heading;
-    //     bodyMesh[1][1] = -23;
+        // Tail animation at rest
+        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
+        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
+        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
+        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
 
-    //     // Leg animation
-    //     bodyMesh[2][2] = (Math.cos(a) * 7 - 4) * heading;
-    //     bodyMesh[2][3] = Math.min(Math.sin(a) * 7, 0);
-    //     bodyMesh[3][2] = (Math.cos(a + 3.2) * 7 - 4) * heading;
-    //     bodyMesh[3][3] = Math.min(Math.sin(a + 3.2) * 7, 0);
-
-    //     // Tail animation while running
-    //     tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
-    //     tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37;
-    //     tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37;
-    //     tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
-    // }
-
-    // function renderIdle(ctx) {
-    //     const t = Math.cos(anim) * 0.7;
-    //     const a = anim * 6;
-    //     const p = 0.4;
-
-    //     renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-    //     renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t, 0);
-    //     renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-    //     renderMesh(handMesh, x, y - 37 - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, 0);
-    //     renderMesh(headMesh, x, y - 37 + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0);
-
-    //     // Tail animation at rest
-    //     tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
-    //     tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37;
-    //     tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37;
-    //     tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
-    // }
+        // legs
+        bodyMesh[2][2] = 5 + tailWhip/50;
+        bodyMesh[2][3] = -4 - tailWhip/70;
+        bodyMesh[3][2] = -6 + tailWhip/50;
+        bodyMesh[3][3] = 2 - tailWhip/70;
+    }
 
     return {
         update,
