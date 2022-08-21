@@ -1,10 +1,11 @@
-import { horizontal } from './controls';
+import { horizontal, jump, holdingJump } from './controls';
 import { color, renderMesh } from './canvas';
 
 function Player(x, y) {
     const thickness = 9;
     let anim = 0;
     let vx = 0;
+    let vy = 0;
     let facing = 1;
     let targetFacing = 1;
     let running = 0;
@@ -52,8 +53,25 @@ function Player(x, y) {
         if (Math.sign(h) != Math.sign(vx)) {
             vx -= vx * 14 * dT;
         }
+
+        // jumping
+        if (jump() && vy == 0) {
+            vy = -700;
+        }
+        if (y < 300 || vy < 0) {
+            if (!holdingJump() && vy < 0) {
+                vy += 4000 * dT;
+            } else {
+                vy += 2000 * dT;
+            }
+        } else {
+            vy = 0;
+            y = 300;
+        }
+
         facing += (targetFacing - facing) * 15 * dT;
         vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+        y += dT * vy;
         x += dT * vx;
     }
 

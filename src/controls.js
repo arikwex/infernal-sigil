@@ -3,7 +3,9 @@ import * as bus from './bus';
 const pressed = {};
 
 window.onkeydown = (evt) => {
-    pressed[evt.code] = true;
+    if (!pressed[evt.code]) {
+        pressed[evt.code] = Date.now();
+    }
 }
 
 window.onkeyup = (evt) => {
@@ -14,10 +16,16 @@ function horizontal() {
     return (pressed['ArrowLeft'] ? -1 : 0) + (pressed['ArrowRight'] ? 1 : 0);
 }
 
-// function vertical() {
-//     return (pressed['ArrowUp'] ? -1 : 0) + (pressed['ArrowRight'] ? 1 : 0);
-// }
+function jump() {
+    return (Date.now() - pressed['ArrowUp']) < 100;
+}
+
+function holdingJump() {
+    return pressed['ArrowUp'];
+}
 
 export {
-    horizontal
+    horizontal,
+    jump,
+    holdingJump,
 }
