@@ -10,7 +10,11 @@ function Player(x, y) {
     let targetFacing = 1;
     let targetRunning = 0;
     let tailWhip = 0;
+    let grounded = 0;
+    let smoothGrounded = 0;
+    
     const MAX_SPEED = 500;
+    const TERMINAL_VELOCITY = 800;
 
     const headMesh = [
         ['#e22', thickness, 0],
@@ -58,6 +62,7 @@ function Player(x, y) {
         // jumping
         if (jump() && vy == 0) {
             vy = -700;
+            grounded = 0;
         }
         if (y < 300 || vy < 0) {
             if (!holdingJump() && vy < 0) {
@@ -68,22 +73,24 @@ function Player(x, y) {
         } else {
             vy = 0;
             y = 300;
+            grounded = 1;
         }
 
         facing += (targetFacing - facing) * 15 * dT;
         vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
-        tailWhip += (vy - tailWhip) * 10 * dT;
+        vy = Math.min(vy, TERMINAL_VELOCITY);
+        tailWhip += (vy - tailWhip) * 17 * dT;
+        smoothGrounded += (grounded - smoothGrounded) * 17 * dT;
         y += dT * vy;
         x += dT * vx;
     }
 
     function render(ctx) {
-        renderIdle(ctx);
-        return;
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
-        const jumping = Math.max(Math.min(vy / 200, 1), -1);
-        const running = targetRunning * (1 - jumping);
-        const idle = (1 - running) * (1 - jumping);
+        const jumping = 1 - smoothGrounded;
+        const notJumping = 1 - jumping;
+        const running = targetRunning;
+        const idle = 1 - running;
 
         const a = anim * 6;
         const t = (-facing * 0.7 + Math.cos(anim * 2) * 0.2) * idle + (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running;
@@ -99,26 +106,26 @@ function Player(x, y) {
         let pHeadY = -37 * idle + (-23) * running;
 
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
+        renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A-1.2 * tailWhip/800);
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-        renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
-        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading);
+        renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A+1.2 * tailWhip/800);
+        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading + facing * tailWhip/2000);
 
         // Body animation
         bodyMesh[1][0] = 10 * heading;
         bodyMesh[1][1] = -37 * idle - 23 * running;
 
         // Leg animation
-        bodyMesh[2][2] = 7 * idle + (Math.cos(a) * 7 - 4) * heading;
-        bodyMesh[2][3] = Math.min(Math.sin(a) * 7, 0) * running;
-        bodyMesh[3][2] = -7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading;
-        bodyMesh[3][3] = Math.min(Math.sin(a + 3.2) * 7, 0) * running;
+        bodyMesh[2][2] = (7 * idle + (Math.cos(a) * 7 - 4) * heading) * notJumping + (5 + tailWhip/50) * jumping * facing;
+        bodyMesh[2][3] = (Math.min(Math.sin(a) * 7, 0) * running) * notJumping + (-4 - tailWhip/70) * jumping;
+        bodyMesh[3][2] = (-7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading) * notJumping + (-6 + tailWhip/50) * jumping * facing;
+        bodyMesh[3][3] = (Math.min(Math.sin(a + 3.2) * 7, 0) * running) * notJumping + (2 - tailWhip/70) * jumping;
 
         // Tail animation while running
-        tailMesh[1][3] = Math.cos(a) * 1 + 31-37;
-        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37;
-        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37;
-        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37;
+        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
+        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
+        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
+        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
     }
 
     function renderIdle(ctx) {
