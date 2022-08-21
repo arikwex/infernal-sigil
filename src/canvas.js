@@ -12,14 +12,15 @@ function renderMesh(mesh, pos, rot) {
     ctx.rotate(rot.p);
     const d = Math.cos(rot.t);
     const d2 = Math.sin(rot.t);
-    let z = 0;
+    let z = pos.z;
+    // x' = cos * x - sin * z
 
     for (let r = 0; r < mesh.length; r++) {
         const data = mesh[r];
         if (data.length == 3) {
             color(data[0]);
             thickness(data[1]);
-            z = data[2];
+            z = pos.z + data[2];
         } else {
             ctx.beginPath();
             ctx.moveTo(data[0] * d - z * d2, data[1]);

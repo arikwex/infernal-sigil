@@ -13,7 +13,7 @@ function Player(x, y) {
     const bodyMesh = [
         ['#e22', 10, 0],
         [0, 0, 0, 20],
-        [0, 20, 7, 36],
+        [0, 20, 7, 37],
         [0, 20, -7, 37],
     ];
 
@@ -21,8 +21,9 @@ function Player(x, y) {
     }
 
     function render(ctx) {
-        renderMesh(bodyMesh, { x: pos.x - 6, y: pos.y - 4 }, { t: -0.6, p: 0.1 });
-        renderMesh(headMesh, pos, { t: -0.6, p: -0.1 });
+        const t = -0.6 + Math.cos(Date.now() * 0.001);
+        renderMesh(bodyMesh, { x: pos.x, y: pos.y - 4, z: 0 }, { t: t, p: 0.1 });
+        renderMesh(headMesh, { x: pos.x, y: pos.y, z: 9 }, { t: t, p: -0.1 });
     }
 
     return {
