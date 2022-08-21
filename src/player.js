@@ -1,35 +1,22 @@
-import { color, thickLine, thinLine } from './canvas';
+import { color, renderMesh } from './canvas';
 
 function Player(x, y) {
+    const pos = { x, y };
+    const headMesh = [
+        ['#e22', 10, 0],
+        [14, -40, 18, -26, 1, 0, -1, 0, -18, -26, -14, -40],
+        [-7, -11, 7, -11],
+        ['#fff', 4, 5],
+        [-9, -11, -3, -9],
+        [9, -11, 3, -9],
+    ];
+
     function update(dT) {
     }
 
     function render(ctx) {
-        const xfm = ctx.getTransform();
-        ctx.translate(x, y);
-        // Head
-        thickLine();
-        color('#e22');
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.lineTo(-19,-29);
-        ctx.lineTo(-19+4,-29-15);
-        ctx.moveTo(0,0);
-        ctx.lineTo(11,-31);
-        ctx.lineTo(11-5,-31-13);
-        ctx.moveTo(-7,-12);
-        ctx.lineTo(4,-14);
-        ctx.stroke();
-        // Eyes
-        thinLine();
-        color('#fff');
-        ctx.beginPath();
-        ctx.moveTo(-7,-12);
-        ctx.lineTo(-1,-8);
-        ctx.moveTo(6,-8);
-        ctx.lineTo(10,-12);
-        ctx.stroke();
-        ctx.setTransform(xfm);
+        const rot = { t: -0.6, p: -0.1 };
+        renderMesh(headMesh, pos, rot);
     }
 
     return {

@@ -1,4 +1,4 @@
-import { ctx } from './canvas';
+import { canvas, ctx } from './canvas';
 
 let gameObjects = [];
 let lastFrameMs = 0;
@@ -6,6 +6,7 @@ let lastFrameMs = 0;
 function tick(currentFrameMs) {
     const dT = (currentFrameMs - lastFrameMs) * 0.001;
     gameObjects.map((g) => { g.update(dT); });
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     gameObjects.map((g) => { g.render(ctx); });
     requestAnimationFrame(tick);
     lastFrameMs = currentFrameMs;
