@@ -42,7 +42,7 @@ function Player(x, y) {
         [0, 20-37, -16, 31-37, -26, 31-37, -32, 22-37, -34, 15-37]
     ];
 
-    function update(dT) {
+    function update(dT, gameObjects, physicsObjects) {
         anim += dT;
 
         // Running
@@ -64,15 +64,23 @@ function Player(x, y) {
             vy = -800;
             grounded = 0;
         }
-        if (y < 300 || vy < 0) {
+
+        let foundGround = false;
+        physicsObjects.map((phys) => {
+            if (phys.isAABB(x-14,y-55,28,50)) {
+                foundGround = true;
+            }
+        });
+
+        if (!foundGround || vy < 0) {
             if (!holdingJump() && vy < 0) {
                 vy += 4000 * dT;
             } else {
                 vy += 2000 * dT;
             }
-        } else {
+        }
+        else {
             vy = 0;
-            y = 300;
             grounded = 1;
         }
 
