@@ -14,6 +14,8 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
+    let unstick = 0;
+    let stick = 0;
     
     // STATES
     // IDLE = 0,
@@ -75,14 +77,26 @@ function Player(x, y) {
         } else {
             // Climbing controls
             if (Math.abs(v) > 0.3) {
-                y -= CLIMB_SPEED * Math.sign(v) * dT;
-                climbAnim += 18 * dT * v;
+                const inf = Math.min(stick * 3, 1);
+                y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
+                climbAnim += 18 * dT * v * inf;
             }
         }
 
-        // Default Jumping
-        if (jump() && groundTime > 0 && state != 3) {
-            vy = -800;
+        if (state != 3) {
+            // Default Jumping
+            if (jump() && groundTime > 0) {
+                vy = -800;
+            }
+        } else {
+            // Wall Jumping
+            if (jump()) {
+                vy = -800;
+                vx = -facing * 300;
+                unstick = 0.1;
+                state = 0;
+                groundTime = 0;
+            }
         }
 
         // Wall physics
@@ -94,14 +108,14 @@ function Player(x, y) {
                 if (y - 16 < phys.y + phys.h && y - 16 > phys.y) {
                     if (x < phys.x) {
                         x = phys.x - 13;
-                        if (facing > 0) {
+                        if (facing > 0 && unstick < 0) {
                             onWall = true;
                         }
                         return;
                     }
                     if (x > phys.x + phys.w) {
                         x = phys.x + phys.w + 13;
-                        if (facing < 0) {
+                        if (facing < 0 && unstick < 0) {
                             onWall = true;
                         }
                         return;
@@ -149,13 +163,11 @@ function Player(x, y) {
         if (state == 3) {
             // Wall climb physics
             if (vy >= 0) {
-                vy = 0;
+                vy -= 20 * vy * dT;
+                climbAnim += vy / 10 * dT;
             } else {
-                if (!holdingJump() && vy < 0) {
-                    vy += 4000 * dT;
-                } else {
-                    vy += 2000 * dT;
-                }
+                vy -= 6 * vy * dT;
+                climbAnim += -vy / 10 * dT;
             }
         } else {
             // Default physics
@@ -166,6 +178,7 @@ function Player(x, y) {
                     vy += 2000 * dT;
                 }
             }
+            stick = 0;
         }
 
         facing += (targetFacing - facing) * 15 * dT;
@@ -177,6 +190,8 @@ function Player(x, y) {
         y += dT * vy;
         x += dT * vx;
         groundTime -= dT;
+        unstick -= dT;
+        stick += dT;
     }
 
     function render(ctx) {
