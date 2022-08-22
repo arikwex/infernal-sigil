@@ -14,8 +14,8 @@ function WallPhysics(x, y, w, h) {
         // DEBUG
         ctx.beginPath();
         ctx.lineWidth = 2;
-        ctx.strokeStyle = isTouching ? '#f0f' : '#0f0';
-        ctx.rect(x2, y2, w2, h2);
+        ctx.strokeStyle = '#fff';//isTouching ? '#f0f' : '#0f0';
+        // ctx.rect(x2, y2, w2, h2);
         ctx.rect(x, y, w, h);
         ctx.stroke();
         //

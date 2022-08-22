@@ -14,8 +14,8 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
-    let unstick = 0;
-    let stick = 0;
+    let unstick = 0; // Disallow sticking while positive
+    let stick = 0; // How long have you been stuck to the wall
     
     // STATES
     // IDLE = 0,
@@ -64,7 +64,7 @@ function Player(x, y) {
         if (state != 3) {
             // Default controls
             if (Math.abs(h) > 0.3) {
-                vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 10);
+                vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 6);
                 anim += 2 * dT;
                 targetRunning += (1 - targetRunning) * 4 * dT;
                 targetFacing = Math.sign(h);
@@ -77,7 +77,7 @@ function Player(x, y) {
         } else {
             // Climbing controls
             if (Math.abs(v) > 0.3) {
-                const inf = Math.min(stick * 3, 1);
+                const inf = Math.min(stick * 6, 1);
                 y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
                 climbAnim += 18 * dT * v * inf;
             } else {
@@ -125,13 +125,13 @@ function Player(x, y) {
                     }
                 }
                 // Falling to hit top of surface
-                if (y - 55 < phys.y && vy >= 0) {
+                if (y - 25 < phys.y && vy >= 0) {
                     vy = 0;
                     y = phys.y + 5.1;
                     groundTime = 0.15;
                     onGround = true;
                 }
-                // Hit head on bottom of surface)
+                // Hit head on bottom of surface
                 if ((y - 15 > phys.y + phys.h) && vy < -100) {
                     vy = 0;
                     y = phys.y + phys.h + 55;

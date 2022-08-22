@@ -1,4 +1,12 @@
-climing
-- Prevent hitting hit/glitching when at bottom of wall going down
-
+Motion
 - TBD opinions on ledge-walking
+
+Mechanics
+- Time trials
+- Bone collection
+- Obstacle avoidance
+- Chores?
+- Catch bats?
+
+VFX
+- Swift wind swirl on land / impact
