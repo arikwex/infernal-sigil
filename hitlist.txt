@@ -1,5 +1,4 @@
 climing
-- jump off from wall
 - default climb anim pose at rest
 - jumping up a wall while standing against it is awkward/glitchy
 - Prevent hitting hit/glitching when at bottom of wall going down

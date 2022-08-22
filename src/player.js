@@ -80,6 +80,9 @@ function Player(x, y) {
                 const inf = Math.min(stick * 3, 1);
                 y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
                 climbAnim += 18 * dT * v * inf;
+            } else {
+                anim += dT;
+                climbAnim -= Math.sin(climbAnim) * 15 * dT;
             }
         }
 
@@ -139,7 +142,7 @@ function Player(x, y) {
         if (!onWall) {
             // If not on the wall while moving up, pop upward
             if (state == 3 && vertical() > 0.3) {
-                vy = -CLIMB_SPEED;
+                vy = -CLIMB_SPEED * 1.4;
                 vx += facing * 300;
             }
             state = 0;
