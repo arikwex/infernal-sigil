@@ -10,7 +10,7 @@ function Player(x, y) {
     let targetFacing = 1;
     let targetRunning = 0;
     let tailWhip = 0;
-    let grounded = 0;
+    let groundTime = 0;
     let smoothGrounded = 0;
     
     const MAX_SPEED = 400;
@@ -60,37 +60,54 @@ function Player(x, y) {
         }
 
         // jumping
-        if (jump() && vy == 0) {
+        if (jump() && groundTime > 0) {
             vy = -800;
-            grounded = 0;
         }
 
-        let foundGround = false;
+        // Wall physics
         physicsObjects.map((phys) => {
             if (phys.isAABB(x-14,y-55,28,50)) {
-                foundGround = true;
+                // Sides
+                if (x < phys.x) {
+                    x = phys.x - 14;
+                    vx -= vx * 0.25;
+                    return;
+                }
+                if (x > phys.x + phys.w) {
+                    x = phys.x + phys.w + 14;
+                    vx -= vx * 0.25;
+                    return;
+                }
+                // Falling to hit top of surface
+                if (y - 55 < phys.y && vy >= 0) {
+                    vy = 0;
+                    y = phys.y + 5.1;
+                    groundTime = 0.15;
+                }
+                // Hit head on bottom of surface)
+                if (y + 30 > phys.y + phys.h) {
+                    vy = 0;
+                    y = phys.y + phys.h + 55;
+                }
             }
         });
 
-        if (!foundGround || vy < 0) {
+        if (groundTime <= 0.1 || vy < 0) {
             if (!holdingJump() && vy < 0) {
                 vy += 4000 * dT;
             } else {
                 vy += 2000 * dT;
             }
         }
-        else {
-            vy = 0;
-            grounded = 1;
-        }
 
         facing += (targetFacing - facing) * 15 * dT;
         vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
         vy = Math.min(vy, TERMINAL_VELOCITY);
         tailWhip += (vy - tailWhip) * 17 * dT;
-        smoothGrounded += (grounded - smoothGrounded) * 17 * dT;
+        smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
         y += dT * vy;
         x += dT * vx;
+        groundTime -= dT;
     }
 
     function render(ctx) {

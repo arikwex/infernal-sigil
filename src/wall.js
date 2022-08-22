@@ -23,7 +23,8 @@ function WallPhysics(x, y, w, h) {
     }
 
     return {
-        isAABB
+        x, y, w, h,
+        isAABB,
     }
 }
 
