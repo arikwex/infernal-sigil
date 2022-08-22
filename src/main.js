@@ -8,6 +8,6 @@ start();
 add(new Player(200, 200));
 
 addPhysics(new WallPhysics(0, 400, 300, 40));
-addPhysics(new WallPhysics(400, 340, 300, 40));
+addPhysics(new WallPhysics(400, 440, 300, 40));
 addPhysics(new WallPhysics(0, 240, 150, 40));
-addPhysics(new WallPhysics(500, 240, 100, 100));
+addPhysics(new WallPhysics(500, 140, 100, 300));

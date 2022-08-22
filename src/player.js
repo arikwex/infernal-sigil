@@ -4,6 +4,7 @@ import { color, renderMesh } from './canvas';
 function Player(x, y) {
     const thickness = 9;
     let anim = 0;
+    let climbAnim = 0;
     let vx = 0;
     let vy = 0;
     let facing = 1;
@@ -44,6 +45,7 @@ function Player(x, y) {
 
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
+        climbAnim += 14 * dT;
 
         // Running
         const h = horizontal();
@@ -112,39 +114,56 @@ function Player(x, y) {
 
     function render(ctx) {
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
-        const jumping = 1 - smoothGrounded;
+        const climbing = 1;
+        const notClimbing = 1 - climbing;
+        const jumping = (1 - smoothGrounded) * notClimbing;
         const notJumping = 1 - jumping;
-        const running = targetRunning;
-        const idle = 1 - running;
+        const running = targetRunning * notClimbing;
+        const idle = (1 - running) * notClimbing;
 
         const a = anim * 6;
-        const t = (-facing * 0.7 + Math.cos(anim * 2) * 0.2) * idle + (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running;
-        const p = 0.4;
+        const t = 
+            (-facing * 0.7 + Math.cos(anim * 2) * 0.2) * idle +
+            (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running +
+            (- 0.6 * facing) * climbing;
 
-        let pHand1X = 0 + 5 * heading;
-        let pHand1Y = -37 * idle + (-31 - heading) * running;
-        let pHand1A = -0.5 * running;
-        let pHand2X = 0 + 4 * heading;
-        let pHand2Y = -37 * idle + (-31 + heading) * running;
-        let pHand2A = 0.5 * running;
-        let pHeadX = 0 + 10 * heading;
-        let pHeadY = -37 * idle + (-23) * running;
+        let pHand1X = 0 + 5 * heading + Math.min(5 * Math.cos(climbAnim*1.5), 0) * facing * climbing;
+        let pHand1Y = -37 * idle + (-31 - heading) * running - 39 * climbing;
+        let pHand1A = -0.5 * running - 1.2 * tailWhip/800 * notClimbing + (0.9 - 2 * facing) * climbing; // -1.1, 2.9
+        let pHand2X = 0 + 4 * heading + Math.min(5 * Math.cos(climbAnim*1.5 + 3), 0) * facing * climbing;
+        let pHand2Y = -37 * idle + (-31 + heading) * running - (37 + 2 * facing) * climbing;
+        let pHand2A = 0.5 * running + 1.2 * tailWhip/800 * notClimbing + (-1.5*facing - 1) * climbing;
+        let pHeadX = 0 + 10 * heading * notClimbing - facing * climbing * 4;
+        let pHeadY = -37 * idle + (-23) * running - 39 * climbing;
+        let pHeadA = t * 0.3 + 0.2 * heading + (facing * tailWhip/2000) * notClimbing + (-facing * 0.8) * climbing;
 
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A-1.2 * tailWhip/800);
+        renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-        renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A+1.2 * tailWhip/800);
-        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, t, t*0.3 + 0.2 * heading + facing * tailWhip/2000);
+        renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
+        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, t, pHeadA);
 
         // Body animation
-        bodyMesh[1][0] = 10 * heading;
-        bodyMesh[1][1] = -37 * idle - 23 * running;
+        bodyMesh[1][0] = 10 * heading - 7 * climbing * facing;
+        bodyMesh[1][1] = -37 * idle - 23 * running - 35 * climbing;
 
         // Leg animation
-        bodyMesh[2][2] = (7 * idle + (Math.cos(a) * 7 - 4) * heading) * notJumping + (5 + tailWhip/50) * jumping * facing;
-        bodyMesh[2][3] = (Math.min(Math.sin(a) * 7, 0) * running) * notJumping + (-4 - tailWhip/70) * jumping;
-        bodyMesh[3][2] = (-7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading) * notJumping + (-6 + tailWhip/50) * jumping * facing;
-        bodyMesh[3][3] = (Math.min(Math.sin(a + 3.2) * 7, 0) * running) * notJumping + (2 - tailWhip/70) * jumping;
+        bodyMesh[2][2] =
+            (7 * idle + (Math.cos(a) * 7 - 4) * heading) * notJumping * notClimbing +
+            (5 + tailWhip/50) * jumping * facing * notClimbing +
+            (14 * facing + Math.min(Math.sin(-climbAnim) * 7, 0)) * climbing;
+        bodyMesh[2][3] =
+            (Math.min(Math.sin(a) * 7, 0) * running) * notJumping * notClimbing +
+            (-4 - tailWhip/70) * jumping * notClimbing +
+            (9 * Math.cos(climbAnim) - 8) * climbing;
+        bodyMesh[3][2] =
+            (-7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading) * notJumping * notClimbing +
+            (-6 + tailWhip/50) * jumping * facing * notClimbing +
+            (14 * facing + Math.min(Math.sin(-climbAnim+3) * 7, 0)) * climbing;
+        bodyMesh[3][3] =
+            (Math.min(Math.sin(a + 3.2) * 7, 0) * running) * notJumping * notClimbing +
+            (2 - tailWhip/70) * jumping * notClimbing +
+            (9 * Math.cos(climbAnim+3) - 8) * climbing;
 
         // Tail animation while running
         tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
