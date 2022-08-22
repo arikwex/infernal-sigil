@@ -56,8 +56,11 @@ function Player(x, y) {
         anim += dT;
 
         // Horizontal movement
+        const h = horizontal();
+        const v = vertical();
+
         if (state != 3) {
-            const h = horizontal();
+            // Default controls
             if (Math.abs(h) > 0.3) {
                 vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 10);
                 anim += 2 * dT;
@@ -70,14 +73,14 @@ function Player(x, y) {
                 vx -= vx * 14 * dT;
             }
         } else {
-            const v = vertical();
+            // Climbing controls
             if (Math.abs(v) > 0.3) {
-                y -= CLIMB_SPEED * v * dT;
+                y -= CLIMB_SPEED * Math.sign(v) * dT;
                 climbAnim += 18 * dT * v;
             }
         }
 
-        // Jumping
+        // Default Jumping
         if (jump() && groundTime > 0 && state != 3) {
             vy = -800;
         }
@@ -120,6 +123,7 @@ function Player(x, y) {
         });
 
         if (!onWall) {
+            // If not on the wall while moving up, pop upward
             if (state == 3 && vertical() > 0.3) {
                 vy = -CLIMB_SPEED;
                 vx += facing * 300;
@@ -127,9 +131,16 @@ function Player(x, y) {
             state = 0;
         }
         else if (onGround && state == 3) {
+            // Touching ground while climbing should release climb
             state = 0;
         }
         else if (onWall && !onGround) {
+            // Touching wall and no ground should enter climbing mode
+            state = 3;
+            vx = 0;
+        }
+        else if (onWall && onGround && v > 0.3) {
+            // Trying to moving up on wall from ground should engage climbing
             state = 3;
             vx = 0;
         }
@@ -162,7 +173,7 @@ function Player(x, y) {
         vy = Math.min(vy, TERMINAL_VELOCITY);
         tailWhip += (vy - tailWhip) * 17 * dT;
         smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
-        targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * 17 * dT;
+        targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * ((state == 3) ? 17 : 8) * dT;
         y += dT * vy;
         x += dT * vx;
         groundTime -= dT;
@@ -189,9 +200,9 @@ function Player(x, y) {
         let pHand2X = 0 + 4 * heading + Math.min(5 * Math.cos(climbAnim*1.5 + 3), 0) * facing * climbing;
         let pHand2Y = -37 * idle + (-31 + heading) * running + (-37 - 2 * facing + 2 * Math.sin(climbAnim*1.5 + 3)) * climbing;
         let pHand2A = 0.5 * running + 1.2 * tailWhip/800 * notClimbing + (-1.5*facing - 1) * climbing;
-        let pHeadX = 0 + 10 * heading * notClimbing - facing * climbing * 4;
-        let pHeadY = -37 * idle + (-23) * running - 39 * climbing;
-        let pHeadA = t * 0.3 + 0.2 * heading + (facing * tailWhip/2000) * notClimbing + (-facing * 0.8) * climbing;
+        let pHeadX = 0 + 10 * heading * notClimbing + facing * climbing * 6;
+        let pHeadY = -37 * idle + (-23) * running - 40 * climbing;
+        let pHeadA = t * 0.3 + 0.2 * heading + (facing * tailWhip/2000) * notClimbing + (-facing * 1.1) * climbing;
 
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
         renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);

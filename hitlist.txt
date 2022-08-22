@@ -1,7 +1,6 @@
 climing
 - up from ground should enter climb
 - jumping against wall is awkward/glitchy
-- slowly allow walk controls after recovering from climb to the top
 - jump off from wall
 - Prevent hitting hit/glitching when at bottom of wall going down
 - default climb anim pose at rest
