@@ -132,7 +132,7 @@ function Player(x, y) {
                     onGround = true;
                 }
                 // Hit head on bottom of surface)
-                if (y + 30 > phys.y + phys.h) {
+                if ((y - 15 > phys.y + phys.h) && vy < -100) {
                     vy = 0;
                     y = phys.y + phys.h + 55;
                 }
@@ -141,9 +141,10 @@ function Player(x, y) {
 
         if (!onWall) {
             // If not on the wall while moving up, pop upward
-            if (state == 3 && vertical() > 0.3) {
+            if (state == 3 && (v > 0.3 || vy < -10)) {
                 vy = -CLIMB_SPEED * 1.4;
-                vx += facing * 300;
+                vx = facing * 300;
+                unstick = 0.1;
             }
             state = 0;
         }
@@ -169,7 +170,7 @@ function Player(x, y) {
                 vy -= 20 * vy * dT;
                 climbAnim += vy / 10 * dT;
             } else {
-                vy -= 6 * vy * dT;
+                vy -= 12 * vy * dT;
                 climbAnim += -vy / 10 * dT;
             }
         } else {
