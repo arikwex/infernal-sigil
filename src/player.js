@@ -24,6 +24,7 @@ function Player(x, y) {
     
     const MAX_SPEED = 400;
     const TERMINAL_VELOCITY = 800;
+    const CLIMB_SPEED = 370;
 
     const headMesh = [
         ['#e22', thickness, 0],
@@ -58,7 +59,7 @@ function Player(x, y) {
         if (state != 3) {
             const h = horizontal();
             if (Math.abs(h) > 0.3) {
-                vx += 3000 * Math.sign(h) * dT;
+                vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 10);
                 anim += 2 * dT;
                 targetRunning += (1 - targetRunning) * 4 * dT;
                 targetFacing = Math.sign(h);
@@ -71,8 +72,8 @@ function Player(x, y) {
         } else {
             const v = vertical();
             if (Math.abs(v) > 0.3) {
-                y -= 300 * v * dT;
-                climbAnim += 14 * dT * v;
+                y -= CLIMB_SPEED * v * dT;
+                climbAnim += 18 * dT * v;
             }
         }
 
@@ -120,7 +121,7 @@ function Player(x, y) {
 
         if (!onWall) {
             if (state == 3 && vertical() > 0.3) {
-                vy = -400;
+                vy = -CLIMB_SPEED;
                 vx += facing * 300;
             }
             state = 0;
