@@ -18,9 +18,9 @@ function Player(x, y) {
     let stick = 0; // How long have you been stuck to the wall
     
     let smoothAttacking = 0;
-    let attackSwipe = 0;
-    let attackSwipe2 = 0.75;
-    let attackTime = 0;
+    let attackSwipe = 2;
+    let attackSwipe2 = 2;
+    let attackTime = 1;
     let attackHandFlag = false;
     
     // STATES
@@ -64,7 +64,7 @@ function Player(x, y) {
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
 
-        attackTime += dT;
+        attackTime = Math.min(attackTime + dT, 1);
         attackSwipe = Math.min(attackSwipe + 2 * dT, 1);
         attackSwipe2 = Math.min(attackSwipe2 + 2 * dT, 1);
 
@@ -76,14 +76,16 @@ function Player(x, y) {
         if (state != 3) {
             // Default controls
             if (Math.abs(h) > 0.3) {
-                vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 6);
-                anim += 2 * dT;
-                targetRunning += (1 - targetRunning) * 4 * dT;
+                if (attackTime > 0.2) {
+                    vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 6);
+                    anim += 2 * dT;
+                    targetRunning += (1 - targetRunning) * 4 * dT;
+                }
                 targetFacing = Math.sign(h);
             } else {
                 targetRunning += (0 - targetRunning) * 4 * dT;
             }
-            if (Math.sign(h) != Math.sign(vx)) {
+            if (Math.sign(h) != Math.sign(vx) || (attackTime < 0.2)) {
                 vx -= vx * 14 * dT;
             }
 
@@ -97,9 +99,12 @@ function Player(x, y) {
                 attackHandFlag = !attackHandFlag;
                 attackTime = 0;
                 smoothAttacking = 1;
-                if (groundTime > 0) {
-                    vx += targetFacing * 200;
-                }
+                vx = targetFacing * 350;
+                vy = 0;
+                //vy *= 0.5;
+                // if (groundTime > 0) {
+                    // vx += targetFacing * 250;
+                // }
             }
         } else {
             // Climbing controls
@@ -204,7 +209,9 @@ function Player(x, y) {
             }
         } else {
             // Default physics
-            if (groundTime <= 0.1 || vy < 0) {
+            if (attackTime < 0.2) {
+                vy += 1000 * dT;
+            } else if (groundTime <= 0.1 || vy < 0) {
                 if (!holdingJump() && vy < 0) {
                     vy += 4000 * dT;
                 } else {
@@ -236,7 +243,7 @@ function Player(x, y) {
         const notClimbing = 1 - climbing;
         const jumping = (1 - smoothGrounded) * notClimbing;
         const notJumping = 1 - jumping;
-        const running = targetRunning * notClimbing;
+        const running = targetRunning * notClimbing * notAttack;
         const idle = (1 - running) * notClimbing;
         const attackSwipePre = 1 - Math.exp(-attackSwipe * 6.0);
         const attackSwipeTiming = attackSwipePre - Math.pow(attackSwipe/1.5, 2);
