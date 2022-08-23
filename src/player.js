@@ -62,6 +62,13 @@ function Player(x, y) {
         ['#e22', thickness, 0],
         [0, 20-37, -16, 31-37, -26, 31-37, -32, 22-37, -34, 15-37]
     ];
+    const flameMesh = [
+        ['#ee2', 6, 0],
+        [0, 0, -5, -5, 0, -17, 5, -5],
+        ['#e62', 6, 0],
+        [0, 0, 0, -9]
+    ];
+    //tailMesh.push(...flameMesh);
 
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
@@ -343,8 +350,39 @@ function Player(x, y) {
         }
         ctx.setTransform(xfm);
 
+        // Body animation
+        bodyMesh[1][0] = 10 * heading * notAttack - 7 * climbing * facing + 15 * attacking * facing;
+        bodyMesh[1][1] = -37 * idle * notAttack - 23 * (running * notAttack + attacking) - 35 * climbing;
+
+        // Leg animation
+        bodyMesh[2][2] =
+            (7 * idle + (Math.cos(a) * 7 - 4) * heading) * notJumping * notClimbing +
+            (5 + tailWhip/50) * jumping * facing * notClimbing +
+            (14 * facing + Math.min(Math.sin(-climbAnim) * 7, 0)) * climbing;
+        bodyMesh[2][3] =
+            (Math.min(Math.sin(a) * 7, 0) * running) * notJumping * notClimbing +
+            (-4 - tailWhip/70) * jumping * notClimbing +
+            (9 * Math.cos(climbAnim) * facing - 8) * climbing;
+        bodyMesh[3][2] =
+            (-7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading) * notJumping * notClimbing +
+            (-6 + tailWhip/50) * jumping * facing * notClimbing +
+            (14 * facing + Math.min(Math.sin(-climbAnim+3) * 7, 0)) * climbing;
+        bodyMesh[3][3] =
+            (Math.min(Math.sin(a + 3.2) * 7, 0) * running) * notJumping * notClimbing +
+            (2 - tailWhip/70) * jumping * notClimbing +
+            (9 * Math.cos(climbAnim+3) * facing - 8) * climbing;
+
+        // Tail animation while running
+        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
+        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
+        tailMesh[1][6] = -32-Math.abs(tailWhip/290);
+        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
+        tailMesh[1][8] = -34+tailWhip/70;
+        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
+
         // Render layers of mesh
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
+        renderMesh(flameMesh, x, y+tailMesh[1][9]-5, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
         if (facing > 0) {
             renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         } else {
@@ -374,36 +412,6 @@ function Player(x, y) {
             ctx.stroke();
         }
         ctx.setTransform(xfm);
-
-        // Body animation
-        bodyMesh[1][0] = 10 * heading * notAttack - 7 * climbing * facing + 15 * attacking * facing;
-        bodyMesh[1][1] = -37 * idle * notAttack - 23 * (running * notAttack + attacking) - 35 * climbing;
-
-        // Leg animation
-        bodyMesh[2][2] =
-            (7 * idle + (Math.cos(a) * 7 - 4) * heading) * notJumping * notClimbing +
-            (5 + tailWhip/50) * jumping * facing * notClimbing +
-            (14 * facing + Math.min(Math.sin(-climbAnim) * 7, 0)) * climbing;
-        bodyMesh[2][3] =
-            (Math.min(Math.sin(a) * 7, 0) * running) * notJumping * notClimbing +
-            (-4 - tailWhip/70) * jumping * notClimbing +
-            (9 * Math.cos(climbAnim) * facing - 8) * climbing;
-        bodyMesh[3][2] =
-            (-7 * idle + (Math.cos(a + 3.2) * 7 - 4) * heading) * notJumping * notClimbing +
-            (-6 + tailWhip/50) * jumping * facing * notClimbing +
-            (14 * facing + Math.min(Math.sin(-climbAnim+3) * 7, 0)) * climbing;
-        bodyMesh[3][3] =
-            (Math.min(Math.sin(a + 3.2) * 7, 0) * running) * notJumping * notClimbing +
-            (2 - tailWhip/70) * jumping * notClimbing +
-            (9 * Math.cos(climbAnim+3) * facing - 8) * climbing;
-
-        // Tail animation while running
-        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
-        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
-        tailMesh[1][6] = -32-Math.abs(tailWhip/190);
-        tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
-        tailMesh[1][8] = -34+tailWhip/70;
-        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
     }
 
     return {
