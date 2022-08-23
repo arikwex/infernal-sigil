@@ -197,7 +197,7 @@ function Player(x, y) {
                     onGround = true;
                 }
                 // Hit head on bottom of surface
-                if ((y - 15 > phys.y + phys.h) && vy < -100) {
+                if ((y - 15 > phys.y + phys.h) && (vy < -100 || state == 3)) {
                     vy = 0;
                     y = phys.y + phys.h + 55;
                 }
