@@ -14,9 +14,12 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
+
+    // Climbing
     let unstick = 0; // Disallow sticking while positive
     let stick = 0; // How long have you been stuck to the wall
     
+    // Basic attack
     let smoothAttacking = 0;
     let attackSwipe = 2;
     let attackSwipe2 = 2;
@@ -24,6 +27,10 @@ function Player(x, y) {
     let attackHandFlag = false;
     let attackSeq = 0;
     let MAX_NUM_ATTACK = 3;
+
+    // Air jump
+    let numAirjumpsUsed = 0;
+    let MAX_NUM_AIRJUMP = 1;
     
     // STATES
     // IDLE = 0,
@@ -54,7 +61,7 @@ function Player(x, y) {
     const handMesh = [
         ['#e22', thickness, 0],
         [4, 0, 14, 6],
-        ['#ee2', 3, 0],
+        ['#def', 3, 0],
         [18, 5, 25, 8],
         [15, 9, 22, 13],
     ];
@@ -127,18 +134,23 @@ function Player(x, y) {
             }
         }
 
-        if (state != 3) {
-            // Default Jumping
-            if (jump() && groundTime > 0) {
-                vy = -800;
-            }
-        } else {
-            // Wall Jumping
-            if (jump()) {
+        if (jump()) {
+            if (state != 3) {
+                // Default jump
+                if (groundTime > 0) {
+                    vy = -800;
+                } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP && unstick < 0) {
+                    // Air jump
+                    numAirjumpsUsed += 1;
+                    vy = -800;
+                }
+            } else {
+                // Wall Jumping
                 vy = -800;
                 vx = -facing * 300;
                 unstick = 0.1;
                 state = 0;
+                numAirjumpsUsed = 0;
                 groundTime = 0;
             }
         }
@@ -170,6 +182,7 @@ function Player(x, y) {
                     vy = 0;
                     y = phys.y + 5.1;
                     groundTime = 0.15;
+                    numAirjumpsUsed = 0;
                     onGround = true;
                 }
                 // Hit head on bottom of surface
@@ -319,7 +332,7 @@ function Player(x, y) {
         let pHeadY =
             -37 * idle * notAttack +
             (-23) * (running * notAttack + attacking) +
-            -40 * climbing;
+            -43 * climbing;
         let pHeadA =
             t * 0.3 +
             0.2 * heading +
@@ -382,7 +395,7 @@ function Player(x, y) {
 
         // Render layers of mesh
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(flameMesh, x, y+tailMesh[1][9]-5, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
+        renderMesh(flameMesh, x, y+tailMesh[1][9]-8, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
         if (facing > 0) {
             renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         } else {
