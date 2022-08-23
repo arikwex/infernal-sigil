@@ -22,6 +22,8 @@ function Player(x, y) {
     let attackSwipe2 = 2;
     let attackTime = 1;
     let attackHandFlag = false;
+    let attackSeq = 0;
+    let MAX_NUM_ATTACK = 3;
     
     // STATES
     // IDLE = 0,
@@ -90,21 +92,21 @@ function Player(x, y) {
             }
 
             // Attack
-            if (requestAttack && attackTime > 0.1) {
+            if (requestAttack && attackTime > 0.1 && attackSeq < MAX_NUM_ATTACK) {
                 if (attackHandFlag) {
                     attackSwipe = 0;
                 } else {
                     attackSwipe2 = 0;
                 }
+                attackSeq += 1;
                 attackHandFlag = !attackHandFlag;
                 attackTime = 0;
                 smoothAttacking = 1;
                 vx = targetFacing * 350;
                 vy = 0;
-                //vy *= 0.5;
-                // if (groundTime > 0) {
-                    // vx += targetFacing * 250;
-                // }
+            }
+            if (attackTime > 0.55) {
+                attackSeq = 0;
             }
         } else {
             // Climbing controls
