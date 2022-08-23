@@ -16,8 +16,12 @@ function Player(x, y) {
     let smoothGrounded = 0;
     let unstick = 0; // Disallow sticking while positive
     let stick = 0; // How long have you been stuck to the wall
+    
+    let smoothAttacking = 0;
     let attackSwipe = 0;
     let attackSwipe2 = 0.75;
+    let attackTime = 0;
+    let attackHandFlag = false;
     
     // STATES
     // IDLE = 0,
@@ -59,14 +63,15 @@ function Player(x, y) {
 
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
-        attackSwipe += 3 * dT;
-        attackSwipe = attackSwipe % 1.5;
-        attackSwipe2 += 3 * dT;
-        attackSwipe2 = attackSwipe2 % 1.5;
+
+        attackTime += dT;
+        attackSwipe = Math.min(attackSwipe + 2 * dT, 1);
+        attackSwipe2 = Math.min(attackSwipe2 + 2 * dT, 1);
 
         // Horizontal movement
         const h = horizontal();
         const v = vertical();
+        const requestAttack = attack();
 
         if (state != 3) {
             // Default controls
@@ -80,6 +85,20 @@ function Player(x, y) {
             }
             if (Math.sign(h) != Math.sign(vx)) {
                 vx -= vx * 14 * dT;
+            }
+
+            // Attack
+            if (requestAttack && attackTime > 0.1) {
+                if (attackHandFlag) {
+                    attackSwipe = 0;
+                } else {
+                    attackSwipe2 = 0;
+                }
+                attackHandFlag = !attackHandFlag;
+                attackTime = 0;
+                if (groundTime > 0) {
+                    vx += targetFacing * 200;
+                }
             }
         } else {
             // Climbing controls
@@ -162,11 +181,13 @@ function Player(x, y) {
         else if (onWall && !onGround) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
+            attackTime = 1;
             vx = 0;
         }
         else if (onWall && onGround && v > 0.3) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
+            attackTime = 1;
             vx = 0;
         }
         
@@ -198,6 +219,7 @@ function Player(x, y) {
         tailWhip += (vy - tailWhip) * 17 * dT;
         smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
         targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * ((state == 3) ? 17 : 8) * dT;
+        smoothAttacking += (((attackTime < 0.35) ? 1 : 0) - smoothAttacking) * 17 * dT;
         y += dT * vy;
         x += dT * vx;
         groundTime -= dT;
@@ -207,7 +229,7 @@ function Player(x, y) {
 
     function render(ctx) {
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
-        const attacking = 1;
+        const attacking = smoothAttacking;
         const notAttack = 1 - attacking;
         const climbing = targetClimbing;
         const notClimbing = 1 - climbing;
@@ -215,8 +237,8 @@ function Player(x, y) {
         const notJumping = 1 - jumping;
         const running = targetRunning * notClimbing;
         const idle = (1 - running) * notClimbing;
-        const attackSwipeTiming = 1 - Math.exp(-attackSwipe * 10.0) - Math.pow(attackSwipe/1.5, 2);
-        const attackSwipeTiming2 = 1 - Math.exp(-attackSwipe2 * 10.0) - Math.pow(attackSwipe2/1.5, 2);
+        const attackSwipeTiming = 1 - Math.exp(-attackSwipe * 6.0) - Math.pow(attackSwipe/1.5, 2);
+        const attackSwipeTiming2 = 1 - Math.exp(-attackSwipe2 * 6.0) - Math.pow(attackSwipe2/1.5, 2);
 
         const a = anim * 6;
         const t = 
