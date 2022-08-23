@@ -1,4 +1,4 @@
-import { horizontal, vertical, jump, holdingJump } from './controls';
+import { horizontal, vertical, jump, holdingJump, attack } from './controls';
 import { color, renderMesh } from './canvas';
 
 function Player(x, y) {
@@ -16,12 +16,15 @@ function Player(x, y) {
     let smoothGrounded = 0;
     let unstick = 0; // Disallow sticking while positive
     let stick = 0; // How long have you been stuck to the wall
+    let attackSwipe = 0;
+    let attackSwipe2 = 0.75;
     
     // STATES
     // IDLE = 0,
     // RUNNING = 1,
     // JUMPING = 2,
-    // CLIMBING = 3
+    // CLIMBING = 3,
+    // ATTACKING = 4
     let state = 0;
     
     const MAX_SPEED = 400;
@@ -56,6 +59,10 @@ function Player(x, y) {
 
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
+        attackSwipe += 3 * dT;
+        attackSwipe = attackSwipe % 1.5;
+        attackSwipe2 += 3 * dT;
+        attackSwipe2 = attackSwipe2 % 1.5;
 
         // Horizontal movement
         const h = horizontal();
@@ -200,12 +207,16 @@ function Player(x, y) {
 
     function render(ctx) {
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
+        const attacking = 1;
+        const notAttack = 1 - attacking;
         const climbing = targetClimbing;
         const notClimbing = 1 - climbing;
         const jumping = (1 - smoothGrounded) * notClimbing;
         const notJumping = 1 - jumping;
         const running = targetRunning * notClimbing;
         const idle = (1 - running) * notClimbing;
+        const attackSwipeTiming = 1 - Math.exp(-attackSwipe * 10.0) - Math.pow(attackSwipe/1.5, 2);
+        const attackSwipeTiming2 = 1 - Math.exp(-attackSwipe2 * 10.0) - Math.pow(attackSwipe2/1.5, 2);
 
         const a = anim * 6;
         const t = 
@@ -213,25 +224,89 @@ function Player(x, y) {
             (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running +
             (- 0.6 * facing) * climbing;
 
-        let pHand1X = 0 + 5 * heading + Math.min(5 * Math.cos(climbAnim*1.5), 0) * facing * climbing;
-        let pHand1Y = -37 * idle + (-31 - heading) * running + (-39 + 2 * Math.sin(climbAnim*1.5)) * climbing;
-        let pHand1A = -0.5 * running - 1.2 * tailWhip/800 * notClimbing + (0.9 - 2 * facing) * climbing;
-        let pHand2X = 0 + 4 * heading + Math.min(5 * Math.cos(climbAnim*1.5 + 3), 0) * facing * climbing;
-        let pHand2Y = -37 * idle + (-31 + heading) * running + (-37 - 2 * facing + 2 * Math.sin(climbAnim*1.5 + 3)) * climbing;
-        let pHand2A = 0.5 * running + 1.2 * tailWhip/800 * notClimbing + (-1.5*facing - 1) * climbing;
-        let pHeadX = 0 + 10 * heading * notClimbing + facing * climbing * 6;
-        let pHeadY = -37 * idle + (-23) * running - 40 * climbing;
-        let pHeadA = t * 0.3 + 0.2 * heading + (facing * tailWhip/2000) * notClimbing + (-facing * 1.1) * climbing;
+        let pHand1X = 
+            5 * heading +
+            Math.min(5 * Math.cos(climbAnim*1.5), 0) * facing * climbing +
+            (facing > 0 ? 
+                (15 + 35 * attackSwipeTiming - 40 * attackSwipeTiming * attackSwipeTiming) :
+                (- 15 * attackSwipeTiming)
+             ) * attacking;
+        let pHand1Y =
+            -37 * idle * notAttack +
+            (-31 - heading) * running * notAttack +
+            (-39 + 2 * Math.sin(climbAnim*1.5)) * climbing +
+            (facing > 0 ?
+                (-40 + 10 * attackSwipeTiming) :
+                (-28)
+            ) * attacking;
+        let pHand1A =
+            -0.5 * running +
+            -1.2 * tailWhip/800 * notClimbing * notAttack +
+            (0.9 - 2 * facing) * climbing +
+            (facing > 0 ?
+                (-1.2 + 2.8 * attackSwipeTiming):
+                (-0.9 + 4.0 * attackSwipeTiming)
+            ) * attacking;
 
+        let pHand2X = 
+            4 * heading * notAttack +
+            Math.min(5 * Math.cos(climbAnim*1.5 + 3), 0) * facing * climbing +
+            (facing > 0 ?
+                (-3 + 15 * attackSwipeTiming2) :
+                (-15 - 35 * attackSwipeTiming2 + 40 * attackSwipeTiming2 * attackSwipeTiming2)
+            ) * attacking
+        let pHand2Y =
+            -37 * idle * notAttack +
+            (-31 + heading) * running * notAttack +
+            (-37 - 2 * facing + 2 * Math.sin(climbAnim*1.5 + 3)) * climbing +
+            (facing > 0 ?
+                (-28) :
+                (-40 + 10 * attackSwipeTiming2)
+             ) * attacking;
+        let pHand2A =
+            0.5 * running * notAttack +
+            1.2 * tailWhip/800 * notClimbing +
+            (-1.5 * facing - 1) * climbing +
+            (facing > 0 ?
+                (0.9 - 4.0 * attackSwipeTiming2) :
+                (1.6 - 2.9 * attackSwipeTiming2)
+            ) * attacking;
+
+        let pHeadX = 
+            10 * (heading * notClimbing * notAttack + attacking * facing) +
+            facing * climbing * 6;
+        let pHeadY =
+            -37 * idle * notAttack +
+            (-23) * (running * notAttack + attacking) +
+            -40 * climbing;
+        let pHeadA =
+            t * 0.3 +
+            0.2 * heading +
+            (facing * tailWhip/2000) * notClimbing +
+            (-facing * 1.1) * climbing;
+        let pHeadT =
+            t +
+            (Math.sin(climbAnim*1.2) * 0.15 - 0.2) * climbing +
+            (attackSwipeTiming * 0.5 - attackSwipeTiming2 * 0.5) * attacking;
+
+        // Render layers of mesh
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
+        if (facing > 0) {
+            renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
+        } else {
+            renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
+        }
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
-        renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
-        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, t + (Math.sin(climbAnim*1.2) * 0.15 - 0.2) * climbing, pHeadA);
+        renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, pHeadT, pHeadA);
+        if (facing > 0) {
+            renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
+        } else {
+            renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
+        }
 
         // Body animation
-        bodyMesh[1][0] = 10 * heading - 7 * climbing * facing;
-        bodyMesh[1][1] = -37 * idle - 23 * running - 35 * climbing;
+        bodyMesh[1][0] = 10 * heading * notAttack - 7 * climbing * facing + 15 * attacking * facing;
+        bodyMesh[1][1] = -37 * idle * notAttack - 23 * (running * notAttack + attacking) - 35 * climbing;
 
         // Leg animation
         bodyMesh[2][2] =

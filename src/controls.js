@@ -21,16 +21,21 @@ function vertical() {
 }
 
 function jump() {
-    return (Date.now() - pressed['Space']) < 100;
+    return (Date.now() - pressed['KeyZ']) < 100;
+}
+
+function attack() {
+    return (Date.now() - pressed['KeyX']) < 100;
 }
 
 function holdingJump() {
-    return pressed['Space'];
+    return pressed['KeyZ'];
 }
 
 export {
     horizontal,
     vertical,
     jump,
+    attack,
     holdingJump,
 }
