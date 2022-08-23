@@ -102,8 +102,8 @@ function Player(x, y) {
                 attackHandFlag = !attackHandFlag;
                 attackTime = 0;
                 smoothAttacking = 1;
-                vx = targetFacing * 350;
-                vy = 0;
+                vx = targetFacing * 850;
+                vy = vy * 0.25 - 100;
             }
             if (attackTime > 0.55) {
                 attackSeq = 0;
