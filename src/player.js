@@ -96,6 +96,7 @@ function Player(x, y) {
                 }
                 attackHandFlag = !attackHandFlag;
                 attackTime = 0;
+                smoothAttacking = 1;
                 if (groundTime > 0) {
                     vx += targetFacing * 200;
                 }
@@ -237,8 +238,10 @@ function Player(x, y) {
         const notJumping = 1 - jumping;
         const running = targetRunning * notClimbing;
         const idle = (1 - running) * notClimbing;
-        const attackSwipeTiming = 1 - Math.exp(-attackSwipe * 6.0) - Math.pow(attackSwipe/1.5, 2);
-        const attackSwipeTiming2 = 1 - Math.exp(-attackSwipe2 * 6.0) - Math.pow(attackSwipe2/1.5, 2);
+        const attackSwipePre = 1 - Math.exp(-attackSwipe * 6.0);
+        const attackSwipeTiming = attackSwipePre - Math.pow(attackSwipe/1.5, 2);
+        const attackSwipePre2 = 1 - Math.exp(-attackSwipe2 * 6.0);
+        const attackSwipeTiming2 = attackSwipePre2 - Math.pow(attackSwipe2/1.5, 2);
 
         const a = anim * 6;
         const t = 
@@ -311,6 +314,26 @@ function Player(x, y) {
             (Math.sin(climbAnim*1.2) * 0.15 - 0.2) * climbing +
             (attackSwipeTiming * 0.5 - attackSwipeTiming2 * 0.5) * attacking;
 
+        // Back swipe render
+        const xfm = ctx.getTransform();
+        const swipe1 = (facing > 0) ? attackSwipePre : attackSwipePre2;
+        const swipe2 = (facing > 0) ? attackSwipePre2 : attackSwipePre;
+        color('#3af');
+        ctx.translate(x, y);
+        if (facing < 0) {
+            ctx.scale(-1, 1);
+        }
+        if (swipe1 < 0.95) {
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.ellipse(5, -25, 70, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(5, -25, 60, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.stroke();
+        }
+        ctx.setTransform(xfm);
+
         // Render layers of mesh
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
         if (facing > 0) {
@@ -325,6 +348,23 @@ function Player(x, y) {
         } else {
             renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         }
+
+        // Front swipe render
+        color('#3af');
+        ctx.translate(x, y);
+        if (facing < 0) {
+            ctx.scale(-1, 1);
+        }
+        if (swipe2 < 0.95) {
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.ellipse(5, -25, 70, 20, 0.2, -swipe2, 3 - 4 * swipe2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(5, -25, 60, 30, 0.1, -swipe2, 3 - 4 * swipe2);
+            ctx.stroke();
+        }
+        ctx.setTransform(xfm);
 
         // Body animation
         bodyMesh[1][0] = 10 * heading * notAttack - 7 * climbing * facing + 15 * attacking * facing;
