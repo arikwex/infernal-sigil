@@ -221,12 +221,14 @@ function Player(x, y) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
             attackTime = 1;
+            airJump /= 2;
             vx = 0;
         }
         else if (onWall && onGround && v > 0.3) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
             attackTime = 1;
+            airJump /= 2;
             vx = 0;
         }
         
