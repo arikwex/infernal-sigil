@@ -30,7 +30,10 @@ function Player(x, y) {
 
     // Air jump
     let numAirjumpsUsed = 0;
-    let MAX_NUM_AIRJUMP = 1;
+    let airJump = 0;
+    let smoothAirjump = 0;
+    let timeSinceJump = 0;
+    let MAX_NUM_AIRJUMP = 3;
     
     // STATES
     // IDLE = 0,
@@ -75,7 +78,11 @@ function Player(x, y) {
         ['#e62', 6, 0],
         [0, 0, 0, -9]
     ];
-    //tailMesh.push(...flameMesh);
+    const wingMesh = [
+        ['#eb8', 3, 0],
+        [0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -20, -10, -25, 6, 0, 4],
+    ];
+    
 
     function update(dT, gameObjects, physicsObjects) {
         anim += dT;
@@ -134,15 +141,18 @@ function Player(x, y) {
             }
         }
 
-        if (jump()) {
+        if (jump() && timeSinceJump > 0.15) {
             if (state != 3) {
                 // Default jump
                 if (groundTime > 0) {
                     vy = -800;
-                } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP && unstick < 0) {
+                    timeSinceJump = 0;
+                } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
                     numAirjumpsUsed += 1;
+                    airJump = 1;
                     vy = -800;
+                    timeSinceJump = 0;
                 }
             } else {
                 // Wall Jumping
@@ -152,6 +162,7 @@ function Player(x, y) {
                 state = 0;
                 numAirjumpsUsed = 0;
                 groundTime = 0;
+                timeSinceJump = 0;
             }
         }
 
@@ -250,11 +261,14 @@ function Player(x, y) {
         smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
         targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * ((state == 3) ? 17 : 8) * dT;
         smoothAttacking += (((attackTime < 0.35) ? 1 : 0) - smoothAttacking) * 17 * dT;
+        smoothAirjump += (airJump - smoothAirjump) * 17 * dT;
         y += dT * vy;
         x += dT * vx;
         groundTime -= dT;
         unstick -= dT;
         stick += dT;
+        airJump = Math.max(airJump - dT, 0);
+        timeSinceJump += dT;
     }
 
     function render(ctx) {
@@ -267,6 +281,8 @@ function Player(x, y) {
         const notJumping = 1 - jumping;
         const running = targetRunning * notClimbing * notAttack;
         const idle = (1 - running) * notClimbing;
+        const wings = smoothAirjump;
+        const notWings = 1 - wings;
         const attackSwipePre = 1 - Math.exp(-attackSwipe * 6.0);
         const attackSwipeTiming = attackSwipePre - Math.pow(attackSwipe/1.5, 2);
         const attackSwipePre2 = 1 - Math.exp(-attackSwipe2 * 6.0);
@@ -401,6 +417,8 @@ function Player(x, y) {
         } else {
             renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
         }
+        renderMesh(wingMesh, x-2, y - 37, 0, 0 * wings + (t * 0.4 + 1.4) * notWings, -0.7 * notWings + tailWhip/2000 - wings * wings * 4 + 2.8 * airJump);
+        renderMesh(wingMesh, x+2, y - 37, 0, 3.14 * wings + (t * 0.4 + 1.6) * notWings, 0.7 * notWings + tailWhip/2000 + wings * wings * 4.4 - 2.8 * airJump);
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
         renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, pHeadT, pHeadA);
         if (facing > 0) {
