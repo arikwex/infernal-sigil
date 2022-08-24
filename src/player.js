@@ -18,6 +18,7 @@ function Player(x, y) {
     let groundTime = 0;
     let smoothGrounded = 0;
     let myHitbox = new BoundingBox(x-14,y-55,28,50);
+    let injured = 0;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -39,7 +40,7 @@ function Player(x, y) {
     let timeSinceJump = 0;
     let MAX_NUM_AIRJUMP = 1;
     
-    // STATES
+    // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
     // RUNNING = 1,
     // JUMPING = 2,
@@ -179,14 +180,14 @@ function Player(x, y) {
             if (myHitbox.isTouching(physics)) {
                 // Sides
                 if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-                    if (x < physics.x) {
+                    if (x-100 < physics.x) {
                         x = physics.x - 13;
                         if (facing > 0 && unstick < 0) {
                             onWall = true;
                         }
                         return;
                     }
-                    if (x > physics.x + physics.w) {
+                    if (x+100 > physics.x + physics.w) {
                         x = physics.x + physics.w + 13;
                         if (facing < 0 && unstick < 0) {
                             onWall = true;
@@ -264,13 +265,18 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
-            if (myHitbox.isTouching(enemyHitbox)) {
-                console.log('!!!');
+            if (myHitbox.isTouching(enemyHitbox) && injured <= 0) {
+                injured = 1;
+                attackTime = 0;
+                vx = Math.sign(x - enemyHitbox.x - enemyHitbox.w/2) * 1100;
+                vy = -100;
             }
         });
 
         facing += (targetFacing - facing) * 15 * dT;
-        vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+        if (injured <= 0.7) {
+            vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+        }
         vy = Math.min(vy, TERMINAL_VELOCITY);
         tailWhip += (vy - tailWhip) * 17 * dT;
         smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
@@ -284,6 +290,7 @@ function Player(x, y) {
         stick += dT;
         airJump = Math.max(airJump - dT, 0);
         timeSinceJump += dT;
+        injured = Math.max(0, injured - dT);
 
         myHitbox.set(x-14,y-55,28,50);
     }
@@ -427,6 +434,9 @@ function Player(x, y) {
         tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
 
         // Render layers of mesh
+        if (injured > 0.1) {
+            ctx.globalAlpha = Math.cos(injured*50) > 0 ? 0.2 : 1;
+        }
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
         renderMesh(flameMesh, x, y+tailMesh[1][9]-8, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
         if (facing > 0) {
@@ -444,6 +454,7 @@ function Player(x, y) {
         } else {
             renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         }
+        ctx.globalAlpha = 1;
 
         // Front swipe render
         color('#3af');
