@@ -1,6 +1,4 @@
 On Deck
-- Event emitter on attack -> deal damage
-- Skeleton death behavior
 - Deal damage to player on enemy touch / hit
 - TBD Skeleton attack behavior
 - Basic skeleton AI

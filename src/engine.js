@@ -14,7 +14,7 @@ function tick(currentFrameMs) {
     // ctx.scale(0.7, 0.7);
 
     objectsToRemove.length = 0;
-    gameObjects.map((g) => { if (g.update?.(dT, gameObjects, physicsObjects)) { objectsToRemove.push(g); } });
+    gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
     if (objectsToRemove.length > 0) { remove(objectsToRemove); }
     gameObjects.map((g) => { g.render?.(ctx); });
     requestAnimationFrame(tick);
@@ -26,10 +26,18 @@ function tick(currentFrameMs) {
 function add(obj) {
     gameObjects.push(obj);
     gameObjects.sort((a, b) => a.order - b.order);
+    if (obj.physics) { physicsObjects.push(obj); }
+}
+
+function arrayRemove(list, valuesToEvict) {
+    return list.filter((g) => !valuesToEvict.includes(g));
 }
 
 function remove(objList) {
-    gameObjects = gameObjects.filter((g) => !objList.includes(g));
+    gameObjects = arrayRemove(gameObjects, objList);
+    objList.map((obj) => {
+        if (obj.physics) { physicsObjects = arrayRemove(physicsObjects, obj); }
+    });
 }
 
 function clear() {
@@ -40,8 +48,12 @@ function start() {
     requestAnimationFrame(tick);
 }
 
-function addPhysics(obj) {
-    physicsObjects.push(obj);
+function getGameObjects() {
+    return gameObjects;
+}
+
+function getPhysicsObjects() {
+    return physicsObjects;
 }
 
 export {
@@ -50,6 +62,7 @@ export {
     add,
     remove,
     clear,
-
-    addPhysics,
+    
+    getGameObjects,
+    getPhysicsObjects,
 };

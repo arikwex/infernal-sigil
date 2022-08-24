@@ -1,8 +1,8 @@
 import { renderMesh } from './canvas';
-import { start, add, addPhysics } from './engine';
+import { start, add } from './engine';
 import Player from './player';
 import Skeleton from './skeleton';
-import { BoundingBox } from './wall';
+import { BoundingBox } from './bbox';
 
 start();
 // add({ render: (ctx) => { renderMesh([['#fff', 8, 0], [0,300,800,300]], 0, -1, 0, 0, 0); }})
@@ -21,5 +21,5 @@ add(new Skeleton(400, 439))
 // addPhysics(new BoundingBox(0, 100, 350, 100));
 
 // L-SHAPE LAYOUT
-addPhysics(new BoundingBox(0, 440, 800, 100));
-addPhysics(new BoundingBox(650, 100, 100, 340));
+add({ physics: new BoundingBox(0, 440, 800, 100) });
+add({ physics: new BoundingBox(650, 100, 100, 340) });

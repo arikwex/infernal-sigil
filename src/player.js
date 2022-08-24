@@ -1,6 +1,7 @@
 import { horizontal, vertical, jump, holdingJump, attack } from './controls';
 import { color, renderMesh } from './canvas';
-import { BoundingBox } from './wall';
+import { getPhysicsObjects } from './engine';
+import { BoundingBox } from './bbox';
 import * as bus from './bus';
 
 function Player(x, y) {
@@ -28,7 +29,7 @@ function Player(x, y) {
     let attackTime = 1;
     let attackHandFlag = false;
     let attackSeq = 0;
-    let MAX_NUM_ATTACK = 2;
+    let MAX_NUM_ATTACK = 3;
 
     // Air jump
     let numAirjumpsUsed = 0;
@@ -87,7 +88,7 @@ function Player(x, y) {
     const WING_FILL = 'rgba(230,100,70,0.5)';
     
 
-    function update(dT, gameObjects, physicsObjects) {
+    function update(dT) {
         anim += dT;
 
         attackTime = Math.min(attackTime + dT, 1);
@@ -116,7 +117,7 @@ function Player(x, y) {
             }
 
             // Attack
-            if (requestAttack && attackTime > 0.1 && attackSeq < MAX_NUM_ATTACK) {
+            if (requestAttack && attackTime > 0.18 && attackSeq < MAX_NUM_ATTACK) {
                 if (attackHandFlag) {
                     attackSwipe = 0;
                 } else {
@@ -173,19 +174,19 @@ function Player(x, y) {
         // Wall physics
         let onGround = false;
         let onWall = false;
-        physicsObjects.map((phys) => {
-            if (phys.isAABB(x-14,y-55,28,50)) {
+        getPhysicsObjects().map(({ physics }) => {
+            if (physics.isAABB(x-14,y-55,28,50)) {
                 // Sides
-                if (y - 16 < phys.y + phys.h && y - 16 > phys.y) {
-                    if (x < phys.x) {
-                        x = phys.x - 13;
+                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+                    if (x < physics.x) {
+                        x = physics.x - 13;
                         if (facing > 0 && unstick < 0) {
                             onWall = true;
                         }
                         return;
                     }
-                    if (x > phys.x + phys.w) {
-                        x = phys.x + phys.w + 13;
+                    if (x > physics.x + physics.w) {
+                        x = physics.x + physics.w + 13;
                         if (facing < 0 && unstick < 0) {
                             onWall = true;
                         }
@@ -193,17 +194,17 @@ function Player(x, y) {
                     }
                 }
                 // Falling to hit top of surface
-                if (y - 25 < phys.y && vy >= 0) {
+                if (y - 25 < physics.y && vy >= 0) {
                     vy = 0;
-                    y = phys.y + 5.1;
+                    y = physics.y + 5.1;
                     groundTime = 0.15;
                     numAirjumpsUsed = 0;
                     onGround = true;
                 }
                 // Hit head on bottom of surface
-                if ((y - 15 > phys.y + phys.h) && (vy < -100 || state == 3)) {
+                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
                     vy = 0;
-                    y = phys.y + phys.h + 55;
+                    y = physics.y + physics.h + 55;
                 }
             }
         });
