@@ -374,10 +374,10 @@ function Player(x, y) {
         if (swipe1 < 0.95) {
             ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.ellipse(5, -25, 70, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.ellipse(5, -25, 80, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(5, -25, 60, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.ellipse(5, -25, 70, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
             ctx.stroke();
         }
         ctx.setTransform(xfm);
@@ -440,10 +440,10 @@ function Player(x, y) {
         if (swipe2 < 0.95) {
             ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.ellipse(5, -25, 70, 20, 0.2, -swipe2, 3 - 4 * swipe2);
+            ctx.ellipse(5, -25, 80, 20, 0.2, -swipe2, 3 - 4 * swipe2);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(5, -25, 60, 30, 0.1, -swipe2, 3 - 4 * swipe2);
+            ctx.ellipse(5, -25, 70, 30, 0.1, -swipe2, 3 - 4 * swipe2);
             ctx.stroke();
         }
         ctx.setTransform(xfm);
@@ -452,6 +452,7 @@ function Player(x, y) {
     return {
         update,
         render,
+        order: 1000,
     };
 }
 

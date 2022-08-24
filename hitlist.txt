@@ -7,6 +7,9 @@ Mechanics
 - Obstacle avoidance
 - Chores?
 - Catch bats?
+- Press down --> 5 bones to heal?
+- All bones lost on death
+- 3 HP base
 
 VFX
 - Slash effect needs its own particle object

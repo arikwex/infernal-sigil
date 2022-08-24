@@ -22,6 +22,7 @@ function tick(currentFrameMs) {
 
 function add(obj) {
     gameObjects.push(obj);
+    gameObjects.sort((a, b) => a.order - b.order);
 }
 
 function remove(obj) {

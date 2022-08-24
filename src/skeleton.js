@@ -71,6 +71,7 @@ function Skeleton(x, y, type) {
     return {
         update,
         render,
+        order: 500,
     };
 }
 
