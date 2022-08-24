@@ -28,14 +28,14 @@ function Player(x, y) {
     let attackTime = 1;
     let attackHandFlag = false;
     let attackSeq = 0;
-    let MAX_NUM_ATTACK = 3;
+    let MAX_NUM_ATTACK = 2;
 
     // Air jump
     let numAirjumpsUsed = 0;
     let airJump = 0;
     let smoothAirjump = 0;
     let timeSinceJump = 0;
-    let MAX_NUM_AIRJUMP = 3;
+    let MAX_NUM_AIRJUMP = 1;
     
     // STATES
     // IDLE = 0,

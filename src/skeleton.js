@@ -9,6 +9,8 @@ function Skeleton(x, y, type) {
     let targetFacing = 1;
     let facing = 1;
     let injured = 0;
+    let maxHp = 3;
+    let hp = maxHp;
 
     const bodyMesh = [
         ['#fff', thickness, 0],
@@ -35,6 +37,10 @@ function Skeleton(x, y, type) {
     ];
 
     function update(dT) {
+        if (hp <= 0) {
+            return true;
+        }
+        
         if (injured <= 0) {
             vx = 60 * facing;
             if (Math.random > 0.98) {
@@ -95,6 +101,7 @@ function Skeleton(x, y, type) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);
             injured = 1;
+            hp -= 1;
         }
     }
     bus.on('attack', hitCheck);

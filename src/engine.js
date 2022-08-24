@@ -2,6 +2,7 @@ import { canvas, ctx } from './canvas';
 
 let gameObjects = [];
 let physicsObjects = [];
+const objectsToRemove = [];
 let lastFrameMs = 0;
 
 function tick(currentFrameMs) {
@@ -12,7 +13,9 @@ function tick(currentFrameMs) {
     ctx.translate(270, 100);
     // ctx.scale(0.7, 0.7);
 
-    gameObjects.map((g) => { g.update?.(dT, gameObjects, physicsObjects); });
+    objectsToRemove.length = 0;
+    gameObjects.map((g) => { if (g.update?.(dT, gameObjects, physicsObjects)) { objectsToRemove.push(g); } });
+    if (objectsToRemove.length > 0) { remove(objectsToRemove); }
     gameObjects.map((g) => { g.render?.(ctx); });
     requestAnimationFrame(tick);
     lastFrameMs = currentFrameMs;
@@ -25,8 +28,8 @@ function add(obj) {
     gameObjects.sort((a, b) => a.order - b.order);
 }
 
-function remove(obj) {
-    gameObjects = gameObjects.filter((g) => g != obj);
+function remove(objList) {
+    gameObjects = gameObjects.filter((g) => !objList.includes(g));
 }
 
 function clear() {
