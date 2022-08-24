@@ -9,4 +9,7 @@ Mechanics
 - Catch bats?
 
 VFX
+- Slash effect needs its own particle object
+- Enemy ground pound
+- Ranged Flame Ability
 - Swift wind swirl on land / impact

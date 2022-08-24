@@ -10,7 +10,7 @@ function tick(currentFrameMs) {
     
     const cameraXfm = ctx.getTransform();
     ctx.translate(270, 100);
-    ctx.scale(0.7, 0.7);
+    // ctx.scale(0.7, 0.7);
 
     gameObjects.map((g) => { g.update?.(dT, gameObjects, physicsObjects); });
     gameObjects.map((g) => { g.render?.(ctx); });

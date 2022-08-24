@@ -239,7 +239,7 @@ function Player(x, y) {
                 vy -= 20 * vy * dT;
                 climbAnim += vy / 10 * dT;
             } else {
-                vy -= 12 * vy * dT;
+                vy -= 20 * vy * dT;
                 climbAnim += -vy / 10 * dT;
             }
         } else {
