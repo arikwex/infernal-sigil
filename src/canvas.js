@@ -5,6 +5,7 @@ const ctx = canvas.getContext('2d');
 
 function thickness(t) { ctx.lineWidth = t; }
 function color(c) { ctx.strokeStyle = c; ctx.fillStyle = c; }
+function scaleInPlace(s, x, y) { ctx.translate(x, y); ctx.scale(s, s); ctx.translate(-x, -y); }
 
 function renderMesh(mesh, x, y, baseZ, theta, phi) {
     const xfm = ctx.getTransform();
@@ -41,4 +42,5 @@ export {
     ctx,
     color,
     renderMesh,
+    scaleInPlace,
 };
