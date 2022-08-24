@@ -17,6 +17,7 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
+    let myHitbox = new BoundingBox(x-14,y-55,28,50);
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -175,7 +176,7 @@ function Player(x, y) {
         let onGround = false;
         let onWall = false;
         getObjectsByTag('physics').map(({ physics }) => {
-            if (physics.isAABB(x-14,y-55,28,50)) {
+            if (myHitbox.isTouching(physics)) {
                 // Sides
                 if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
                     if (x < physics.x) {
@@ -263,7 +264,9 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
-            // console.log(enemyHitbox);
+            if (myHitbox.isTouching(enemyHitbox)) {
+                console.log('!!!');
+            }
         });
 
         facing += (targetFacing - facing) * 15 * dT;
@@ -281,6 +284,8 @@ function Player(x, y) {
         stick += dT;
         airJump = Math.max(airJump - dT, 0);
         timeSinceJump += dT;
+
+        myHitbox.set(x-14,y-55,28,50);
     }
 
     function render(ctx) {

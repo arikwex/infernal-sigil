@@ -100,8 +100,8 @@ function Skeleton(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([bbox, dir]) {
-        if (bbox.isAABB(x-20, y-55,40,55)) {
+    function hitCheck([attackHitbox, dir]) {
+        if (enemyHitbox.isTouching(attackHitbox)) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);
             injured = 1;
