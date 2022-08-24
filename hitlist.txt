@@ -1,3 +1,29 @@
+On Deck
+- Event emitter on attack -> deal damage
+- Skeleton hit animation
+- Skeleton death behavior
+- Deal damage to player on enemy touch / hit
+- TBD Skeleton attack behavior
+- Basic skeleton AI
+- Slash effect needs its own particle object
+- Rename WallPhysics -> BoundingBox
+- Bones scatter on enemy death
+- Collect bones
+- HUD for HP + bones
+- Heal ability
+- Camera tracking player (windowbox, not exponential follow)
+- Room loader/unloader mechanism
+- Hooks to level up player (visually and mechanically)
+- Shrine to acquire upgrade
+- GameState that is effectively load/reload
+- Ranged Flame Ability
+- Spikes / Lava dealing one damage and resetting player position
+- On death, go to last checkpoint at full HP + lose bones
+- TBD All objects can optionally return a physicsBox to add them to env physics
+- Game world layout
+- Mandatory combat rooms
+- TBD map?
+
 Motion
 - TBD opinions on ledge-walking
 
@@ -12,7 +38,5 @@ Mechanics
 - 3 HP base
 
 VFX
-- Slash effect needs its own particle object
-- Enemy ground pound
-- Ranged Flame Ability
+- Enemy ground pound animation / pulse
 - Swift wind swirl on land / impact
