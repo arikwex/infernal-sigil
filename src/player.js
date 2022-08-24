@@ -79,9 +79,10 @@ function Player(x, y) {
         [0, 0, 0, -9]
     ];
     const wingMesh = [
-        ['#eb8', 3, 0],
-        [0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -20, -10, -25, 6, 0, 4],
+        ['#e22', 3, 0],
+        [0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4],
     ];
+    const WING_FILL = 'rgba(230,100,70,0.5)';
     
 
     function update(dT, gameObjects, physicsObjects) {
@@ -419,8 +420,9 @@ function Player(x, y) {
         } else {
             renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
         }
-        renderMesh(wingMesh, x-2, y - 37, 0, 0 * wings + (t * 0.4 + 1.4) * notWings, -0.7 * notWings + tailWhip/2000 - wings * wings * 4 + 2.8 * airJump);
-        renderMesh(wingMesh, x+2, y - 37, 0, 3.14 * wings + (t * 0.4 + 1.6) * notWings, 0.7 * notWings + tailWhip/2000 + wings * wings * 4.4 - 2.8 * airJump);
+        ctx.fillStyle
+        renderMesh(wingMesh, x-2, y - 37, 0, 0 * wings + (t * 0.4 + 1.4) * notWings, -0.7 * notWings + tailWhip/2000 - wings * wings * 4 + 2.8 * airJump, WING_FILL);
+        renderMesh(wingMesh, x+2, y - 37, 0, 3.14 * wings + (t * 0.4 + 1.6) * notWings, 0.7 * notWings + tailWhip/2000 + wings * wings * 4.4 - 2.8 * airJump, WING_FILL);
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
         renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, pHeadT, pHeadA);
         if (facing > 0) {
