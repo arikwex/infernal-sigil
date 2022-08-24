@@ -22,8 +22,11 @@ function BoundingBox(x, y, w, h) {
         return isTouching;
     }
 
+    function set(x_,y_,w_,h_) { x=x_;y=y_;w=w_;h=h_; }
+
     return {
         x, y, w, h,
+        set,
         isAABB,
     }
 }

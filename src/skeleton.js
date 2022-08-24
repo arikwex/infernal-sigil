@@ -1,5 +1,6 @@
 import { color, renderMesh, scaleInPlace } from './canvas';
 import * as bus from './bus';
+import { BoundingBox } from './bbox';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -11,6 +12,7 @@ function Skeleton(x, y, type) {
     let injured = 0;
     let maxHp = 3;
     let hp = maxHp;
+    const enemyHitbox = new BoundingBox(0,0,0,0);
 
     const bodyMesh = [
         ['#fff', thickness, 0],
@@ -40,7 +42,7 @@ function Skeleton(x, y, type) {
         if (hp <= 0) {
             return true;
         }
-        
+
         if (injured <= 0) {
             vx = 60 * facing;
             if (Math.random > 0.98) {
@@ -56,6 +58,8 @@ function Skeleton(x, y, type) {
         x += vx * dT;
         facing += (targetFacing - facing) * 20 * dT;
         injured = Math.max(0, injured - dT * 2);
+
+        enemyHitbox.set(x-20, y-55,40,55);
     }
 
     function render(ctx) {
@@ -110,6 +114,8 @@ function Skeleton(x, y, type) {
         update,
         render,
         order: 500,
+        tags: ['enemy'],
+        enemyHitbox,
     };
 }
 

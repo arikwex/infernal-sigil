@@ -1,7 +1,7 @@
 import { canvas, ctx } from './canvas';
 
 let gameObjects = [];
-let physicsObjects = [];
+let gameObjectsByTag = {};
 const objectsToRemove = [];
 let lastFrameMs = 0;
 
@@ -26,7 +26,10 @@ function tick(currentFrameMs) {
 function add(obj) {
     gameObjects.push(obj);
     gameObjects.sort((a, b) => a.order - b.order);
-    if (obj.physics) { physicsObjects.push(obj); }
+    obj.tags?.map((tag) => {
+        gameObjectsByTag[tag] = (gameObjectsByTag[tag] ?? []);
+        gameObjectsByTag[tag].push(obj);
+    });
 }
 
 function arrayRemove(list, valuesToEvict) {
@@ -36,7 +39,9 @@ function arrayRemove(list, valuesToEvict) {
 function remove(objList) {
     gameObjects = arrayRemove(gameObjects, objList);
     objList.map((obj) => {
-        if (obj.physics) { physicsObjects = arrayRemove(physicsObjects, obj); }
+        obj.tags?.map((tag) => {
+            gameObjectsByTag[tag] = arrayRemove(gameObjectsByTag[tag], [obj]);
+        });
     });
 }
 
@@ -52,8 +57,8 @@ function getGameObjects() {
     return gameObjects;
 }
 
-function getPhysicsObjects() {
-    return physicsObjects;
+function getObjectsByTag(tag) {
+    return gameObjectsByTag[tag];
 }
 
 export {
@@ -64,5 +69,5 @@ export {
     clear,
     
     getGameObjects,
-    getPhysicsObjects,
+    getObjectsByTag,
 };

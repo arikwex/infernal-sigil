@@ -1,6 +1,6 @@
 import { horizontal, vertical, jump, holdingJump, attack } from './controls';
 import { color, renderMesh } from './canvas';
-import { getPhysicsObjects } from './engine';
+import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
 
@@ -174,7 +174,7 @@ function Player(x, y) {
         // Wall physics
         let onGround = false;
         let onWall = false;
-        getPhysicsObjects().map(({ physics }) => {
+        getObjectsByTag('physics').map(({ physics }) => {
             if (physics.isAABB(x-14,y-55,28,50)) {
                 // Sides
                 if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
@@ -260,6 +260,11 @@ function Player(x, y) {
             }
             stick = 0;
         }
+
+        // Enemy collision checks
+        getObjectsByTag('enemy').map(({ enemyHitbox }) => {
+            // console.log(enemyHitbox);
+        });
 
         facing += (targetFacing - facing) * 15 * dT;
         vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);

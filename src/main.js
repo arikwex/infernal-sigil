@@ -21,5 +21,5 @@ add(new Skeleton(400, 439))
 // addPhysics(new BoundingBox(0, 100, 350, 100));
 
 // L-SHAPE LAYOUT
-add({ physics: new BoundingBox(0, 440, 800, 100) });
-add({ physics: new BoundingBox(650, 100, 100, 340) });
+add({ tags: ['physics'], physics: new BoundingBox(0, 440, 800, 100) });
+add({ tags: ['physics'], physics: new BoundingBox(650, 100, 100, 340) });
