@@ -35,8 +35,18 @@ function Skeleton(x, y, type) {
     ];
 
     function update(dT) {
+        if (injured <= 0) {
+            vx = 60 * facing;
+            if (Math.random > 0.98) {
+                targetFacing = -targetFacing;
+            }
+        }
+
+        if (injured > 0) {
+            vx -= vx * 12 * dT;
+        }
+
         anim += dT;
-        vx -= vx * 12 * dT;
         x += vx * dT;
         facing += (targetFacing - facing) * 20 * dT;
         injured = Math.max(0, injured - dT * 2);
