@@ -1,6 +1,6 @@
 import { ctx } from './canvas';
 
-function WallPhysics(x, y, w, h) {
+function BoundingBox(x, y, w, h) {
     function isHorizontal(x2, w2) {
         return (x2 + w2 > x) && (x2 < x + w);
     }
@@ -29,5 +29,5 @@ function WallPhysics(x, y, w, h) {
 }
 
 export {
-    WallPhysics
+    BoundingBox
 };

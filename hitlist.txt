@@ -8,6 +8,7 @@ On Deck
 - Slash effect needs its own particle object
 - Rename WallPhysics -> BoundingBox
 - Bones scatter on enemy death
+- Skeleton wall physics (X axis mandatory)
 - Collect bones
 - HUD for HP + bones
 - Heal ability

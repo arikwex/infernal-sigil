@@ -1,5 +1,7 @@
 import { horizontal, vertical, jump, holdingJump, attack } from './controls';
 import { color, renderMesh } from './canvas';
+import { BoundingBox } from './wall';
+import * as bus from './bus';
 
 function Player(x, y) {
     const thickness = 9;
@@ -126,6 +128,7 @@ function Player(x, y) {
                 smoothAttacking = 1;
                 vx = targetFacing * 850;
                 vy = vy * 0.25 - 100;
+                bus.emit('attack', [new BoundingBox(x - 50 + 50 * targetFacing, y - 50, 100, 50), targetFacing]);
             }
             if (attackTime > 0.55) {
                 attackSeq = 0;
@@ -421,8 +424,8 @@ function Player(x, y) {
             renderMesh(handMesh, x + pHand2X, y + pHand2Y - Math.cos(a + 3) * 1.5 + 1, 0, t+3.14, pHand2A);
         }
         ctx.fillStyle
-        renderMesh(wingMesh, x-2, y - 37, 0, 0 * wings + (t * 0.4 + 1.4) * notWings, -0.7 * notWings + tailWhip/2000 - wings * wings * 4 + 2.8 * airJump, WING_FILL);
-        renderMesh(wingMesh, x+2, y - 37, 0, 3.14 * wings + (t * 0.4 + 1.6) * notWings, 0.7 * notWings + tailWhip/2000 + wings * wings * 4.4 - 2.8 * airJump, WING_FILL);
+        renderMesh(wingMesh, x-2, y - 37 + attacking * 6, 0, 0 * wings + (t * 0.4 + 1.4) * notWings, -0.7 * notWings + tailWhip/2000 - wings * wings * 4 + 2.8 * airJump, WING_FILL);
+        renderMesh(wingMesh, x+2, y - 37 + attacking * 6, 0, 3.14 * wings + (t * 0.4 + 1.6) * notWings, 0.7 * notWings + tailWhip/2000 + wings * wings * 4.4 - 2.8 * airJump, WING_FILL);
         renderMesh(bodyMesh, x, y - 8, 0, t, 0);
         renderMesh(headMesh, x + pHeadX, y + pHeadY + Math.cos(a + 1) * 1.5 + 1, 10, pHeadT, pHeadA);
         if (facing > 0) {
