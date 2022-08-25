@@ -17,7 +17,7 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
-    let myHitbox = new BoundingBox(x-14,y-55,28,50);
+    let playerHitbox = new BoundingBox(x-14,y-55,28,50);
     let injured = 0;
 
     // Climbing
@@ -106,7 +106,7 @@ function Player(x, y) {
         let onGround = false;
         let onWall = false;
         getObjectsByTag('physics').map(({ physics }) => {
-            if (myHitbox.isTouching(physics)) {
+            if (playerHitbox.isTouching(physics)) {
                 // Sides
                 if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
                     if (x-10 < physics.x) {
@@ -264,7 +264,7 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
-            if (myHitbox.isTouching(enemyHitbox) && injured <= 0) {
+            if (playerHitbox.isTouching(enemyHitbox) && injured <= 0) {
                 injured = 1;
                 attackTime = 0;
                 vx = Math.sign(x - enemyHitbox.x - enemyHitbox.w/2) * 1100;
@@ -291,7 +291,7 @@ function Player(x, y) {
         timeSinceJump += dT;
         injured = Math.max(0, injured - dT);
 
-        myHitbox.set(x-14,y-55,28,50);
+        playerHitbox.set(x-14,y-55,28,50);
     }
 
     function render(ctx) {
@@ -477,6 +477,8 @@ function Player(x, y) {
         update,
         render,
         order: 1000,
+        tags: ['player'],
+        playerHitbox
     };
 }
 

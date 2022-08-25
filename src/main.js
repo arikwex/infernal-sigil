@@ -3,10 +3,12 @@ import { start, add } from './engine';
 import Player from './player';
 import Skeleton from './skeleton';
 import { BoundingBox } from './bbox';
+import Bone from './bone';
 
 start();
 add(new Player(150, 400));
-add(new Skeleton(500, 439))
+add(new Skeleton(500, 439));
+add(new Bone(300, 300, 0, 0));
 
 // ISLANDS LAYOUT
 // addPhysics(new BoundingBox(0, 440, 300, 100));

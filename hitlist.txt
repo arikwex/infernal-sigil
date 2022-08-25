@@ -1,13 +1,8 @@
 On Deck
-- Basic skeleton AI
-- Slash effect needs its own particle object
-- Rename WallPhysics -> BoundingBox
 - Bones scatter on enemy death
-- Skeleton wall physics (X axis mandatory)
 - Collect bones
 - HUD for HP + bones
-- TBD Skeleton attack behavior
-- Heal ability
+
 - Camera tracking player (windowbox, not exponential follow)
 - Room loader/unloader mechanism
 - Hooks to level up player (visually and mechanically)
@@ -16,7 +11,11 @@ On Deck
 - Ranged Flame Ability
 - Spikes / Lava dealing one damage and resetting player position
 - On death, go to last checkpoint at full HP + lose bones
-- TBD All objects can optionally return a physicsBox to add them to env physics
+
+- TBD Skeleton attack behavior
+- Slash effect needs its own particle object
+- Heal ability
+
 - Game world layout
 - Mandatory combat rooms
 - TBD map?
