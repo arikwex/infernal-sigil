@@ -125,7 +125,7 @@ function Player(x, y) {
                     }
                 }
                 // Falling to hit top of surface
-                if (y - 45 < physics.y) {
+                if (y - 45 < physics.y && vy >= -10) {
                     vy = 0;
                     y = physics.y + 5.1;
                     groundTime = 0.15;
@@ -229,14 +229,12 @@ function Player(x, y) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
             attackTime = 1;
-            airJump /= 2;
             vx = 0;
         }
         else if (onWall && onGround && v > 0.3) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
             attackTime = 1;
-            airJump /= 2;
             vx = 0;
         }
         
@@ -247,7 +245,7 @@ function Player(x, y) {
                 vy -= 20 * vy * dT;
                 climbAnim += vy / 10 * dT;
             } else {
-                vy -= 20 * vy * dT;
+                vy -= 10 * vy * dT;
                 climbAnim += -vy / 10 * dT;
             }
         } else {
@@ -289,7 +287,7 @@ function Player(x, y) {
         groundTime -= dT;
         unstick -= dT;
         stick += dT;
-        airJump = Math.max(airJump - dT, 0);
+        airJump = Math.max(airJump - ((state==3) ? 3 * dT : dT), 0);
         timeSinceJump += dT;
         injured = Math.max(0, injured - dT);
 

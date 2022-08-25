@@ -46,7 +46,7 @@ function Skeleton(x, y, type) {
         }
 
         let onGround = false;
-        vy += 2000 * dT;
+        vy += 1400 * dT;
         getObjectsByTag('physics').map(({ physics }) => {
             if (enemyHitbox.isTouching(physics)) {
                 // Sides
@@ -65,7 +65,7 @@ function Skeleton(x, y, type) {
                 // Falling to hit top of surface
                 if (y - 45 < physics.y) {
                     vy = 0;
-                    y = physics.y + 5.1;
+                    y = physics.y + 0.1;
                     onGround = true;
                 }
                 // Hit head on bottom of surface
@@ -89,10 +89,11 @@ function Skeleton(x, y, type) {
 
         anim += dT;
         x += vx * dT;
+        y += vy * dT;
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
-        enemyHitbox.set(x-20, y-55,40,55);
+        enemyHitbox.set(x-20, y-59,40,60);
     }
 
     function render(ctx) {
