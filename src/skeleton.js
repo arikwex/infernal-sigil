@@ -42,6 +42,8 @@ function Skeleton(x, y, type) {
 
     function update(dT) {
         if (hp <= 0) {
+            bus.emit('bone:spawn', [x,y-55,4]);
+            bus.off('attack', hitCheck);
             return true;
         }
 

@@ -2,6 +2,7 @@ On Deck
 - Bones scatter on enemy death
 - Collect bones
 - HUD for HP + bones
+- REFACTOR WALL HIT DETECTION (make it re-usable)
 
 - Camera tracking player (windowbox, not exponential follow)
 - Room loader/unloader mechanism
