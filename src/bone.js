@@ -1,12 +1,14 @@
 import * as bus from './bus';
 import { BoundingBox } from "./bbox"
-import { renderMesh } from "./canvas";
+import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { physicsCheck } from './utils';
 
 function Bone(x, y, vx, vy) {
     let anim = Math.random() * 7;
     let phase = Math.random() * 7;
+    let popOut = 0;
+    let collected = false;
     let lifeTime = 0;
 
     const collectHitbox = new BoundingBox(x,y,1,1);
@@ -28,15 +30,19 @@ function Bone(x, y, vx, vy) {
             vx -= vx * 9.0 * dT;
         }
         if (onRoof) { vy = 0; }
+        
+        if (!collected) {
+            getObjectsByTag('player').map(({ playerHitbox }) => {
+                if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.5) {
+                    collected = true;
+                    bus.emit('bone:collect', 1);
+                }
+            });
+        } else {
+            popOut += 3 * dT;
+        }
 
-        let collected = false;
-        getObjectsByTag('player').map(({ playerHitbox }) => {
-            if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.65) {
-                collected = true;
-            }
-        });
-        if (collected) {
-            bus.emit('bone:collect', 1);
+        if (popOut > 0.5) {
             return true;
         }
 
@@ -48,7 +54,14 @@ function Bone(x, y, vx, vy) {
     function render(ctx) {
         const t = anim * 3;
         const p = Math.cos(anim + phase) * 0.2 + phase;
-        renderMesh(boneMesh, x, y, 0, t, p);
+        if (collected) {
+            color(`rgba(255, 255, 180, ${1 - popOut * 2})`);
+            ctx.beginPath();
+            ctx.arc(x,y,popOut*40+10,0,6.28);
+            ctx.fill();
+        } else {
+            renderMesh(boneMesh, x, y, 0, t, p);
+        }
     }
 
     return {

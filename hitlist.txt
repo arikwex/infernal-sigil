@@ -1,5 +1,4 @@
 On Deck
-- REFACTOR WALL HIT DETECTION (make it re-usable)
 
 - Camera tracking player (windowbox, not exponential follow)
 - Map loader + compressor
