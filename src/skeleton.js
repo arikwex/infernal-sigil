@@ -14,7 +14,7 @@ function Skeleton(x, y, type) {
     let injured = 0;
     let maxHp = 3;
     let hp = maxHp;
-    const enemyHitbox = new BoundingBox(0,0,0,0);
+    const enemyHitbox = new BoundingBox(0,0,0,0,0,0);
 
     const bodyMesh = [
         ['#fff', thickness, 0],
@@ -95,7 +95,7 @@ function Skeleton(x, y, type) {
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
-        enemyHitbox.set(x-20, y-59,40,60);
+        enemyHitbox.set(x, y, -20, -59, 40, 60);
     }
 
     function render(ctx) {

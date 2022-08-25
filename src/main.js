@@ -26,9 +26,9 @@ function initialize() {
     // addPhysics(new BoundingBox(0, 100, 350, 100));
 
     // L-SHAPE LAYOUT
-    add({ tags: ['physics'], physics: new BoundingBox(0, 440, 800, 100) });
-    add({ tags: ['physics'], physics: new BoundingBox(650, 100, 100, 340) });
-    add({ tags: ['physics'], physics: new BoundingBox(250, 340, 100, 100) });
+    add({ tags: ['physics'], physics: new BoundingBox(0, 440, 0, 0, 800, 100) });
+    add({ tags: ['physics'], physics: new BoundingBox(650, 100, 0, 0, 100, 340) });
+    add({ tags: ['physics'], physics: new BoundingBox(250, 340, 0, 0, 100, 100) });
 
     // Game events
     bus.on('bone:spawn', ([x,y,N]) => {

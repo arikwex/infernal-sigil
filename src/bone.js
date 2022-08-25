@@ -68,7 +68,7 @@ function Bone(x, y, vx, vy) {
 
         x += vx * dT;
         y += vy * dT;
-        collectHitbox.set(x-15,y-20,30,40);
+        collectHitbox.set(x, y, -15, -20, 30, 40);
     }
 
     function render(ctx) {

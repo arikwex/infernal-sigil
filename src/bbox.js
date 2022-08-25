@@ -5,23 +5,23 @@ function inBound(x, w, x2, w2) {
 }
 
 function isTouching(a, b) {
-    const c = inBound(a.x, a.w, b.x, b.w) && inBound(a.y, a.h, b.y, b.h);
+    const c = inBound(a.x+a.ox, a.w, b.x+b.ox, b.w) && inBound(a.y+a.oy, a.h, b.y+b.oy, b.h);
     // DEBUG
     ctx.beginPath();
     ctx.lineWidth = 2;
     ctx.strokeStyle = '#fff';//isTouching ? '#f0f' : '#0f0';
-    ctx.rect(b.x, b.y, b.w, b.h);
-    // ctx.rect(a.x, a.y, a.w, a.h);
+    ctx.rect(b.x+b.ox, b.y+b.oy, b.w, b.h);
+    ctx.rect(a.x+a.ox, a.y+a.oy, a.w, a.h);
     ctx.stroke();
     //
     return c;
 }
 
-function BoundingBox(x, y, w, h) {
+function BoundingBox(x, y, ox, oy, w, h) {
     const self = {};
-    self.set = (x_,y_,w_,h_) => { self.x=x_;self.y=y_;self.w=w_;self.h=h_; }
+    self.set = (x_,y_,ox_,oy_,w_,h_) => { self.x=x_;self.y=y_;self.ox=ox_;self.oy=oy_;self.w=w_;self.h=h_; }
     self.isTouching = (other) => { return isTouching(self, other); }
-    self.set(x,y,w,h);
+    self.set(x,y,ox,oy,w,h);
     return self;
 }
 
