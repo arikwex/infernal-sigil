@@ -269,6 +269,10 @@ function Player(x, y) {
                 attackTime = 0;
                 vx = Math.sign(x - enemyHitbox.x - enemyHitbox.w/2) * 1100;
                 vy = -100;
+                if (state == 3) {
+                    state = 0;
+                    vx = -targetFacing * 300;
+                }
                 bus.emit('player:hit', 1);
             }
         });

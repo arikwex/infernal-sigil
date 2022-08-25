@@ -1,11 +1,10 @@
 On Deck
-- HUD for HP + bones
-- If hit while on wall, things look hilariously bad...
 - REFACTOR WALL HIT DETECTION (make it re-usable)
 
 - Camera tracking player (windowbox, not exponential follow)
 - Map loader + compressor
 - Room loader/unloader mechanism
+
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
 - GameState that is effectively load/reload
