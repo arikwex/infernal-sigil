@@ -3,6 +3,7 @@ import { color, renderMesh } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
+import { physicsCheck } from './utils';
 
 function Player(x, y) {
     const thickness = 9;
@@ -105,40 +106,65 @@ function Player(x, y) {
         // Wall physics
         let onGround = false;
         let onWall = false;
+        let onRoof = false;
+        const canHitHead = (vy < -100 || state == 3);
         getObjectsByTag('physics').map(({ physics }) => {
-            if (playerHitbox.isTouching(physics)) {
-                // Sides
-                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-                    if (x-10 < physics.x) {
-                        x = physics.x - 13;
-                        if (facing > 0 && unstick < 0) {
-                            onWall = true;
-                        }
-                        return;
-                    }
-                    if (x+10 > physics.x + physics.w) {
-                        x = physics.x + physics.w + 13;
-                        if (facing < 0 && unstick < 0) {
-                            onWall = true;
-                        }
-                        return;
-                    }
-                }
-                // Falling to hit top of surface
-                if (y - 45 < physics.y && vy >= -10) {
-                    vy = 0;
-                    y = physics.y + 5.1;
-                    groundTime = 0.15;
-                    numAirjumpsUsed = 0;
-                    onGround = true;
-                }
-                // Hit head on bottom of surface
-                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
-                    vy = 0;
-                    y = physics.y + physics.h + 55;
-                }
-            }
+            [x_, y_, onGround_, onRightWall_, onLeftWall_, onRoof_] = physicsCheck(playerHitbox, physics);
+            x = x_;
+            y = y_;
+            onGround |= onGround_;
+            onWall |= (onRightWall_ && facing > 0) || (onLeftWall_ && facing < 0);
+            onRoof |= onRoof_;
+            playerHitbox.set(x, y, -14, -55, 28, 50);
+            // if (playerHitbox.isTouching(physics)) {
+            //     // Sides
+            //     if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+            //         if (x-10 < physics.x) {
+            //             x = physics.x - 13;
+            //             if (facing > 0 && unstick < 0) {
+            //                 onWall = true;
+            //             }
+            //             return;
+            //         }
+            //         if (x+10 > physics.x + physics.w) {
+            //             x = physics.x + physics.w + 13;
+            //             if (facing < 0 && unstick < 0) {
+            //                 onWall = true;
+            //             }
+            //             return;
+            //         }
+            //     }
+            //     // Falling to hit top of surface
+            //     if (y - 45 < physics.y && vy >= -10) {
+            //         vy = 0;
+            //         y = physics.y + 5.1;
+            //         groundTime = 0.15;
+            //         numAirjumpsUsed = 0;
+            //         onGround = true;
+            //     }
+            //     // Hit head on bottom of surface
+            //     if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
+            //         vy = 0;
+            //         y = physics.y + physics.h + 55;
+            //     }
+            // }
         });
+        
+        // Disallow sticking to wall during timeout period
+        if (onWall && unstick >= 0) {
+            onWall = false;
+        }
+
+        if (onGround) {
+            vy = 0;
+            groundTime = 0.15;
+            numAirjumpsUsed = 0;
+            onGround = true;
+        }
+
+        if (onRoof) {
+            vy = 0;
+        }
 
         if (state != 3) {
             // Default controls
@@ -214,7 +240,7 @@ function Player(x, y) {
 
         if (!onWall) {
             // If not on the wall while moving up, pop upward
-            if (state == 3 && (v > 0.3 || vy < -10)) {
+            if (state == 3 && (v > 0.3 || vy < -0.3)) {
                 vy = -CLIMB_SPEED * 1.4;
                 vx = facing * 300;
                 unstick = 0.1;

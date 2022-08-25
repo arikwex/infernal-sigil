@@ -15,20 +15,20 @@ function initialize() {
     add(new HUD());
 
     // ISLANDS LAYOUT
-    // addPhysics(new BoundingBox(0, 440, 300, 100));
-    // addPhysics(new BoundingBox(400, 440, 300, 100));
-    // addPhysics(new BoundingBox(100, 140, 100, 200));
-    // addPhysics(new BoundingBox(500, 140, 100, 300));
+    // add({ tags: ['physics'], physics: new BoundingBox(0, 440, 0, 0, 300, 100) });
+    // add({ tags: ['physics'], physics: new BoundingBox(400, 440, 0, 0, 300, 100) });
+    // add({ tags: ['physics'], physics: new BoundingBox(100, 140, 0, 0, 100, 200) });
+    // add({ tags: ['physics'], physics: new BoundingBox(500, 140, 0, 0, 100, 300) });
 
     // NOOK LAYOUT
-    // addPhysics(new BoundingBox(0, 440, 800, 100));
-    // addPhysics(new BoundingBox(350, 100, 100, 340));
-    // addPhysics(new BoundingBox(0, 100, 350, 100));
+    add({ tags: ['physics'], physics: new BoundingBox(0, 440, 0, 0, 800, 100) });
+    add({ tags: ['physics'], physics: new BoundingBox(350, 100, 0, 0, 100, 340) });
+    add({ tags: ['physics'], physics: new BoundingBox(0, 100, 0, 0, 350, 100) });
 
     // L-SHAPE LAYOUT
-    add({ tags: ['physics'], physics: new BoundingBox(0, 440, 0, 0, 800, 100) });
-    add({ tags: ['physics'], physics: new BoundingBox(650, 100, 0, 0, 100, 340) });
-    add({ tags: ['physics'], physics: new BoundingBox(250, 340, 0, 0, 100, 100) });
+    // add({ tags: ['physics'], physics: new BoundingBox(0, 440, 0, 0, 800, 100) });
+    // add({ tags: ['physics'], physics: new BoundingBox(650, 100, 0, 0, 100, 340) });
+    // add({ tags: ['physics'], physics: new BoundingBox(250, 340, 0, 0, 100, 100) });
 
     // Game events
     bus.on('bone:spawn', ([x,y,N]) => {

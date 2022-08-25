@@ -19,37 +19,37 @@ function Bone(x, y, vx, vy) {
         vy += 2000 * dT;
 
         let onGround = false;
-        getObjectsByTag('physics').map(({ physics }) => {
-            if (collectHitbox.isTouching(physics)) {
-                // Sides
-                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-                    if (x-10 < physics.x) {
-                        x = physics.x - 15;
-                        vx = -vx;
-                        targetFacing = -1;
-                        return;
-                    }
-                    if (x+10 > physics.x + physics.w) {
-                        x = physics.x + physics.w + 15;
-                        vx = -vx;
-                        targetFacing = 1;
-                        return;
-                    }
-                }
-                // Falling to hit top of surface
-                if (y - 45 < physics.y) {
-                    vy = (vy > 300) ? -0.4*vy : 0;
-                    vx *= 0.7;
-                    y = physics.y - 19.9;
-                    onGround = true;
-                }
-                // Hit head on bottom of surface
-                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
-                    vy = 0;
-                    y = physics.y + physics.h + 20;
-                }
-            }
-        });
+        // getObjectsByTag('physics').map(({ physics }) => {
+        //     if (collectHitbox.isTouching(physics)) {
+        //         // Sides
+        //         if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+        //             if (x-10 < physics.x) {
+        //                 x = physics.x - 15;
+        //                 vx = -vx;
+        //                 targetFacing = -1;
+        //                 return;
+        //             }
+        //             if (x+10 > physics.x + physics.w) {
+        //                 x = physics.x + physics.w + 15;
+        //                 vx = -vx;
+        //                 targetFacing = 1;
+        //                 return;
+        //             }
+        //         }
+        //         // Falling to hit top of surface
+        //         if (y - 45 < physics.y) {
+        //             vy = (vy > 300) ? -0.4*vy : 0;
+        //             vx *= 0.7;
+        //             y = physics.y - 19.9;
+        //             onGround = true;
+        //         }
+        //         // Hit head on bottom of surface
+        //         if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
+        //             vy = 0;
+        //             y = physics.y + physics.h + 20;
+        //         }
+        //     }
+        // });
 
         if (onGround) {
             vx -= vx * 9.0 * dT;
