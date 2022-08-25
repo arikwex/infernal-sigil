@@ -37,6 +37,14 @@ function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor = null) {
     ctx.setTransform(xfm);
 }
 
+function renderText(txt, x, y, color = '#fff', size = 30, align = 'left') {
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.font = `bold ${size}px arial`;
+    ctx.fillText(txt, x, y);
+}
+
+ctx.textBaseline = 'middle';
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
 
@@ -45,5 +53,6 @@ export {
     ctx,
     color,
     renderMesh,
+    renderText,
     scaleInPlace,
 };
