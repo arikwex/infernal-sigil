@@ -1,4 +1,5 @@
-import { color, renderMesh, scaleInPlace } from './canvas';
+import { renderMesh, scaleInPlace } from './canvas';
+import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 
@@ -7,6 +8,7 @@ function Skeleton(x, y, type) {
     const size = 1.3;
     let anim = 0;
     let vx = 0;
+    let vy = 0;
     let targetFacing = 1;
     let facing = 1;
     let injured = 0;
@@ -43,6 +45,37 @@ function Skeleton(x, y, type) {
             return true;
         }
 
+        let onGround = false;
+        vy += 2000 * dT;
+        getObjectsByTag('physics').map(({ physics }) => {
+            if (enemyHitbox.isTouching(physics)) {
+                // Sides
+                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+                    if (x-10 < physics.x) {
+                        x = physics.x - 20;
+                        targetFacing = -1;
+                        return;
+                    }
+                    if (x+10 > physics.x + physics.w) {
+                        x = physics.x + physics.w + 20;
+                        targetFacing = 1;
+                        return;
+                    }
+                }
+                // Falling to hit top of surface
+                if (y - 45 < physics.y) {
+                    vy = 0;
+                    y = physics.y + 5.1;
+                    onGround = true;
+                }
+                // Hit head on bottom of surface
+                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
+                    vy = 0;
+                    y = physics.y + physics.h + 55;
+                }
+            }
+        });
+
         if (injured <= 0) {
             vx = 60 * facing;
             if (Math.random > 0.98) {
@@ -56,7 +89,7 @@ function Skeleton(x, y, type) {
 
         anim += dT;
         x += vx * dT;
-        facing += (targetFacing - facing) * 20 * dT;
+        facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
         enemyHitbox.set(x-20, y-55,40,55);

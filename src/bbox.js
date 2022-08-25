@@ -11,7 +11,7 @@ function isTouching(a, b) {
     ctx.lineWidth = 2;
     ctx.strokeStyle = '#fff';//isTouching ? '#f0f' : '#0f0';
     ctx.rect(b.x, b.y, b.w, b.h);
-    ctx.rect(a.x, a.y, a.w, a.h);
+    // ctx.rect(a.x, a.y, a.w, a.h);
     ctx.stroke();
     //
     return c;
