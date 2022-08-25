@@ -9,10 +9,10 @@ function isTouching(a, b) {
     // DEBUG
     ctx.beginPath();
     ctx.lineWidth = 2;
-    //ctx.strokeStyle = '#fff';
-    ctx.strokeStyle = c ? '#f0f' : '#0f0';
+    ctx.strokeStyle = '#fff';
+    // ctx.strokeStyle = c ? '#f0f' : '#0f0';
     ctx.rect(b.x+b.ox, b.y+b.oy, b.w, b.h);
-    ctx.rect(a.x+a.ox, a.y+a.oy, a.w, a.h);
+    // ctx.rect(a.x+a.ox, a.y+a.oy, a.w, a.h);
     ctx.stroke();
     //
     return c;

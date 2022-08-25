@@ -2,10 +2,12 @@ import * as bus from './bus';
 import { BoundingBox } from "./bbox"
 import { renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
+import { physicsCheck } from './utils';
 
 function Bone(x, y, vx, vy) {
     let anim = Math.random() * 7;
     let phase = Math.random() * 7;
+    let lifeTime = 0;
 
     const collectHitbox = new BoundingBox(x,y,1,1);
     const boneMesh = [
@@ -16,9 +18,14 @@ function Bone(x, y, vx, vy) {
 
     function update(dT) {
         anim += dT;
+        lifeTime += dT;
         vy += 2000 * dT;
 
-        let onGround = false;
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), collectHitbox);
+        if (onRightWall || onLeftWall) { vx = -vx; }
+        if (onGround) { vy = (vy > 300) ? -0.4 * vy : 0; vx *= 0.7; }
+        if (onRoof) { vy = 0; }
+
         // getObjectsByTag('physics').map(({ physics }) => {
         //     if (collectHitbox.isTouching(physics)) {
         //         // Sides
@@ -57,7 +64,7 @@ function Bone(x, y, vx, vy) {
 
         let collected = false;
         getObjectsByTag('player').map(({ playerHitbox }) => {
-            if (collectHitbox.isTouching(playerHitbox)) {
+            if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.35) {
                 collected = true;
             }
         });

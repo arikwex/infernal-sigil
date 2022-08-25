@@ -2,6 +2,7 @@ import { renderMesh, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
+import { physicsCheck } from './utils';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -14,7 +15,7 @@ function Skeleton(x, y, type) {
     let injured = 0;
     let maxHp = 3;
     let hp = maxHp;
-    const enemyHitbox = new BoundingBox(0,0,0,0,0,0);
+    const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
 
     const bodyMesh = [
         ['#fff', thickness, 0],
@@ -49,35 +50,11 @@ function Skeleton(x, y, type) {
 
         let onGround = false;
         vy += 1400 * dT;
-        getObjectsByTag('physics').map(({ physics }) => {
-            
-            // if (enemyHitbox.isTouching(physics)) {
-            //     // Sides
-            //     if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-            //         if (x-10 < physics.x) {
-            //             x = physics.x - 20;
-            //             targetFacing = -1;
-            //             return;
-            //         }
-            //         if (x+10 > physics.x + physics.w) {
-            //             x = physics.x + physics.w + 20;
-            //             targetFacing = 1;
-            //             return;
-            //         }
-            //     }
-            //     // Falling to hit top of surface
-            //     if (y - 45 < physics.y) {
-            //         vy = 0;
-            //         y = physics.y + 0.1;
-            //         onGround = true;
-            //     }
-            //     // Hit head on bottom of surface
-            //     if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
-            //         vy = 0;
-            //         y = physics.y + physics.h + 55;
-            //     }
-            // }
-        });
+        
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
+        if (onRightWall) { targetFacing = -1; }
+        if (onLeftWall) { targetFacing = 1; }
+        if (onGround || onRoof) { vy = 0; }
 
         if (injured <= 0) {
             vx = 60 * facing;

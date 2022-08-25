@@ -106,13 +106,6 @@ function Player(x, y) {
         // Wall physics
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
         let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
-        // getObjectsByTag('physics').map(({ physics }) => {
-        //     [x, y, onGround_, onRightWall_, onLeftWall_, onRoof_] = physicsCheck(playerHitbox, physics);
-        //     onGround |= onGround_;
-        //     onWall |= (onRightWall_ && facing > 0) || (onLeftWall_ && facing < 0);
-        //     onRoof |= onRoof_;
-        //     playerHitbox.set(x, y, -14, -55, 28, 50);
-        // });
         
         // Disallow sticking to wall during timeout period
         if (onWall && unstick >= 0) {
