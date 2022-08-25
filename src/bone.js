@@ -1,3 +1,4 @@
+import * as bus from './bus';
 import { BoundingBox } from "./bbox"
 import { renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
@@ -61,6 +62,7 @@ function Bone(x, y, vx, vy) {
             }
         });
         if (collected) {
+            bus.emit('bone:collect', 1);
             return true;
         }
 

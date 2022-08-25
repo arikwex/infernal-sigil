@@ -1,10 +1,10 @@
 On Deck
-- Bones scatter on enemy death
-- Collect bones
 - HUD for HP + bones
+- If hit while on wall, things look hilariously bad...
 - REFACTOR WALL HIT DETECTION (make it re-usable)
 
 - Camera tracking player (windowbox, not exponential follow)
+- Map loader + compressor
 - Room loader/unloader mechanism
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
@@ -20,6 +20,8 @@ On Deck
 - Game world layout
 - Mandatory combat rooms
 - TBD map?
+- Procedural background (fixed seed)
+- Procedural destructables (fixed seed)
 
 Motion
 - TBD opinions on ledge-walking
