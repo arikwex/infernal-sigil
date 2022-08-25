@@ -104,51 +104,15 @@ function Player(x, y) {
         const requestAttack = attack();
 
         // Wall physics
-        let onGround = false;
-        let onWall = false;
-        let onRoof = false;
-        const canHitHead = (vy < -100 || state == 3);
-        getObjectsByTag('physics').map(({ physics }) => {
-            [x_, y_, onGround_, onRightWall_, onLeftWall_, onRoof_] = physicsCheck(playerHitbox, physics);
-            x = x_;
-            y = y_;
-            onGround |= onGround_;
-            onWall |= (onRightWall_ && facing > 0) || (onLeftWall_ && facing < 0);
-            onRoof |= onRoof_;
-            playerHitbox.set(x, y, -14, -55, 28, 50);
-            // if (playerHitbox.isTouching(physics)) {
-            //     // Sides
-            //     if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-            //         if (x-10 < physics.x) {
-            //             x = physics.x - 13;
-            //             if (facing > 0 && unstick < 0) {
-            //                 onWall = true;
-            //             }
-            //             return;
-            //         }
-            //         if (x+10 > physics.x + physics.w) {
-            //             x = physics.x + physics.w + 13;
-            //             if (facing < 0 && unstick < 0) {
-            //                 onWall = true;
-            //             }
-            //             return;
-            //         }
-            //     }
-            //     // Falling to hit top of surface
-            //     if (y - 45 < physics.y && vy >= -10) {
-            //         vy = 0;
-            //         y = physics.y + 5.1;
-            //         groundTime = 0.15;
-            //         numAirjumpsUsed = 0;
-            //         onGround = true;
-            //     }
-            //     // Hit head on bottom of surface
-            //     if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
-            //         vy = 0;
-            //         y = physics.y + physics.h + 55;
-            //     }
-            // }
-        });
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
+        let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
+        // getObjectsByTag('physics').map(({ physics }) => {
+        //     [x, y, onGround_, onRightWall_, onLeftWall_, onRoof_] = physicsCheck(playerHitbox, physics);
+        //     onGround |= onGround_;
+        //     onWall |= (onRightWall_ && facing > 0) || (onLeftWall_ && facing < 0);
+        //     onRoof |= onRoof_;
+        //     playerHitbox.set(x, y, -14, -55, 28, 50);
+        // });
         
         // Disallow sticking to wall during timeout period
         if (onWall && unstick >= 0) {
