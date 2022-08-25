@@ -102,6 +102,44 @@ function Player(x, y) {
         const v = vertical();
         const requestAttack = attack();
 
+        // Wall physics
+        let onGround = false;
+        let onWall = false;
+        getObjectsByTag('physics').map(({ physics }) => {
+            if (myHitbox.isTouching(physics)) {
+                // Sides
+                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+                    if (x-10 < physics.x) {
+                        x = physics.x - 13;
+                        if (facing > 0 && unstick < 0) {
+                            onWall = true;
+                        }
+                        return;
+                    }
+                    if (x+10 > physics.x + physics.w) {
+                        x = physics.x + physics.w + 13;
+                        if (facing < 0 && unstick < 0) {
+                            onWall = true;
+                        }
+                        return;
+                    }
+                }
+                // Falling to hit top of surface
+                if (y - 45 < physics.y) {
+                    vy = 0;
+                    y = physics.y + 5.1;
+                    groundTime = 0.15;
+                    numAirjumpsUsed = 0;
+                    onGround = true;
+                }
+                // Hit head on bottom of surface
+                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
+                    vy = 0;
+                    y = physics.y + physics.h + 55;
+                }
+            }
+        });
+
         if (state != 3) {
             // Default controls
             if (Math.abs(h) > 0.3) {
@@ -170,46 +208,9 @@ function Player(x, y) {
                 numAirjumpsUsed = 0;
                 groundTime = 0;
                 timeSinceJump = 0;
+                onWall = false;
             }
         }
-
-        // Wall physics
-        let onGround = false;
-        let onWall = false;
-        getObjectsByTag('physics').map(({ physics }) => {
-            if (myHitbox.isTouching(physics)) {
-                // Sides
-                if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
-                    if (x-100 < physics.x) {
-                        x = physics.x - 13;
-                        if (facing > 0 && unstick < 0) {
-                            onWall = true;
-                        }
-                        return;
-                    }
-                    if (x+100 > physics.x + physics.w) {
-                        x = physics.x + physics.w + 13;
-                        if (facing < 0 && unstick < 0) {
-                            onWall = true;
-                        }
-                        return;
-                    }
-                }
-                // Falling to hit top of surface
-                if (y - 25 < physics.y && vy >= 0) {
-                    vy = 0;
-                    y = physics.y + 5.1;
-                    groundTime = 0.15;
-                    numAirjumpsUsed = 0;
-                    onGround = true;
-                }
-                // Hit head on bottom of surface
-                if ((y - 15 > physics.y + physics.h) && (vy < -100 || state == 3)) {
-                    vy = 0;
-                    y = physics.y + physics.h + 55;
-                }
-            }
-        });
 
         if (!onWall) {
             // If not on the wall while moving up, pop upward
@@ -224,7 +225,7 @@ function Player(x, y) {
             // Touching ground while climbing should release climb
             state = 0;
         }
-        else if (onWall && !onGround) {
+        else if (onWall && !onGround && attackTime > 0.3) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
             attackTime = 1;

@@ -1,6 +1,4 @@
 On Deck
-- Deal damage to player on enemy touch / hit
-- TBD Skeleton attack behavior
 - Basic skeleton AI
 - Slash effect needs its own particle object
 - Rename WallPhysics -> BoundingBox
@@ -8,6 +6,7 @@ On Deck
 - Skeleton wall physics (X axis mandatory)
 - Collect bones
 - HUD for HP + bones
+- TBD Skeleton attack behavior
 - Heal ability
 - Camera tracking player (windowbox, not exponential follow)
 - Room loader/unloader mechanism

@@ -5,9 +5,8 @@ import Skeleton from './skeleton';
 import { BoundingBox } from './bbox';
 
 start();
-// add({ render: (ctx) => { renderMesh([['#fff', 8, 0], [0,300,800,300]], 0, -1, 0, 0, 0); }})
 add(new Player(150, 400));
-add(new Skeleton(400, 439))
+add(new Skeleton(500, 439))
 
 // ISLANDS LAYOUT
 // addPhysics(new BoundingBox(0, 440, 300, 100));
@@ -23,3 +22,4 @@ add(new Skeleton(400, 439))
 // L-SHAPE LAYOUT
 add({ tags: ['physics'], physics: new BoundingBox(0, 440, 800, 100) });
 add({ tags: ['physics'], physics: new BoundingBox(650, 100, 100, 340) });
+add({ tags: ['physics'], physics: new BoundingBox(250, 340, 100, 100) });
