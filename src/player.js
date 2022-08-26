@@ -20,7 +20,7 @@ function Player(x, y) {
     let smoothGrounded = 0;
     let playerHitbox = new BoundingBox(x, y, -14, -55, 28, 50);
     let injured = 0;
-    let hasClaws = false;
+    let hasClaws = true;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -40,7 +40,7 @@ function Player(x, y) {
     let airJump = 0;
     let smoothAirjump = 0;
     let timeSinceJump = 0;
-    let MAX_NUM_AIRJUMP = 0;
+    let MAX_NUM_AIRJUMP = 1;
     
     // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
@@ -188,12 +188,14 @@ function Player(x, y) {
                 if (groundTime > 0) {
                     vy = -1000;
                     timeSinceJump = 0;
+                    groundTime = 0;
                 } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
                     numAirjumpsUsed += 1;
                     airJump = 1;
                     vy = -1000;
                     timeSinceJump = 0;
+                    groundTime = 0;
                 }
             } else {
                 // Wall Jumping
@@ -387,13 +389,13 @@ function Player(x, y) {
         const xfm = ctx.getTransform();
         const swipe1 = (facing > 0) ? attackSwipePre : attackSwipePre2;
         const swipe2 = (facing > 0) ? attackSwipePre2 : attackSwipePre;
-        color('#3af');
+        color(hasClaws ? '#3af' : '#999');
         ctx.translate(x, y);
         if (facing < 0) {
             ctx.scale(-1, 1);
         }
         if (swipe1 < 0.95) {
-            ctx.lineWidth = 4;
+            ctx.lineWidth = hasClaws ? 4 : 2;
             ctx.beginPath();
             ctx.ellipse(5, -25, 80, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
             ctx.stroke();
@@ -457,13 +459,13 @@ function Player(x, y) {
         ctx.globalAlpha = 1;
 
         // Front swipe render
-        color('#3af');
+        color(hasClaws ? '#3af' : '#999');
         ctx.translate(x, y);
         if (facing < 0) {
             ctx.scale(-1, 1);
         }
         if (swipe2 < 0.95) {
-            ctx.lineWidth = 4;
+            ctx.lineWidth = hasClaws ? 4 : 2;
             ctx.beginPath();
             ctx.ellipse(5, -25, 80, 20, 0.2, -swipe2, 3 - 4 * swipe2);
             ctx.stroke();

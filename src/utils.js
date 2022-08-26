@@ -14,7 +14,7 @@ function physicsCheck(physicsObjects, myHitbox) {
         if (myHitbox.isTouching(physics)) {
             // Sides
             let onThisWall = false;
-            if (y - 16 < physics.y + physics.h && y - 16 > physics.y) {
+            if (y + myHitbox.oy + 10 < physics.y + physics.h && y + myHitbox.oy + myHitbox.h - 10 > physics.y) {
                 if (x-10 < physics.x) {
                     x = physics.x + physics.ox - myHitbox.ox - myHitbox.w + 0.1;
                     onRightWall = true;

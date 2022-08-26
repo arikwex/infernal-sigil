@@ -1,7 +1,8 @@
 On Deck
-- Enemy AI should have sensor to detect ledges
+- Bug fix for sliding off bottom of wall no claws
+- Bone treasure chests
 - Enemy AI initial phase from map data
-- Wall renderer (outline only)
+- Wall renderer (outline only + algorithm)
 - Gate + switch (melee)
 - Room loader/unloader mechanism
 - Combat room (link kills to gate)
@@ -32,6 +33,8 @@ Motion
 - Ground impact tilt forward animation
 
 Mechanics
+- End goal is have max score with many bones. Death reduces your bone count by half or something. So does healing.
+- Bones make boss gith easier?
 - Time trials
 - Bone collection
 - Obstacle avoidance
