@@ -467,19 +467,12 @@ function Player(x, y) {
         ctx.setTransform(xfm);
     }
 
-    function move(x_, y_) {
-        x = x_;
-        y = y_;
-        playerHitbox.set(x, y, -14, -55, 28, 50);
-    }
-
     return {
         update,
         render,
         order: 1000,
         tags: ['player'],
         playerHitbox,
-        move,
     };
 }
 

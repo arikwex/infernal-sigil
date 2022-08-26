@@ -34,7 +34,7 @@ function Bone(x, y, vx, vy) {
         
         if (!collected) {
             getObjectsByTag('player').map(({ playerHitbox }) => {
-                if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.5) {
+                if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.25) {
                     collected = true;
                     bus.emit('bone:collect', 1);
                 }

@@ -36,14 +36,9 @@ function Camera(x, y) {
         const px = -x + canvas.width/2 + dx;
         const py = -y + canvas.height/2 + dy;
         
-        //ctx.translate(canvas.width/2, canvas.height/2);
-        
         ctx.translate(canvas.width/2, canvas.height/2);
         ctx.scale(z,z);
         ctx.translate(-x, -y);
-        // ctx.translate(px, py);
-        // ctx.scale(0.5,0.5);
-        // ctx.translate(-canvas.width/2, -canvas.height/2);
     }
 
     bus.on('player:hit', () => shake=0.5);

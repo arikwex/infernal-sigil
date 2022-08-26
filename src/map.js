@@ -2,6 +2,9 @@ import gamemap from './game-map.png';
 import { canvas } from './canvas';
 import { add, getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
+import Player from './player';
+import Camera from './camera';
+import Skeleton from './skeleton';
 
 function Map() {
     let img = new Image();
@@ -30,7 +33,11 @@ function Map() {
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
                 if (V == 0x00ff00) {
-                    getObjectsByTag('player')[0].move(x * BLOCK_SIZE, y * BLOCK_SIZE);
+                    add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                    add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                }
+                if (V == 0xff0000) {
+                    add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE));
                 }
             }
         }
