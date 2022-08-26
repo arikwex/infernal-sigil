@@ -53,11 +53,12 @@ function Skeleton(x, y, type) {
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
         [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox);
+        if (onGround && vy > 500) { hp = 0; }
         if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
         if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
         if (onGround || onRoof) { vy = 0; }
 
-        if (injured <= 0) {
+        if (injured <= 0 && onGround) {
             vx = 60 * facing;
             if (Math.random > 0.98) {
                 targetFacing = -targetFacing;
