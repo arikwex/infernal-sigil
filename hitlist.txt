@@ -1,6 +1,5 @@
 On Deck
-- Camera tracking player (windowbox, not exponential follow)
-- Camshake (on player hit?)
+- Bug where I can climb up through bottom of physics wall
 - Map loader + compressor
 - Room loader/unloader mechanism
 
@@ -11,6 +10,7 @@ On Deck
 - Spikes / Lava dealing one damage and resetting player position
 - On death, go to last checkpoint at full HP + lose bones
 
+- Enemy AI should have sensor to detect ledges
 - TBD Skeleton attack behavior
 - Slash effect needs its own particle object
 - Heal ability
