@@ -100,8 +100,13 @@ function Player(x, y) {
 
         // Horizontal movement
         const h = horizontal();
-        const v = vertical();
+        let v = vertical();
         const requestAttack = attack();
+
+        // If wall-climbing, respect horizontal control as "up"
+        if (state == 3 && Math.abs(v) < 0.3 && (Math.abs(h) > 0.3 && Math.sign(h) == Math.sign(facing))) {
+            v = 1;
+        }
 
         // Wall physics
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
@@ -466,7 +471,7 @@ function Player(x, y) {
         render,
         order: 1000,
         tags: ['player'],
-        playerHitbox
+        playerHitbox,
     };
 }
 

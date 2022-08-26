@@ -24,6 +24,7 @@ On Deck
 
 Motion
 - TBD opinions on ledge-walking
+- One-way terrain to jump through
 
 Mechanics
 - Time trials

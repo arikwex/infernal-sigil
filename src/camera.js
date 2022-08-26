@@ -7,7 +7,8 @@ function Camera(x, y) {
     let shake = 0;
     let tx = x;
     let ty = y;
-    let z = 0.9;
+    let tz = canvas.width / 1400;
+    let z = tz;
 
     function update(dT) {
         anim += dT;
@@ -16,16 +17,17 @@ function Camera(x, y) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
             const { width, height } = canvas;
-            const W = width / 5;
-            const H = height / 4;
+            const W = width / 8;
+            const H = height / 6;
             if (px < x - W) { tx = px + W; }
             if (px > x + W) { tx = px - W; }
             if (py < y - H) { ty = py + H; }
             if (py > y + H*0.8) { ty = py - H*0.8; }
         }
         shake = Math.max(shake-dT,0);
-        x += (tx - x) * 10 * dT;
-        y += (ty - y) * 10 * dT;
+        x += (tx - x) * 12 * dT;
+        y += (ty - y) * 12 * dT;
+        z += (tz - z) * 3 * dT;
     }
 
     function set(ctx) {
