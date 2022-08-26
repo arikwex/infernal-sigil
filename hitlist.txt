@@ -1,7 +1,8 @@
 On Deck
-- Bug where I can climb up through bottom of physics wall
+- Gate + switch (melee)
 - Map loader + compressor
 - Room loader/unloader mechanism
+- Combat room (link kills to gate)
 
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
@@ -25,6 +26,7 @@ On Deck
 Motion
 - TBD opinions on ledge-walking
 - One-way terrain to jump through
+- Ground impact tilt forward animation
 
 Mechanics
 - Time trials

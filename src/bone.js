@@ -23,6 +23,7 @@ function Bone(x, y, vx, vy) {
         lifeTime += dT;
         vy += 2000 * dT;
 
+        let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), collectHitbox);
         if (onRightWall || onLeftWall) { vx = -vx; }
         if (onGround) { 

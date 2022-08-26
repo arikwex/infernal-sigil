@@ -8,7 +8,7 @@ function isTouching(a, b) {
     const c = inBound(a.x+a.ox, a.w, b.x+b.ox, b.w) && inBound(a.y+a.oy, a.h, b.y+b.oy, b.h);
     // DEBUG
     ctx.beginPath();
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.strokeStyle = '#fff';
     ctx.strokeStyle = c ? '#f0f' : '#0f0';
     ctx.rect(b.x+b.ox, b.y+b.oy, b.w, b.h);

@@ -1,6 +1,7 @@
 const path = require('path');
 const esbuild = require('esbuild');
 const { minify, optimize, html, zip, stats } = require('./packager');
+const { buildMap } = require('./map-compiler');
 
 const entry = path.resolve('./src/main.js');
 const useWatch = process.argv.includes('--watch');
@@ -10,6 +11,13 @@ const useRoadroller = process.argv.includes('--roadroll');
 let postBuildPlugin = {
     name: 'Post-Build',
     setup(build) {
+        build.onLoad({ filter: /\.png$/ }, (args) => {
+            return {
+                contents: buildMap(args.path),
+                loader: 'dataurl',
+            }
+        })
+
         build.onEnd(async() => {
             if (useMinify) {
                 minify();

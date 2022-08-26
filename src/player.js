@@ -109,6 +109,7 @@ function Player(x, y) {
         }
 
         // Wall physics
+        let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
         let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
         
@@ -178,7 +179,7 @@ function Player(x, y) {
             if (state != 3) {
                 // Default jump
                 if (groundTime > 0) {
-                    vy = -800;
+                    vy = -1000;
                     timeSinceJump = 0;
                 } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
@@ -242,7 +243,7 @@ function Player(x, y) {
                 vy += 1000 * dT;
             } else if (groundTime <= 0.1 || vy < 0) {
                 if (!holdingJump() && vy < 0) {
-                    vy += 4000 * dT;
+                    vy += 6000 * dT;
                 } else {
                     vy += 2000 * dT;
                 }
@@ -466,12 +467,19 @@ function Player(x, y) {
         ctx.setTransform(xfm);
     }
 
+    function move(x_, y_) {
+        x = x_;
+        y = y_;
+        playerHitbox.set(x, y, -14, -55, 28, 50);
+    }
+
     return {
         update,
         render,
         order: 1000,
         tags: ['player'],
         playerHitbox,
+        move,
     };
 }
 

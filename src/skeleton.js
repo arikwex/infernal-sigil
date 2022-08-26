@@ -48,9 +48,9 @@ function Skeleton(x, y, type) {
             return true;
         }
 
-        let onGround = false;
         vy += 1400 * dT;
         
+        let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
         if (onRightWall) { targetFacing = -1; }
         if (onLeftWall) { targetFacing = 1; }
