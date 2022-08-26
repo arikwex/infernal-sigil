@@ -6,7 +6,7 @@ import { BoundingBox } from './bbox';
 function Map() {
     let img = new Image();
     let data = null;
-    let W;
+    let W, H;
 
     async function generate() {
         await new Promise((r) => {
@@ -19,9 +19,8 @@ function Map() {
         context.drawImage(img, 0, 0);
 
         W = img.width;
-        const H = img.height;
+        H = img.height;
         data = context.getImageData(0, 0, W, H).data;
-        console.log(data);
         context.clearRect(0, 0, W, H);
         
         const BLOCK_SIZE = 100;
@@ -29,11 +28,7 @@ function Map() {
         // Character placements
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
-                const baseIdx = (x + y * W) << 2;
                 const V = get(x, y);
-                // if (V == 0xffffff) {
-                //     //add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, BLOCK_SIZE, BLOCK_SIZE) });
-                // }
                 if (V == 0x00ff00) {
                     getObjectsByTag('player')[0].move(x * BLOCK_SIZE, y * BLOCK_SIZE);
                 }
@@ -41,21 +36,45 @@ function Map() {
         }
 
         // Merge walls vertically
-        const usedMap = {};
+        const vertMap = {};
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
-                if (V == 0xffffff && !usedMap[x+','+y]) {
+                if (V == 0xffffff && !vertMap[x+','+y]) {
                     let q = y;
-                    while (q < 128) {
+                    while (q < H) {
                         const V2 = get(x, q);
                         if (V2 != 0xffffff) {
                             break;
                         }
-                        usedMap[x+','+q] = true;
+                        vertMap[x+','+q] = true;
                         q++;
                     }
-                    add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, BLOCK_SIZE, (q - y) * BLOCK_SIZE) });
+                    vertMap[x+','+y] = [y, q];
+                }
+            }
+        }
+        console.log(vertMap);
+
+        // Merge walls horizontally
+        const horizMap = {};
+        for (let x = 0; x < W; x++) {
+            for (let y = 0; y < H; y++) {
+                const vm = vertMap[x+','+y];
+                if (vm?.length && !horizMap[x+','+y]) {
+                    let q = x;
+                    while (q < W) {
+                        const vm2 = vertMap[q+','+y];
+                        if (!vm2?.length) {
+                            break;
+                        }
+                        if (vm2[1] != vm[1]) {
+                            break;
+                        }
+                        horizMap[q+','+y] = true;
+                        q++;
+                    }
+                    add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE) });
                 }
             }
         }
