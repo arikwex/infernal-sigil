@@ -1,5 +1,4 @@
 On Deck
-- Bug fix for sliding off bottom of wall no claws
 - Bone treasure chests
 - Enemy AI initial phase from map data
 - Wall renderer (outline only + algorithm)
