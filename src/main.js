@@ -6,9 +6,11 @@ import { BoundingBox } from './bbox';
 import Bone from './bone';
 import { getCurrentGameState } from './gamestate';
 import HUD from './hud';
+import Camera from './camera';
 
 function initialize() {
     start();
+    add(new Camera(150, 400));
     add(new Player(150, 400));
     add(new Skeleton(500, 439));
     // add(new Skeleton(300, 339));

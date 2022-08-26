@@ -9,8 +9,11 @@ function tick(currentFrameMs) {
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.1);
     ctx.clearRect(0,0,canvas.width,canvas.height);
     
-    const cameraXfm = ctx.getTransform();
-    ctx.translate(270, 100);
+    const originalXfm = ctx.getTransform();
+    const camera = getObjectsByTag('camera')[0];
+    camera.set(ctx);
+
+    // ctx.translate(270, 100);
     // ctx.scale(0.7, 0.7);
 
     objectsToRemove.length = 0;
@@ -20,7 +23,7 @@ function tick(currentFrameMs) {
     requestAnimationFrame(tick);
     lastFrameMs = currentFrameMs;
 
-    ctx.setTransform(cameraXfm);
+    ctx.setTransform(originalXfm);
 }
 
 function add(obj) {
