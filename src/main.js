@@ -11,6 +11,8 @@ function initialize() {
     start();
     add(new Player(150, 400));
     add(new Skeleton(500, 439));
+    // add(new Skeleton(300, 339));
+    // add(new Skeleton(400, 239));
     add(new Bone(300, 300, 0, 0));
     add(new HUD());
 

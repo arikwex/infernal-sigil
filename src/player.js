@@ -154,7 +154,7 @@ function Player(x, y) {
                 vy = vy * 0.25 - 100;
                 bus.emit('attack', [new BoundingBox(x, y, -50 + 50 * targetFacing, -50, 100, 50), targetFacing]);
             }
-            if (attackTime > 0.55) {
+            if (attackTime > 0.4) {
                 attackSeq = 0;
             }
         } else {

@@ -7,7 +7,7 @@ import { physicsCheck } from './utils';
 function Skeleton(x, y, type) {
     const thickness = 5;
     const size = 1.3;
-    let anim = 0;
+    let anim = Math.random() * 10;
     let vx = 0;
     let vy = 0;
     let targetFacing = 1;
