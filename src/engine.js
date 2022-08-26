@@ -13,9 +13,6 @@ function tick(currentFrameMs) {
     const camera = getObjectsByTag('camera')[0];
     camera.set(ctx);
 
-    // ctx.translate(270, 100);
-    // ctx.scale(0.7, 0.7);
-
     objectsToRemove.length = 0;
     gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
     if (objectsToRemove.length > 0) { remove(objectsToRemove); }
