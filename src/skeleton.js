@@ -2,7 +2,7 @@ import { renderMesh, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
-import { physicsCheck } from './utils';
+import { physicsCheck, groundCheck } from './utils';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -52,8 +52,9 @@ function Skeleton(x, y, type) {
         
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
-        if (onRightWall) { targetFacing = -1; }
-        if (onLeftWall) { targetFacing = 1; }
+        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox);
+        if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
+        if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
         if (onGround || onRoof) { vy = 0; }
 
         if (injured <= 0) {

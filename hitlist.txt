@@ -1,6 +1,7 @@
 On Deck
+- Enemy AI should have sensor to detect ledges
+- Wall renderer (outline only)
 - Gate + switch (melee)
-- Map loader + compressor
 - Room loader/unloader mechanism
 - Combat room (link kills to gate)
 
@@ -11,13 +12,13 @@ On Deck
 - Spikes / Lava dealing one damage and resetting player position
 - On death, go to last checkpoint at full HP + lose bones
 
-- Enemy AI should have sensor to detect ledges
 - TBD Skeleton attack behavior
 - Slash effect needs its own particle object
 - Heal ability
 - Show bone count on empty slot for heal "cost"
 - Should there be a dash?
 
+- Map loader + compressor improvements
 - Game world layout
 - Mandatory combat rooms
 - TBD map?

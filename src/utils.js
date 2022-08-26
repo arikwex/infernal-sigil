@@ -51,7 +51,32 @@ function physicsCheck(physicsObjects, myHitbox) {
     return physicsResult;
 }
 
+const groundResult = [false, false];
+function groundCheck(physicsObjects, myHitbox) {
+    let hasRight = false;
+    let hasLeft = false;
+    let ox = myHitbox.x;
+    let oy = myHitbox.y;
+    physicsObjects.map(({ physics }) => {
+        myHitbox.y = oy + 2;
+        myHitbox.x = ox + 40;
+        if (myHitbox.isTouching(physics)) {
+            hasRight = true;
+        }
+        myHitbox.x = ox - 40;
+        if (myHitbox.isTouching(physics)) {
+            hasLeft = true;
+        }
+    });
+    myHitbox.x = ox;
+    myHitbox.y = oy;
+    groundResult[0] = hasRight;
+    groundResult[1] = hasLeft;
+    return groundResult;
+}
+
 export {
     clamp,
     physicsCheck,
+    groundCheck,
 }

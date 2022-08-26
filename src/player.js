@@ -39,7 +39,7 @@ function Player(x, y) {
     let airJump = 0;
     let smoothAirjump = 0;
     let timeSinceJump = 0;
-    let MAX_NUM_AIRJUMP = 1;
+    let MAX_NUM_AIRJUMP = 0;
     
     // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
