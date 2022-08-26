@@ -16,6 +16,7 @@ On Deck
 - Slash effect needs its own particle object
 - Heal ability
 - Show bone count on empty slot for heal "cost"
+- Should there be a dash?
 
 - Game world layout
 - Mandatory combat rooms
