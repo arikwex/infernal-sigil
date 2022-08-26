@@ -11,6 +11,7 @@ function Map() {
     let img = new Image();
     let data = null;
     let W, H;
+    const BLOCK_SIZE = 100;
 
     async function generate() {
         await new Promise((r) => {
@@ -27,7 +28,6 @@ function Map() {
         data = context.getImageData(0, 0, W, H).data;
         context.clearRect(0, 0, W, H);
         
-        const BLOCK_SIZE = 100;
 
         // Character placements
         for (let x = 0; x < W; x++) {
@@ -82,11 +82,52 @@ function Map() {
                         horizMap[q+','+y] = true;
                         q++;
                     }
-                    //add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE) });
-                    add(new Wall((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE));
+                    // scan adjacent surface nodes and mark them for skipping
+                    let o = outlineFinder(x, y, q, vm[1]);
+                    console.log(o);
+                    add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE));
                 }
             }
         }
+    }
+
+    function outlineFinder(x, y, ex, ey) {
+        const right = [];
+        const left = [];
+        let drawing = [];
+        let drawing2 = [];
+        for (let i = y; i < ey; i++) {
+            const sample = get(ex, i);
+            if (!drawing.length && sample != 0xffffff) {
+                drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
+            }
+            if (drawing.length && sample == 0xffffff) {
+                drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
+                right.push(drawing);
+                drawing = [];
+            }
+
+            const sample2 = get(x-1, i);
+            if (!drawing2.length && sample2 != 0xffffff) {
+                drawing2.push(0, (i-y) * BLOCK_SIZE);
+            }
+            if (drawing2.length && sample2 == 0xffffff) {
+                drawing2.push(0, (i-y) * BLOCK_SIZE);
+                left.push(drawing2);
+                drawing2 = [];
+            }
+        }
+
+        if (drawing.length) {
+            drawing.push((ex-x) * BLOCK_SIZE, (ey-y) * BLOCK_SIZE);
+            right.push(drawing);
+        }
+        if (drawing2.length) {
+            drawing2.push(0, (ey-y) * BLOCK_SIZE);
+            left.push(drawing2);
+        }
+
+        return [right, left];
     }
 
     function get(x, y) {

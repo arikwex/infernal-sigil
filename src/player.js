@@ -262,7 +262,7 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
-            if (playerHitbox.isTouching(enemyHitbox) && injured <= 0) {
+            if (playerHitbox.isTouching(enemyHitbox) && injured <= 0 && attackTime > 0.15) {
                 injured = 1;
                 attackTime = 0;
                 vx = Math.sign(x - enemyHitbox.x - enemyHitbox.w/2) * 1100;

@@ -58,7 +58,7 @@ function getGameObjects() {
 }
 
 function getObjectsByTag(tag) {
-    return gameObjectsByTag[tag];
+    return gameObjectsByTag[tag] || [];
 }
 
 export {

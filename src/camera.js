@@ -33,12 +33,10 @@ function Camera(x, y) {
     function set(ctx) {
         const dx = Math.cos(anim)*3 + Math.cos(anim*40) * 15 * shake;
         const dy = Math.cos(anim*0.8)*3 + Math.cos(anim*23) * 8 * shake;
-        const px = -x + canvas.width/2 + dx;
-        const py = -y + canvas.height/2 + dy;
         
         ctx.translate(canvas.width/2, canvas.height/2);
         ctx.scale(z,z);
-        ctx.translate(-x, -y);
+        ctx.translate(-x+dx, -y+dy);
     }
 
     bus.on('player:hit', () => shake=0.5);
