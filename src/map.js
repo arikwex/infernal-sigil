@@ -5,6 +5,7 @@ import { BoundingBox } from './bbox';
 import Player from './player';
 import Camera from './camera';
 import Skeleton from './skeleton';
+import Wall from './wall';
 
 function Map() {
     let img = new Image();
@@ -81,7 +82,8 @@ function Map() {
                         horizMap[q+','+y] = true;
                         q++;
                     }
-                    add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE) });
+                    //add({ tags: ['physics'], physics: new BoundingBox((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, 0, 0, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE) });
+                    add(new Wall((x - 0.5) * BLOCK_SIZE, (y - 0.5) * BLOCK_SIZE, (q - x) * BLOCK_SIZE, (vm[1] - y) * BLOCK_SIZE));
                 }
             }
         }

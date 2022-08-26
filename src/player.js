@@ -20,6 +20,7 @@ function Player(x, y) {
     let smoothGrounded = 0;
     let playerHitbox = new BoundingBox(x, y, -14, -55, 28, 50);
     let injured = 0;
+    let hasClaws = false;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -69,10 +70,7 @@ function Player(x, y) {
     ];
     const handMesh = [
         ['#e22', thickness, 0],
-        [4, 0, 14, 6],
-        ['#def', 3, 0],
-        [18, 5, 25, 8],
-        [15, 9, 22, 13],
+        [4, 0, 14, 6]
     ];
     const tailMesh = [
         ['#e22', thickness, 0],
@@ -85,10 +83,19 @@ function Player(x, y) {
         [0, 0, 0, -9]
     ];
     const wingMesh = [
-        ['#e22', 3, 0],
-        [0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4],
+        ['#e22', 3, 0]
     ];
     const WING_FILL = 'rgba(230,100,70,0.5)';
+
+    // Add claws
+    if (hasClaws) {
+        handMesh.push(['#def', 3, 0], [18, 5, 25, 8], [15, 9, 22, 13]);
+    }
+
+    // Add wings
+    if (MAX_NUM_AIRJUMP > 0) {
+        wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
+    }
     
 
     function update(dT) {
@@ -214,13 +221,13 @@ function Player(x, y) {
             // Touching ground while climbing should release climb
             state = 0;
         }
-        else if (onWall && !onGround && attackTime > 0.3) {
+        else if (onWall && !onGround && attackTime > 0.3 && hasClaws) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
             attackTime = 1;
             vx = 0;
         }
-        else if (onWall && onGround && v > 0.3) {
+        else if (onWall && onGround && v > 0.3 && hasClaws) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
             attackTime = 1;

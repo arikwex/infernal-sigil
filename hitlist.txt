@@ -1,5 +1,6 @@
 On Deck
 - Enemy AI should have sensor to detect ledges
+- Enemy AI initial phase from map data
 - Wall renderer (outline only)
 - Gate + switch (melee)
 - Room loader/unloader mechanism
