@@ -185,12 +185,12 @@ function Player(x, y) {
                     // Air jump
                     numAirjumpsUsed += 1;
                     airJump = 1;
-                    vy = -800;
+                    vy = -1000;
                     timeSinceJump = 0;
                 }
             } else {
                 // Wall Jumping
-                vy = -800;
+                vy = -1000;
                 vx = -facing * 300;
                 unstick = 0.1;
                 state = 0;

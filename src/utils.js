@@ -36,7 +36,6 @@ function physicsCheck(physicsObjects, myHitbox) {
                 if (y - 15 > physics.y + physics.h) {
                     y = physics.y + physics.oy + physics.h - myHitbox.oy;
                     onRoof = true;
-                    console.log('bop')
                 }
             }
             myHitbox.x = x;
