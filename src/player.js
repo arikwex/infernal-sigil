@@ -25,7 +25,7 @@ function Player(x, y) {
     // Climbing
     let unstick = 0; // Disallow sticking while positive
     let stick = 0; // How long have you been stuck to the wall
-    
+
     // Basic attack
     let smoothAttacking = 0;
     let attackSwipe = 2;
@@ -41,7 +41,7 @@ function Player(x, y) {
     let smoothAirjump = 0;
     let timeSinceJump = 0;
     let MAX_NUM_AIRJUMP = 1;
-    
+
     // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
     // RUNNING = 1,
@@ -49,7 +49,7 @@ function Player(x, y) {
     // CLIMBING = 3,
     // ATTACKING = 4
     let state = 0;
-    
+
     const MAX_SPEED = 400;
     const TERMINAL_VELOCITY = 800;
     const CLIMB_SPEED = 370;
@@ -96,7 +96,7 @@ function Player(x, y) {
     if (MAX_NUM_AIRJUMP > 0) {
         wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
     }
-    
+
 
     function update(dT) {
         anim += dT;
@@ -119,7 +119,7 @@ function Player(x, y) {
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
         let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
-        
+
         // Disallow sticking to wall during timeout period
         if (onWall && unstick >= 0) {
             onWall = false;
@@ -235,7 +235,7 @@ function Player(x, y) {
             attackTime = 1;
             vx = 0;
         }
-        
+
 
         if (state == 3) {
             // Wall climb physics
@@ -315,15 +315,15 @@ function Player(x, y) {
         const attackSwipeTiming2 = attackSwipePre2 - Math.pow(attackSwipe2/1.5, 2);
 
         const a = anim * 6;
-        const t = 
+        const t =
             (-facing * 0.7 + Math.cos(anim * 2) * 0.2) * idle +
             (- 0.6 * heading + Math.cos(a*0.5) * 0.1) * running +
             (- 0.6 * facing) * climbing;
 
-        let pHand1X = 
+        let pHand1X =
             5 * heading +
             Math.min(5 * Math.cos(climbAnim*1.5), 0) * facing * climbing +
-            (facing > 0 ? 
+            (facing > 0 ?
                 (15 + 35 * attackSwipeTiming - 40 * attackSwipeTiming * attackSwipeTiming) :
                 (- 15 * attackSwipeTiming)
              ) * attacking;
@@ -344,7 +344,7 @@ function Player(x, y) {
                 (-0.9 + 4.0 * attackSwipeTiming)
             ) * attacking;
 
-        let pHand2X = 
+        let pHand2X =
             4 * heading * notAttack +
             Math.min(5 * Math.cos(climbAnim*1.5 + 3), 0) * facing * climbing +
             (facing > 0 ?
@@ -368,7 +368,7 @@ function Player(x, y) {
                 (1.6 - 2.9 * attackSwipeTiming2)
             ) * attacking;
 
-        let pHeadX = 
+        let pHeadX =
             10 * (heading * notClimbing * notAttack + attacking * facing) +
             facing * climbing * 6;
         let pHeadY =

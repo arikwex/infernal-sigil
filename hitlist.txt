@@ -1,8 +1,8 @@
 On Deck
-- Wall renderer (outline only + algorithm)
 - Bone treasure chests
-- Enemy AI initial phase from map data
+- Spikes / Lava dealing one damage (and resetting player position)
 - Gate + switch (melee)
+- Enemy AI initial phase from map data
 - Room loader/unloader mechanism
 - Combat room (link kills to gate)
 
@@ -10,7 +10,6 @@ On Deck
 - Shrine to acquire upgrade
 - GameState that is effectively load/reload
 - Ranged Flame Ability
-- Spikes / Lava dealing one damage and resetting player position
 - On death, go to last checkpoint at full HP + lose bones
 
 - TBD Skeleton attack behavior

@@ -43,13 +43,12 @@ function Skeleton(x, y, type) {
 
     function update(dT) {
         if (hp <= 0) {
-            bus.emit('bone:spawn', [x,y-55,4]);
-            bus.off('attack', hitCheck);
+            bus.emit('bone:spawn', [x,y-55,4,1]);
             return true;
         }
 
         vy += 1400 * dT;
-        
+
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
         [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox);
@@ -89,7 +88,7 @@ function Skeleton(x, y, type) {
 
         const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
         const pHand1X = 7 * t * (idle + walking) + pBodyP * 50;
-        const pHand1Y = 
+        const pHand1Y =
             (-33 - 2 * t + Math.cos(a)) * idle +
             (-33 - 2 * t + Math.cos(a-1)) * walking;
         const pHand2X = 7 * t * (idle + walking) + pBodyP * 50;
@@ -97,7 +96,7 @@ function Skeleton(x, y, type) {
             (-33 + 2 * t + Math.cos(a)) * idle +
             (-33 + 2 * t + Math.cos(a+2)) * walking;
         const pHeadY = (-40 + Math.cos(a+1)) * (idle + walking);
-        
+
         // Leg animation
         legMesh[1][0] = -8 * idle + (Math.cos(a) * 8 * facing) * walking;
         legMesh[1][1] = (Math.min(0, Math.sin(a)) * 4) * walking;
@@ -124,11 +123,20 @@ function Skeleton(x, y, type) {
             hp -= 1;
         }
     }
-    bus.on('attack', hitCheck);
+
+    function enable() {
+        bus.on('attack', hitCheck);
+    }
+
+    function disable() {
+        bus.off('attack', hitCheck);
+    }
 
     return {
         update,
         render,
+        enable,
+        disable,
         order: 500,
         tags: ['enemy'],
         enemyHitbox,

@@ -8,7 +8,7 @@ let lastFrameMs = 0;
 function tick(currentFrameMs) {
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.03);
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    
+
     const originalXfm = ctx.getTransform();
     const camera = getObjectsByTag('camera')[0];
     camera.set(ctx);
@@ -30,6 +30,7 @@ function add(obj) {
         gameObjectsByTag[tag] = (gameObjectsByTag[tag] ?? []);
         gameObjectsByTag[tag].push(obj);
     });
+    obj.enable?.();
 }
 
 function arrayRemove(list, valuesToEvict) {
@@ -42,6 +43,7 @@ function remove(objList) {
         obj.tags?.map((tag) => {
             gameObjectsByTag[tag] = arrayRemove(gameObjectsByTag[tag], [obj]);
         });
+        obj.disable?.();
     });
 }
 
@@ -63,11 +65,11 @@ function getObjectsByTag(tag) {
 
 export {
     start,
-    
+
     add,
     remove,
     clear,
-    
+
     getGameObjects,
     getObjectsByTag,
 };
