@@ -1,10 +1,9 @@
 On Deck
-- png compression magic
 - Terrain colors for different regions
 - Spikes / Lava dealing one damage (and resetting player position)
 - Gate + switch (melee)
 - Enemy AI initial phase from map data
-- Room loader/unloader mechanism
+- Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Combat room (link kills to gate)
 
 - Hooks to level up player (visually and mechanically)
@@ -25,6 +24,7 @@ On Deck
 - TBD map?
 - Procedural background (fixed seed)
 - Procedural destructables (fixed seed)
+- png compression magic
 
 Motion
 - TBD opinions on ledge-walking

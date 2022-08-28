@@ -5,6 +5,7 @@ import { BoundingBox } from './bbox';
 import Player from './player';
 import Camera from './camera';
 import Skeleton from './skeleton';
+import Treasure from './treasure';
 import Wall from './wall';
 
 function Map() {
@@ -27,18 +28,24 @@ function Map() {
         H = img.height;
         data = context.getImageData(0, 0, W, H).data;
         context.clearRect(0, 0, W, H);
-
+        console.log(data);
 
         // Character placements
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
+                const D0 = (V >> 16) & 0xff;
+                const D1 = (V >> 8) & 0xff;
+                const D2 = V & 0xff;
                 if (V == 0x00ff00) {
                     add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
                     add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
                 }
                 if (V == 0xff0000) {
                     add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                }
+                if (D0 == 0x00 && D2 == 0xff) {
+                    add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1));
                 }
             }
         }
