@@ -1,4 +1,4 @@
-import gamemap from './game-map.png';
+import terrain from './game-map.png';
 import { canvas } from './canvas';
 import { add, getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
@@ -16,7 +16,7 @@ function Map() {
     async function generate() {
         await new Promise((r) => {
             img.onload = r;
-            img.src = gamemap;
+            img.src = terrain;
         });
 
         //
@@ -27,7 +27,7 @@ function Map() {
         H = img.height;
         data = context.getImageData(0, 0, W, H).data;
         context.clearRect(0, 0, W, H);
-        
+
 
         // Character placements
         for (let x = 0; x < W; x++) {
@@ -62,7 +62,6 @@ function Map() {
                 }
             }
         }
-        console.log(vertMap);
 
         // Merge walls horizontally
         const horizMap = {};
@@ -84,7 +83,6 @@ function Map() {
                     }
                     // scan adjacent surface nodes and mark them for skipping
                     let o = outlineFinder(x, y, q, vm[1]);
-                    console.log(o);
                     add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE));
                 }
             }

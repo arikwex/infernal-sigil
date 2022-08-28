@@ -17,12 +17,12 @@ function Treasure(x, y, t) {
 
     const baseColor = colorMap[t];
     const treasureMesh = [
-    [baseColor, 8, 0],
-    [20, 0, -20, 0, -28, -23, 28, -23, 20, 0],
-    [baseColor, 8, 0],
-    [-28, -23, -24, -40, 24, -40, 28, -23],
-    ['#ffa', 8, 0],
-    [0, -27, 0, -19],
+        [baseColor, 8, 0],
+        [20, 0, -20, 0, -28, -23, 28, -23, 20, 0],
+        [baseColor, 8, 0],
+        [-28, -23, -24, -40, 24, -40, 28, -23],
+        ['#ffa', 8, 0],
+        [0, -27, 0, -19],
     ];
 
     function update(dT) {

@@ -1,5 +1,6 @@
 On Deck
-- Bone treasure chests
+- png compression magic
+- Terrain colors for different regions
 - Spikes / Lava dealing one damage (and resetting player position)
 - Gate + switch (melee)
 - Enemy AI initial phase from map data
