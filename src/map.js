@@ -156,8 +156,8 @@ function Map() {
     function computeTheme(x, y) {
         const avgTheme = [0, 0, 0, 0, 0, 0];
         let N = 0.001;
-        for (let dx = -10; dx <= 10; dx++) {
-            for (let dy = -10; dy <= 10; dy++) {
+        for (let dx = -8; dx <= 8; dx++) {
+            for (let dy = -8; dy <= 8; dy++) {
                 const V = get(x + dx, y + dy);
                 const wallData = WALL_MAP[V];
                 if (wallData) {
