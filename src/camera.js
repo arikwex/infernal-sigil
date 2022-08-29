@@ -10,6 +10,9 @@ function Camera(x, y) {
     let tz = canvas.width / 1400;
     let z = tz;
 
+    let bgBot = [0, 0, 0];
+    let bgTop = [0, 0, 0];
+
     function update(dT) {
         anim += dT;
         const player = getObjectsByTag('player')[0];
@@ -28,12 +31,21 @@ function Camera(x, y) {
         x += (tx - x) * 12 * dT;
         y += (ty - y) * 12 * dT;
         z += (tz - z) * 3 * dT;
+
+        // Chould technically be in the render loop
+        const m = getObjectsByTag('map')[0];
+        const themeData = m.getTheme(x/100, y/100);
+        for (let i = 0; i < 3; i++) {
+            bgTop[i] += (themeData[i] - bgTop[i]) * 3 * dT;
+            bgBot[i] += (themeData[i + 3] - bgBot[i]) * 3 * dT;
+        }
+        document.body.style = `background: linear-gradient(0deg, rgb(${bgBot.join(',')}) 0%, rgb(${bgTop.join(',')}) 100%)`;
     }
 
     function set(ctx) {
         const dx = Math.cos(anim)*3 + Math.cos(anim*40) * 15 * shake;
         const dy = Math.cos(anim*0.8)*3 + Math.cos(anim*23) * 8 * shake;
-        
+
         ctx.translate(canvas.width/2, canvas.height/2);
         ctx.scale(z,z);
         ctx.translate(-x+dx, -y+dy);

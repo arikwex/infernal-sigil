@@ -15,9 +15,10 @@ function Map() {
     let W, H;
     const BLOCK_SIZE = 100;
     const WALL_MAP = {
-      [0xffffff]: ['#a99', '#433'],
-      [0x64ff64]: ['#474', '#242'],
+      [0xffffff]: ['#a99', '#433', 30, 10, 30, 80, 10, 10],
+      [0x64ff64]: ['#474', '#242', 20, 50, 20, 10, 10, 10],
     };
+    const themeLookup = {};
 
     async function generate() {
         await new Promise((r) => {
@@ -54,8 +55,13 @@ function Map() {
                 if (D0 == 0x00 && D2 == 0xff) {
                     add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1));
                 }
+
+                // compute theme avg
+                themeLookup[x] = themeLookup[x] || {};
+                themeLookup[x][y] = computeTheme(x, y);
             }
         }
+        console.log(themeLookup);
 
         // Merge walls vertically
         const vertMap = {};
@@ -147,8 +153,37 @@ function Map() {
         return (data[baseIdx] << 16) | (data[baseIdx + 1] << 8) | data[baseIdx + 2]
     }
 
+    function computeTheme(x, y) {
+        const avgTheme = [0, 0, 0, 0, 0, 0];
+        let N = 0.001;
+        for (let dx = -10; dx <= 10; dx++) {
+            for (let dy = -10; dy <= 10; dy++) {
+                const V = get(x + dx, y + dy);
+                const wallData = WALL_MAP[V];
+                if (wallData) {
+                    for (let i = 0; i < 6; i++) {
+                        avgTheme[i] += wallData[2 + i];
+                    }
+                    N++;
+                }
+            }
+        }
+        return avgTheme.map((v) => v / N);
+    }
+
+    let themeData = [0, 0, 0, 0, 0, 0];
+    function getTheme(x, y) {
+        const t = themeLookup[parseInt(x)]?.[parseInt(y)];
+        if (t) {
+            themeData = t;
+        }
+        return themeData;
+    }
+
     return {
-        generate
+        generate,
+        tags: ['map'],
+        getTheme,
     }
 }
 
