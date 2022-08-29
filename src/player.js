@@ -172,6 +172,7 @@ function Player(x, y) {
             }
         } else {
             // Climbing controls
+            numAirjumpsUsed = 0;
             if (Math.abs(v) > 0.3) {
                 const inf = Math.min(stick * 6, 1);
                 y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
