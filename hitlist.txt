@@ -1,7 +1,7 @@
 On Deck
 - Lava
 - Gate + switch (melee)
-- Combat room (link kills to gate)
+- Switch/button that closes on a timer (fireball gate)
 
 - Ranged Flame Ability
 - Hooks to level up player (visually and mechanically)
@@ -10,20 +10,25 @@ On Deck
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
-- TBD Skeleton attack behavior
-- Slash effect needs its own particle object
-- Heal ability
-- Show bone count on empty slot for heal "cost"
+- Enemy spider
+- Enemy bat
+- Background gradient (change in different regions)
+- Game world layout
+
+- Enemy Orba
+- Enemy Ironclaw (TBD Skeleton attack behavior)
+- Enemy Archer
+- Enemy
 
 - Do not render out of frame
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Map loader + compressor improvements
-- Game world layout
 - Mandatory combat rooms
-- TBD map?
+- TBD minimap overlay?
 - Procedural background (fixed seed)
 - Procedural destructables (fixed seed)
 - png compression magic
+- Boss fights?
 
 Motion
 - TBD opinions on ledge-walking
@@ -42,7 +47,11 @@ Mechanics
 - Press down --> 5 bones to heal?
 - All bones lost on death?
 - 3 HP base
+- Heal ability?
+- Combat room (link kills to gate)?
+- Show bone count on empty slot for heal "cost"
 
 VFX
 - Enemy ground pound animation / pulse
 - Swift wind swirl on land / impact
+- Slash effect needs its own particle object
