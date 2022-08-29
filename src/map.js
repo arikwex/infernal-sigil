@@ -13,6 +13,10 @@ function Map() {
     let data = null;
     let W, H;
     const BLOCK_SIZE = 100;
+    const WALL_MAP = {
+      [0xffffff]: ['#a99', '#433'],
+      [0x64ff64]: ['#474', '#242'],
+    };
 
     async function generate() {
         await new Promise((r) => {
@@ -28,7 +32,6 @@ function Map() {
         H = img.height;
         data = context.getImageData(0, 0, W, H).data;
         context.clearRect(0, 0, W, H);
-        console.log(data);
 
         // Character placements
         for (let x = 0; x < W; x++) {
@@ -55,17 +58,17 @@ function Map() {
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
-                if (V == 0xffffff && !vertMap[x+','+y]) {
+                if (WALL_MAP[V] && !vertMap[x+','+y]) {
                     let q = y;
                     while (q < H) {
                         const V2 = get(x, q);
-                        if (V2 != 0xffffff) {
+                        if (V != V2) {
                             break;
                         }
                         vertMap[x+','+q] = true;
                         q++;
                     }
-                    vertMap[x+','+y] = [y, q];
+                    vertMap[x+','+y] = [y, q, V];
                 }
             }
         }
@@ -82,7 +85,7 @@ function Map() {
                         if (!vm2?.length) {
                             break;
                         }
-                        if (vm2[1] != vm[1]) {
+                        if (vm2[1] != vm[1] || vm2[2] != vm[2]) {
                             break;
                         }
                         horizMap[q+','+y] = true;
@@ -90,7 +93,7 @@ function Map() {
                     }
                     // scan adjacent surface nodes and mark them for skipping
                     let o = outlineFinder(x, y, q, vm[1]);
-                    add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE));
+                    add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
                 }
             }
         }
@@ -103,20 +106,20 @@ function Map() {
         let drawing2 = [];
         for (let i = y; i < ey; i++) {
             const sample = get(ex, i);
-            if (!drawing.length && sample != 0xffffff) {
+            if (!drawing.length && !WALL_MAP[sample]) {
                 drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
             }
-            if (drawing.length && sample == 0xffffff) {
+            if (drawing.length && WALL_MAP[sample]) {
                 drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
                 right.push(drawing);
                 drawing = [];
             }
 
             const sample2 = get(x-1, i);
-            if (!drawing2.length && sample2 != 0xffffff) {
+            if (!drawing2.length && !WALL_MAP[sample2]) {
                 drawing2.push(0, (i-y) * BLOCK_SIZE);
             }
-            if (drawing2.length && sample2 == 0xffffff) {
+            if (drawing2.length && WALL_MAP[sample2]) {
                 drawing2.push(0, (i-y) * BLOCK_SIZE);
                 left.push(drawing2);
                 drawing2 = [];

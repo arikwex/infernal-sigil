@@ -1,15 +1,15 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 
-function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE) {
+function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     const w = (ex - x) * BLOCK_SIZE;
     const h = (ey - y) * BLOCK_SIZE;
     x = (x - 0.5) * BLOCK_SIZE;
     y = (y - 0.5) * BLOCK_SIZE;
-    
+
     const physics = new BoundingBox(x, y, 0, 0, w, h);
     const wallMesh = [
-        ['#a99', 5, 0]
+        [palette[0], 5, 0]
     ];
     let outlineTop = [];
     let dx = Math.random() * 6 + 6;
@@ -22,9 +22,10 @@ function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE) {
     wallMesh.push(...outlineData[0]);
     wallMesh.push([w, h, 0, h]);
     wallMesh.push(...outlineData[1]);
-    
 
     function render(ctx) {
+        ctx.fillStyle = palette[1];
+        ctx.fillRect(x-1, y, w+2, h);
         renderMesh(wallMesh,x,y,0,0,0);
     }
 
