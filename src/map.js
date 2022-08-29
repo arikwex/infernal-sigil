@@ -45,8 +45,8 @@ function Map() {
                     add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
                     add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
                 }
-                if (V == 0xff0000) {
-                    add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                if (D0 == 0xff && D1 == 0x00) {
+                    add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));
                 }
                 if (D0 == 0xff && D1 == 0x01) {
                     add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));

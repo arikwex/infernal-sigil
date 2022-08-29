@@ -1,5 +1,5 @@
 On Deck
-- Spikes / Lava dealing one damage (and resetting player position)
+- Lava
 - Gate + switch (melee)
 - Enemy AI initial phase from map data
 - Combat room (link kills to gate)

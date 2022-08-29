@@ -10,8 +10,8 @@ function Skeleton(x, y, type) {
     let anim = Math.random() * 10;
     let vx = 0;
     let vy = 0;
-    let targetFacing = 1;
-    let facing = 1;
+    let targetFacing = (type > 127) ? -1 : 1;
+    let facing = targetFacing;
     let injured = 0;
     let maxHp = 3;
     let hp = maxHp;
