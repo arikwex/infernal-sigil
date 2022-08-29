@@ -13,7 +13,7 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    add(new Hazard(100*46, 100*71, 0));
+    // add(new Hazard(100*46, 100*71, 0));
     // add(new Hazard(100*48, 100*72, 1));
     // add(new Hazard(100*47, 100*71, 2));
     // add(new Hazard(100*48, 100*71, 3));

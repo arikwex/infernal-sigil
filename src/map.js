@@ -7,6 +7,7 @@ import Camera from './camera';
 import Skeleton from './skeleton';
 import Treasure from './treasure';
 import Wall from './wall';
+import Hazard from './hazard';
 
 function Map() {
     let img = new Image();
@@ -46,6 +47,9 @@ function Map() {
                 }
                 if (V == 0xff0000) {
                     add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                }
+                if (D0 == 0xff && D1 == 0x01) {
+                    add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));
                 }
                 if (D0 == 0x00 && D2 == 0xff) {
                     add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1));

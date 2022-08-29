@@ -12,13 +12,14 @@ function Hazard(x, y, t) {
   let enemyHitbox;
   let extended = 0;
   let targetExtended = 0;
+  let phase = t < 4 ? 1 : 0;
   if (t%4 == 0) { enemyHitbox = new BoundingBox(x,y,-45,35,90,90); }
   if (t%4 == 1) { enemyHitbox = new BoundingBox(x,y,-125,-45,90,90); }
   if (t%4 == 2) { enemyHitbox = new BoundingBox(x,y,-45,-125,90,90); }
   if (t%4 == 3) { enemyHitbox = new BoundingBox(x,y,35,-45,90,90); }
 
   function update(dT) {
-    const q = Date.now() % 3000;
+    const q = (Date.now() + phase * 1500) % 3000;
     let dy = 0;
     targetExtended = (q > 1500) ? 1 : 0;
     if (targetExtended == 0 && q > 500) {
