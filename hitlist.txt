@@ -1,20 +1,19 @@
 On Deck
 - Lava
 - Gate + switch (melee)
-- Enemy AI initial phase from map data
 - Combat room (link kills to gate)
 
+- Ranged Flame Ability
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
+
 - GameState that is effectively load/reload
-- Ranged Flame Ability
 - On death, go to last checkpoint at full HP + lose bones
 
 - TBD Skeleton attack behavior
 - Slash effect needs its own particle object
 - Heal ability
 - Show bone count on empty slot for heal "cost"
-- Should there be a dash?
 
 - Do not render out of frame
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
@@ -32,6 +31,7 @@ Motion
 - Ground impact tilt forward animation
 
 Mechanics
+- Should there be a dash?
 - End goal is have max score with many bones. Death reduces your bone count by half or something. So does healing.
 - Bones make boss gith easier?
 - Time trials
@@ -40,7 +40,7 @@ Mechanics
 - Chores?
 - Catch bats?
 - Press down --> 5 bones to heal?
-- All bones lost on death
+- All bones lost on death?
 - 3 HP base
 
 VFX
