@@ -5,7 +5,7 @@ import { getCurrentGameState } from './gamestate';
 import HUD from './hud';
 import Map from './map';
 
-import Treasure from './treasure';
+import Hazard from './hazard';
 
 async function initialize() {
     const m = new Map();
@@ -13,9 +13,10 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    add(new Treasure(100*47, 100*(72+0.5), 1));
-    add(new Treasure(100*50, 100*(72+0.5), 2));
-    add(new Treasure(100*54, 100*(71+0.5), 3));
+    add(new Hazard(100*46, 100*71, 0));
+    // add(new Hazard(100*48, 100*72, 1));
+    // add(new Hazard(100*47, 100*71, 2));
+    // add(new Hazard(100*48, 100*71, 3));
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {

@@ -1,9 +1,7 @@
 On Deck
-- Terrain colors for different regions
 - Spikes / Lava dealing one damage (and resetting player position)
 - Gate + switch (melee)
 - Enemy AI initial phase from map data
-- Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Combat room (link kills to gate)
 
 - Hooks to level up player (visually and mechanically)
@@ -18,6 +16,8 @@ On Deck
 - Show bone count on empty slot for heal "cost"
 - Should there be a dash?
 
+- Do not render out of frame
+- Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Map loader + compressor improvements
 - Game world layout
 - Mandatory combat rooms
