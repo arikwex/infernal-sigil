@@ -28,7 +28,7 @@ function Hazard(x, y, t) {
   function update(dT) {
     anim += dT * rate;
     if (anim > 1) {
-      rate = Math.random() + 0.5;
+      rate = Math.random() * 2 + 0.5;
       anim = 0;
       placement = (Math.random() - 0.5) * 80;
     }
@@ -51,7 +51,7 @@ function Hazard(x, y, t) {
       ctx.fillStyle = '#f82';
       ctx.beginPath();
       const p = anim;
-      ctx.arc(x + placement, y + 50 - p * 50, (p - p * p) * 40, 0, 2 * Math.PI);
+      ctx.arc(x + placement, y + 50 - p * 40, (p - p * p) * 40, 0, 2 * Math.PI);
       ctx.fill();
       renderMesh(lavaMesh, x, y, 0, 0, 0);
     } else {

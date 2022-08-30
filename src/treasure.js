@@ -8,6 +8,7 @@ import { BoundingBox } from './bbox';
 const boneMap = {1: 7, 2: 14, 3: 11};
 const skullMap = {1: 1, 2: 3, 3: 7 };
 const colorMap = {1: '#a63', 2: '#889', 3: '#db1'};
+const bgColorMap = {1: '#742', 2: '#667', 3: '#b90'};
 
 function Treasure(x, y, t) {
     let hitTimer = 0;
@@ -16,6 +17,7 @@ function Treasure(x, y, t) {
     const myHitbox = new BoundingBox(x-25,y-55,0,0,50,55);
 
     const baseColor = colorMap[t];
+    const bgColor = bgColorMap[t];
     const treasureMesh = [
         [baseColor, 8, 0],
         [20, 0, -20, 0, -28, -23, 28, -23, 20, 0],
@@ -40,7 +42,7 @@ function Treasure(x, y, t) {
         const da = Math.cos(hitTimer * 30 + phase) * hitTimer * decay / 60;
         const xfm = ctx.getTransform();
         scaleInPlace(0.75 + t * 0.15, x, y);
-        renderMesh(treasureMesh, x, y - dy, 0, 0, da);
+        renderMesh(treasureMesh, x, y - dy, 0, 0, da, bgColor);
         ctx.setTransform(xfm);
     }
 
