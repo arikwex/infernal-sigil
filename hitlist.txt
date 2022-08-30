@@ -10,6 +10,7 @@ On Deck
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
+- Juicy destructables
 - Enemy spider
 - Enemy bat
 - Background gradient (change in different regions)
@@ -55,3 +56,37 @@ VFX
 - Enemy ground pound animation / pulse
 - Swift wind swirl on land / impact
 - Slash effect needs its own particle object
+
+The Styx (Biome)
+- Ash + Gray
+- Crossroads to other regions + Starting location
+- Skeletons
+- Platforming
+- Lava
+
+Asphodel Meadows (Biome)
+- Grass + Green
+- Skeletons
+- Gates + Switches
+- Treasure chests
+- Static spike traps
+- GRANT: HELLBOUND CLAWS
+
+Elysian Boneyard (Biome)
+- Bones + Light Purple
+- Spiders
+- Moving spike traps
+- Web gates
+- Timed push buttons
+- GRANT: INFERNAL FLAME
+
+Fields of Mourning (Biome)
+- ??
+- Bats
+- GRANT: DEMON WINGS
+
+Throne Room (Biome)
+- Reach the throne room to win
+
+
+
