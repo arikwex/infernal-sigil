@@ -29,6 +29,7 @@ On Deck
 - Procedural destructables (fixed seed)
 - png compression magic
 - Boss fights?
+- Parallax BG / FG
 
 Motion
 - TBD opinions on ledge-walking
@@ -72,7 +73,7 @@ Asphodel Meadows (Biome)
 [ ] GRANT: HELLBOUND CLAWS
 
 Elysian Boneyard (Biome)
-[ ] Bones + Light Purple
+[X] Bones + Light Purple
 [ ] Spiders
 [X] Moving spike traps
 [ ] Web gates

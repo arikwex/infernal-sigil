@@ -27,7 +27,6 @@ function Gate(x, y, switchNum) {
     }
 
     function onSwitch([num, state]) {
-        console.log(num, state);
         if (num == switchNum) {
             open = state;
         }

@@ -8,6 +8,8 @@ import Skeleton from './skeleton';
 import Treasure from './treasure';
 import Wall from './wall';
 import Hazard from './hazard';
+import Gate from './gate';
+import Switch from './switch';
 
 function Map() {
     let img = new Image();
@@ -54,8 +56,10 @@ function Map() {
                 if (D0 == 0xff && D1 == 0x01) {
                     add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));
                 }
-                if (D0 == 0x00 && D2 == 0xff) {
-                    add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1));
+                if (D2 == 0xff) {
+                    if (D0 == 0x00) { add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1)); }
+                    if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
+                    if (D0 == 0x02) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
                 }
 
                 // compute theme avg
