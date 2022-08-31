@@ -1,7 +1,8 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
+import * as bus from './bus';
 
-function Gate(x, y) {
+function Gate(x, y, switchNum) {
     let open = false;
     let pos = 0;
     const gateMesh = [
@@ -14,21 +15,37 @@ function Gate(x, y) {
         [-50, -190, 50, -190],
         [-50, -20, 50, -20],
     ];
-    const physics = new BoundingBox(x-50,y-170,0,0,100,220);
+    const physics = new BoundingBox(x-50,y-220,0,0,100,220);
 
     function update(dT) {
-        if (open) {
-            pos += (-200 + pos) * 2 * dT;
-        }
+        pos += ((open ? -150 : 50) - pos) * 4 * dT;
+        physics.y = y+pos-220;
     }
 
     function render(ctx) {
-        renderMesh(gateMesh, x, y+50+pos, 0, 0, 0);
+        renderMesh(gateMesh, x, y+pos, 0, 0, 0);
+    }
+
+    function onSwitch([num, state]) {
+        console.log(num, state);
+        if (num == switchNum) {
+            open = state;
+        }
+    }
+
+    function enable() {
+        bus.on('switch', onSwitch);
+    }
+
+    function disable() {
+        bus.off('switch', onSwitch);
     }
 
     return {
         update,
         render,
+        enable,
+        disable,
         tags: ['physics'],
         physics,
         order: -7000
