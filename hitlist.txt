@@ -1,5 +1,4 @@
 On Deck
-- Lava
 - Gate + switch (melee)
 - Switch/button that closes on a timer (fireball gate)
 
@@ -58,32 +57,34 @@ VFX
 - Slash effect needs its own particle object
 
 The Styx (Biome)
-- Ash + Gray
-- Crossroads to other regions + Starting location
-- Skeletons
-- Platforming
-- Lava
+[X] Ash + Gray
+[ ] Crossroads to other regions + Starting location
+[X] Skeletons
+[X] Platforming
+[X] Lava
 
 Asphodel Meadows (Biome)
-- Grass + Green
-- Skeletons
-- Gates + Switches
-- Treasure chests
-- Static spike traps
-- GRANT: HELLBOUND CLAWS
+[X] Grass + Green
+[ ] Gates + Switches
+[X] Treasure chests
+[X] Static spike traps
+[ ] Skeleton Archer
+[ ] GRANT: HELLBOUND CLAWS
 
 Elysian Boneyard (Biome)
-- Bones + Light Purple
-- Spiders
-- Moving spike traps
-- Web gates
-- Timed push buttons
-- GRANT: INFERNAL FLAME
+[ ] Bones + Light Purple
+[ ] Spiders
+[X] Moving spike traps
+[ ] Web gates
+[ ] Timed push buttons
+[ ] GRANT: INFERNAL FLAME
 
 Fields of Mourning (Biome)
-- ??
-- Bats
-- GRANT: DEMON WINGS
+[X] Dirt + blueish
+[ ] Bats
+[ ] Projectile traps
+[X] Air jump Platforming
+[ ] GRANT: DEMON WINGS
 
 Throne Room (Biome)
 - Reach the throne room to win
