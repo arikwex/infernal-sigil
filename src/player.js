@@ -1,4 +1,4 @@
-import { horizontal, vertical, jump, holdingJump, attack } from './controls';
+import { horizontal, vertical, jump, holdingJump, attack, ignite } from './controls';
 import { color, renderMesh } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
@@ -34,6 +34,10 @@ function Player(x, y) {
     let attackHandFlag = false;
     let attackSeq = 0;
     let MAX_NUM_ATTACK = 3;
+
+    // Fireball attack
+    let fireballTime = 0;
+    let hasFlame = true;
 
     // Air jump
     let numAirjumpsUsed = 0;
@@ -104,11 +108,13 @@ function Player(x, y) {
         attackTime = Math.min(attackTime + dT, 1);
         attackSwipe = Math.min(attackSwipe + 2 * dT, 1);
         attackSwipe2 = Math.min(attackSwipe2 + 2 * dT, 1);
+        fireballTime += dT;
 
         // Horizontal movement
         const h = horizontal();
         let v = vertical();
         const requestAttack = attack();
+        const requestFireball = ignite();
 
         // If wall-climbing, respect horizontal control as "up"
         if (state == 3 && Math.abs(v) < 0.3 && (Math.abs(h) > 0.3 && Math.sign(h) == Math.sign(facing))) {
@@ -169,6 +175,16 @@ function Player(x, y) {
             }
             if (attackTime > 0.4) {
                 attackSeq = 0;
+            }
+            
+            // Fireball
+            if (requestFireball && fireballTime > 1.0 && hasFlame) {
+                fireballTime = 0;
+                attackTime = 0;
+                smoothAttacking = 1;
+                vx = -targetFacing * 850;
+                vy = vy * 0.25 - 100;
+                bus.emit('fireball', [x, y-30, targetFacing]);
             }
         } else {
             // Climbing controls

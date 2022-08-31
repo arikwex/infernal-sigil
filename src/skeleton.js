@@ -115,12 +115,13 @@ function Skeleton(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([attackHitbox, dir]) {
+    function hitCheck([attackHitbox, dir, owner]) {
         if (enemyHitbox.isTouching(attackHitbox)) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);
             injured = 1;
             hp -= 1;
+            bus.emit('attack:hit', [owner]);
         }
     }
 

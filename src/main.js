@@ -4,8 +4,7 @@ import Bone from './bone';
 import { getCurrentGameState } from './gamestate';
 import HUD from './hud';
 import Map from './map';
-import Switch from './switch';
-import Gate from './gate';
+import Fireball from './fireball';
 
 async function initialize() {
     const m = new Map();
@@ -13,11 +12,8 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    // add(new Switch(100*46, 100*71, 0, 7));
-    // add(new Gate(100*45, 100*71, 7));
-    // add(new Hazard(100*48, 100*72, 1));
-    // add(new Hazard(100*47, 100*71, 2));
-    // add(new Hazard(100*48, 100*71, 3));
+    add(new Fireball(100*46, 100*71, 1));
+    
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {
@@ -25,6 +21,7 @@ async function initialize() {
     });
     bus.on('bone:collect', (v) => getCurrentGameState().addBones(v));
     bus.on('player:hit', (v) => getCurrentGameState().addHp(-v));
+    bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
 
     start();
 }

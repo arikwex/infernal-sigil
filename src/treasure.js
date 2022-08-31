@@ -46,12 +46,13 @@ function Treasure(x, y, t) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([attackHitbox, dir]) {
+    function hitCheck([attackHitbox, dir, owner]) {
         if (myHitbox.isTouching(attackHitbox)) {
             hitTimer = 1;
             phase = Math.random() * 7;
             hp -= 1;
             bus.emit('bone:spawn', [x,y-20,1,1]);
+            bus.emit('attack:hit', [owner]);
         }
     }
 

@@ -29,10 +29,11 @@ function Switch(x, y, t, switchNum) {
         renderMesh(switchBaseMesh, x, y, 0, 0, 0);
     }
 
-    function hitCheck([attackHitbox, dir]) {
+    function hitCheck([attackHitbox, dir, owner]) {
         if (myHitbox.isTouching(attackHitbox)) {
             active = (dir > 0) ^ phase;
             bus.emit('switch', [switchNum, active]);
+            bus.emit('attack:hit', [owner]);
         }
     }
 
