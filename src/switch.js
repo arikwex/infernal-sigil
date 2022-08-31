@@ -4,7 +4,7 @@ import * as bus from './bus';
 
 function Switch(x, y, t, switchNum) {
     let active = false;
-    const phase = false;
+    const phase = t == 1;
     let angle = 0;
     const myHitbox = new BoundingBox(x-40,y-15,0,0,80,65);
 

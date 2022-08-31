@@ -1,7 +1,4 @@
 On Deck
-- Gate + switch (melee)
-- Switch/button that closes on a timer (fireball gate)
-
 - Ranged Flame Ability
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
@@ -9,6 +6,7 @@ On Deck
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
+- Switch/button that closes on a timer (fireball gate)
 - Juicy destructables
 - Enemy spider
 - Enemy bat
@@ -66,7 +64,7 @@ The Styx (Biome)
 
 Asphodel Meadows (Biome)
 [X] Grass + Green
-[ ] Gates + Switches
+[X] Gates + Switches
 [X] Treasure chests
 [X] Static spike traps
 [ ] Skeleton Archer
