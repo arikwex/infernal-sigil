@@ -4,6 +4,9 @@ import * as bus from './bus';
 
 function Web(x, y) {
     y -= 50;
+    let size = 100;
+    let step = 1;
+    let burnup = false;
     let anim = 0;
     let cx = 0;
     let cy = 0;
@@ -18,7 +21,7 @@ function Web(x, y) {
     for (let i = 0; i < 8; i++) {
         let a = -2.3 + (Math.random() - 0.5)/4 + (i%4)/2;
         if (i > 3) { a += 3.14; }
-        const R = 110 / Math.abs(Math.sin(a));
+        const R = (size + 10) / Math.abs(Math.sin(a));
         angles.push(a);
         rads.push(R);
         webMesh.push([0, 0, Math.cos(a) * R, Math.sin(a) * R]);
@@ -34,6 +37,10 @@ function Web(x, y) {
         cx = omx * Math.cos(anim);
         cy = omy * Math.cos(anim / 1.4);
         updateWebPos();
+
+        if (burnup) {
+            return true;
+        }
     }
 
     function render(ctx) {
@@ -45,19 +52,22 @@ function Web(x, y) {
             webMesh[1 + i][0] = cx;
             webMesh[1 + i][1] = cy;
         }
-        for (let i = 0; i < 32; i++) {
+        for (let i = 0; i < 32 / step; i++) {
             const a = angles[i % 8];
-            const p =(i / 70 + 0.07) / (1 - Math.abs(Math.sin(a)) * 0.5);
+            const p =(i * step / 70 + 0.07) / (1 - Math.abs(Math.sin(a)) * 0.5);
             const r = rads[i % 8] * p;
             webbing[i*2] = Math.cos(a) * r + cx * (1 - p);
             webbing[i*2+1] = Math.sin(a) * r + cy * (1 - p);
         }
     }
 
-    function hitCheck([attackHitbox, dir, owner]) {
+    function hitCheck([attackHitbox, dir, owner, flames]) {
         if (physics.isTouching(attackHitbox)) {
             omx = 10;
             omy = 8;
+            if (flames) {
+                burnup = true;
+            }
             bus.emit('attack:hit', [owner]);
         }
     }

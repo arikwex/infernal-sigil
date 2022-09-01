@@ -18,13 +18,13 @@ function Fireball(x, y, dir) {
     const myHitbox = new BoundingBox(x, y, -20, -15, 30, 30);
 
     function update(dT) {
+        // TBD if this can be less aggressive
+        bus.emit('attack', [myHitbox, dir, self, true]);
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
         if (!self || onGround || onRight || onLeft || onRoof) {
             return true;
         }
-        // TBD if this can be less aggressive
-        bus.emit('attack', [myHitbox, dir, self]);
         vx = clamp(vx + 1000 * dT * dir, -750, 750);
         x += vx * dT;
         myHitbox.x = x;

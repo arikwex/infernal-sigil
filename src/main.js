@@ -15,9 +15,9 @@ async function initialize() {
     add(new HUD());
 
     add(new Web(100*32, 100*66));
-    // getObjectsByTag('player')[0].grant(0);
-    // getObjectsByTag('player')[0].grant(1);
-    // getObjectsByTag('player')[0].grant(2);
+    getObjectsByTag('player')[0].grant(0);
+    getObjectsByTag('player')[0].grant(1);
+    getObjectsByTag('player')[0].grant(2);
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {
