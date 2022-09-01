@@ -33,6 +33,7 @@ On Deck
 - Parallax BG / FG
 - Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
 - Symbols above gates to "link them" to eachother mentally
+- Bug (that I kinda like) where attacking then jumping gives tall jump
 
 Motion
 - TBD opinions on ledge-walking

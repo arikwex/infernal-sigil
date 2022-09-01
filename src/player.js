@@ -20,7 +20,7 @@ function Player(x, y) {
     let smoothGrounded = 0;
     let playerHitbox = new BoundingBox(x, y, -14, -55, 28, 50);
     let injured = 0;
-    let hasClaws = true;
+    let hasClaws = false;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -37,14 +37,14 @@ function Player(x, y) {
 
     // Fireball attack
     let fireballTime = 0;
-    let hasFlame = true;
+    let hasFlame = false;
 
     // Air jump
     let numAirjumpsUsed = 0;
     let airJump = 0;
     let smoothAirjump = 0;
     let timeSinceJump = 0;
-    let MAX_NUM_AIRJUMP = 1;
+    let MAX_NUM_AIRJUMP = 0;
 
     // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
@@ -91,14 +91,21 @@ function Player(x, y) {
     ];
     const WING_FILL = 'rgba(230,100,70,0.5)';
 
-    // Add claws
-    if (hasClaws) {
-        handMesh.push(['#def', 3, 0], [18, 5, 25, 8], [15, 9, 22, 13]);
-    }
-
-    // Add wings
-    if (MAX_NUM_AIRJUMP > 0) {
-        wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
+    function grant(ability) {
+        // Claws
+        if (ability == 0) {
+            hasClaws = true;
+            handMesh.push(['#def', 3, 0], [18, 5, 25, 8], [15, 9, 22, 13]);
+        }
+        // Flame
+        if (ability == 1) {
+            hasFlame = true;
+        }
+        // Wings
+        if (ability == 2) {
+            MAX_NUM_AIRJUMP = 1;
+            wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
+        }
     }
 
 
@@ -457,7 +464,9 @@ function Player(x, y) {
             ctx.globalAlpha = Math.cos(injured*50) > 0 ? 0.2 : 1;
         }
         renderMesh(tailMesh, x, y - 8, 0, t + 1.57 + t * 0.3, 0);
-        renderMesh(flameMesh, x, y+tailMesh[1][9]-8, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
+        if (hasFlame) {
+            renderMesh(flameMesh, x, y+tailMesh[1][9]-8, tailMesh[1][8], t + t * 0.3, -heading * 0.3 + Math.cos(y/14) * 0.1);
+        }
         if (facing > 0) {
             renderMesh(handMesh, x + pHand1X, y + pHand1Y - Math.cos(a + 3) * 1.5 + 1, 0, t, pHand1A);
         } else {
@@ -499,6 +508,7 @@ function Player(x, y) {
         order: 1000,
         tags: ['player'],
         playerHitbox,
+        grant,
     };
 }
 
