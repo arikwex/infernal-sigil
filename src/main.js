@@ -14,10 +14,10 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    add(new Shrine(100*27, 100*66, 0));
-    getObjectsByTag('player')[0].grant(0);
-    getObjectsByTag('player')[0].grant(1);
-    getObjectsByTag('player')[0].grant(2);
+    add(new Shrine(100*27, 100*66, 2));
+    // getObjectsByTag('player')[0].grant(0);
+    // getObjectsByTag('player')[0].grant(1);
+    // getObjectsByTag('player')[0].grant(2);
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {

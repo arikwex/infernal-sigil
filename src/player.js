@@ -48,10 +48,7 @@ function Player(x, y) {
 
     // STATES (not really using these tbh, just 0 and 3)
     // IDLE = 0,
-    // RUNNING = 1,
-    // JUMPING = 2,
     // CLIMBING = 3,
-    // ATTACKING = 4
     let state = 0;
 
     const MAX_SPEED = 400;
@@ -502,9 +499,19 @@ function Player(x, y) {
         ctx.setTransform(xfm);
     }
 
+    function enable() {
+        bus.on('player:grant', grant);
+    }
+
+    function disable() {
+        bus.off('player:grant', grant);
+    }
+
     return {
         update,
         render,
+        enable,
+        disable,
         order: 1000,
         tags: ['player'],
         playerHitbox,

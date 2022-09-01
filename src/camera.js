@@ -16,6 +16,12 @@ function Camera(x, y) {
     function update(dT) {
         anim += dT;
         const player = getObjectsByTag('player')[0];
+        shake = Math.max(shake-dT,0);
+        x += (tx - x) * 12 * dT;
+        y += (ty - y) * 12 * dT;
+        z += (tz - z) * 3 * dT;
+        tz += (canvas.width / 1400 - tz) * 4 * dT;
+
         if (player) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
@@ -27,10 +33,6 @@ function Camera(x, y) {
             if (py < y - H) { ty = py + H; }
             if (py > y + H*0.8) { ty = py - H*0.8; }
         }
-        shake = Math.max(shake-dT,0);
-        x += (tx - x) * 12 * dT;
-        y += (ty - y) * 12 * dT;
-        z += (tz - z) * 3 * dT;
 
         // Chould technically be in the render loop
         const m = getObjectsByTag('map')[0];
@@ -51,11 +53,28 @@ function Camera(x, y) {
         ctx.translate(-x+dx, -y+dy);
     }
 
+    function getX() {
+        return x;
+    }
+
+    function getY() {
+        return y;
+    }
+
+    function aim(tx_, ty_, tz_) {
+        tx = tx_;
+        ty = ty_;
+        tz = tz_ * canvas.width / 1400;
+    }
+
     bus.on('player:hit', () => shake=0.5);
 
     return {
         update,
         set,
+        aim,
+        getX,
+        getY,
         order: -10000,
         tags: ['camera']
     }
