@@ -68,6 +68,7 @@ function Camera(x, y) {
     }
 
     bus.on('player:hit', () => shake=0.5);
+    bus.on('player:grant', () => shake=0.5);
 
     return {
         update,

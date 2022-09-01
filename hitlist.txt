@@ -1,6 +1,4 @@
 On Deck
-- Shrine to acquire upgrade
-
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
@@ -18,6 +16,7 @@ On Deck
 - Enemy
 
 - Talk to spirits / read signs?
+- Text explaining recent upgrade
 - Do not render out of frame
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Map loader + compressor improvements
@@ -76,7 +75,7 @@ Asphodel Meadows (Biome)
 [X] Treasure chests
 [X] Static spike traps
 [ ] Skeleton Archer
-[ ] GRANT: HELLBOUND CLAWS
+[X] GRANT: HELLBOUND CLAWS
 
 Elysian Boneyard (Biome)
 [X] Bones + Light Purple
@@ -84,14 +83,14 @@ Elysian Boneyard (Biome)
 [X] Moving spike traps
 [ ] Web gates
 [ ] Timed push buttons
-[ ] GRANT: INFERNAL FLAME
+[X] GRANT: INFERNAL FLAME
 
 Fields of Mourning (Biome)
 [X] Dirt + blueish
 [ ] Bats
 [ ] Projectile traps
 [X] Air jump Platforming
-[ ] GRANT: DEMON WINGS
+[X] GRANT: DEMON WINGS
 
 Throne Room (Biome)
 - Reach the throne room to win

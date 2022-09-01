@@ -10,6 +10,7 @@ import Wall from './wall';
 import Hazard from './hazard';
 import Gate from './gate';
 import Switch from './switch';
+import Shrine from './shrine';
 
 function Map() {
     let img = new Image();
@@ -61,6 +62,7 @@ function Map() {
                     if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
                     if (D0 == 0x02) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 1, D1)); }
                     if (D0 == 0x03) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
+                    if (D0 == 0x04) { add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
                 }
 
                 // compute theme avg

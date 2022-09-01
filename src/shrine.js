@@ -54,7 +54,7 @@ function Shrine(x, y, grantType) {
                 const cam = getObjectsByTag('camera')[0];
                 const alpha = engaging / 3;
                 const beta = 1 - alpha;
-                cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha);
+                cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha, alpha);
                 if (engaging > 3) {
                     engage();
                 }

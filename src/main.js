@@ -6,15 +6,13 @@ import Map from './map';
 import Bone from './bone';
 import Fireball from './fireball';
 
-import Shrine from './shrine';
-
 async function initialize() {
     const m = new Map();
     await m.generate();
     add(m);
     add(new HUD());
 
-    add(new Shrine(100*27, 100*66, 2));
+    // add(new Shrine(100*27, 100*66, 2));
     // getObjectsByTag('player')[0].grant(0);
     // getObjectsByTag('player')[0].grant(1);
     // getObjectsByTag('player')[0].grant(2);
