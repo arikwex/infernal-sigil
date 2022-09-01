@@ -6,7 +6,7 @@ On Deck
 
 - Switch/button that closes on a timer (fireball gate)
 - Spider web (ignite to break)
-- Juicy destructables
+- Juicy destructables (torch, post, statue)
 - Enemy spider
 - Enemy bat
 - Background gradient (change in different regions)
