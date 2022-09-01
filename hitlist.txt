@@ -1,10 +1,12 @@
 On Deck
-- Web via map
-- GameState that is effectively load/reload
-- On death, go to last checkpoint at full HP + lose bones
-
 - Switch/button that closes on a timer (fireball gate)
 - Juicy destructables (torch, post, statue)
+
+- Death animation
+- Checkpoint system
+- On death, go to checkpoint at full HP and lose some bones
+- GameState that is effectively load/reload
+
 - Enemy spider
 - Enemy bat
 - Background gradient (change in different regions)

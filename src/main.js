@@ -15,8 +15,8 @@ async function initialize() {
 
     // add(new FlameSFX(100*31, 100*66, 1, 5));
     getObjectsByTag('player')[0].grant(0);
-    // getObjectsByTag('player')[0].grant(1);
-    // getObjectsByTag('player')[0].grant(2);
+    getObjectsByTag('player')[0].grant(1);
+    getObjectsByTag('player')[0].grant(2);
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {
