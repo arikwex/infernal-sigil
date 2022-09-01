@@ -1,9 +1,9 @@
 On Deck
+- Spider web (ignite to break)
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
 - Switch/button that closes on a timer (fireball gate)
-- Spider web (ignite to break)
 - Juicy destructables (torch, post, statue)
 - Enemy spider
 - Enemy bat
