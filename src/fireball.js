@@ -23,6 +23,7 @@ function Fireball(x, y, dir) {
         if (!self || onGround || onRight || onLeft || onRoof) {
             return true;
         }
+        // TBD if this can be less aggressive
         bus.emit('attack', [myHitbox, dir, self]);
         vx = clamp(vx + 1000 * dT * dir, -750, 750);
         x += vx * dT;

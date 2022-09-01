@@ -1,5 +1,4 @@
 On Deck
-- Ranged Flame Ability
 - Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
 
@@ -7,6 +6,7 @@ On Deck
 - On death, go to last checkpoint at full HP + lose bones
 
 - Switch/button that closes on a timer (fireball gate)
+- Spider web (ignite to break)
 - Juicy destructables
 - Enemy spider
 - Enemy bat
@@ -31,6 +31,7 @@ On Deck
 - Game timer (bottom right for speed runners)
 - Boss fights?
 - Parallax BG / FG
+- Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
 - Symbols above gates to "link them" to eachother mentally
 
 Motion
