@@ -7,19 +7,16 @@ import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
 
-import Web from './web';
-
 async function initialize() {
     const m = new Map();
     await m.generate();
     add(m);
     add(new HUD());
 
-    add(new Web(100*32, 100*66));
     // add(new FlameSFX(100*31, 100*66, 1, 5));
     getObjectsByTag('player')[0].grant(0);
-    getObjectsByTag('player')[0].grant(1);
-    getObjectsByTag('player')[0].grant(2);
+    // getObjectsByTag('player')[0].grant(1);
+    // getObjectsByTag('player')[0].grant(2);
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => {

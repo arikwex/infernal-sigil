@@ -23,6 +23,7 @@ function Fireball(x, y, dir) {
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
         if (!self || onGround || onRight || onLeft || onRoof) {
+            bus.emit('sfx:flame', [x, y, 2, 0.5]);
             return true;
         }
         vx = clamp(vx + 1000 * dT * dir, -750, 750);
