@@ -50,7 +50,8 @@ function Web(x, y) {
             // Darken
             const p = 1-burntime;
             const w = Math.max(255 - 1000 * burntime, 0);
-            webMesh[0][0] = `rgba(${w},${w},${w},${p})`;
+            webMesh[0][0] = `rgb(${w},${w},${w})`;
+            webMesh[0][1] = 4 * p;
         }
         renderMesh(webMesh, x, y, 0, 0, 0);
     }

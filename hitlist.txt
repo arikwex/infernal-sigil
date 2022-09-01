@@ -1,5 +1,5 @@
 On Deck
-- Spider web (ignite to break)
+- Web via map
 - GameState that is effectively load/reload
 - On death, go to last checkpoint at full HP + lose bones
 
