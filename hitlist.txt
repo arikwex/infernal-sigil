@@ -1,5 +1,4 @@
 On Deck
-- Hooks to level up player (visually and mechanically)
 - Shrine to acquire upgrade
 
 - GameState that is effectively load/reload
@@ -32,6 +31,8 @@ On Deck
 - Boss fights?
 - Parallax BG / FG
 - Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
+- Favicon
+- Joystick
 - Symbols above gates to "link them" to eachother mentally
 - Bug (that I kinda like) where attacking then jumping gives tall jump
 
