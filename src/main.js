@@ -5,6 +5,7 @@ import HUD from './hud';
 import Map from './map';
 import Bone from './bone';
 import Fireball from './fireball';
+import FlameSFX from './flame-sfx';
 
 import Web from './web';
 
@@ -15,6 +16,7 @@ async function initialize() {
     add(new HUD());
 
     add(new Web(100*32, 100*66));
+    // add(new FlameSFX(100*31, 100*66, 1, 5));
     getObjectsByTag('player')[0].grant(0);
     getObjectsByTag('player')[0].grant(1);
     getObjectsByTag('player')[0].grant(2);
@@ -26,6 +28,7 @@ async function initialize() {
     bus.on('bone:collect', (v) => getCurrentGameState().addBones(v));
     bus.on('player:hit', (v) => getCurrentGameState().addHp(-v));
     bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
+    bus.on('sfx:flame', ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 
     start();
 }

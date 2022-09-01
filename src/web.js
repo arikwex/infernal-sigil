@@ -4,9 +4,8 @@ import * as bus from './bus';
 
 function Web(x, y) {
     y -= 50;
-    let size = 100;
-    let step = 1;
     let burnup = false;
+    let burntime = 0;
     let anim = 0;
     let cx = 0;
     let cy = 0;
@@ -21,7 +20,7 @@ function Web(x, y) {
     for (let i = 0; i < 8; i++) {
         let a = -2.3 + (Math.random() - 0.5)/4 + (i%4)/2;
         if (i > 3) { a += 3.14; }
-        const R = (size + 10) / Math.abs(Math.sin(a));
+        const R = 110 / Math.abs(Math.sin(a));
         angles.push(a);
         rads.push(R);
         webMesh.push([0, 0, Math.cos(a) * R, Math.sin(a) * R]);
@@ -39,11 +38,20 @@ function Web(x, y) {
         updateWebPos();
 
         if (burnup) {
-            return true;
+            burntime += dT;
+            if (burntime > 1) {
+                return true;
+            }
         }
     }
 
     function render(ctx) {
+        if (burnup) {
+            // Darken
+            const p = 1-burntime;
+            const w = Math.max(255 - 1000 * burntime, 0);
+            webMesh[0][0] = `rgba(${w},${w},${w},${p})`;
+        }
         renderMesh(webMesh, x, y, 0, 0, 0);
     }
 
@@ -52,9 +60,9 @@ function Web(x, y) {
             webMesh[1 + i][0] = cx;
             webMesh[1 + i][1] = cy;
         }
-        for (let i = 0; i < 32 / step; i++) {
+        for (let i = 0; i < 32; i++) {
             const a = angles[i % 8];
-            const p =(i * step / 70 + 0.07) / (1 - Math.abs(Math.sin(a)) * 0.5);
+            const p = (i / 70 + 0.07) / (1 - Math.abs(Math.sin(a)) * 0.5);
             const r = rads[i % 8] * p;
             webbing[i*2] = Math.cos(a) * r + cx * (1 - p);
             webbing[i*2+1] = Math.sin(a) * r + cy * (1 - p);
@@ -65,8 +73,20 @@ function Web(x, y) {
         if (physics.isTouching(attackHitbox)) {
             omx = 10;
             omy = 8;
-            if (flames) {
+            if (flames && !burnup) {
                 burnup = true;
+                // Flames
+                for (let i = 0; i < 18; i++) {
+                    setTimeout(() => {
+                        bus.emit('sfx:flame', [
+                            x + (Math.random() - 0.5) * 170,
+                            y + (Math.random() - 0.5) * 190 + 20,
+                            Math.random() * 1 + 1,
+                            Math.random() * 0.5 + 0.5
+                        ]);
+                    }, Math.random() * (100 + 33 * i));
+                }
+                physics.h = 0;
             }
             bus.emit('attack:hit', [owner]);
         }

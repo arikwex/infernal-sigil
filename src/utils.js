@@ -1,5 +1,5 @@
 function clamp(v, min, max) {
-    return Math.max(Math.min(v,max), min);
+    return Math.max(Math.min(v, max), min);
 }
 
 const physicsResult = [0, 0, false, false, false, false];
