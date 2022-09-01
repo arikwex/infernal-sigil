@@ -70,7 +70,6 @@ function Map() {
                 themeLookup[x][y] = computeTheme(x, y);
             }
         }
-        console.log(themeLookup);
 
         // Merge walls vertically
         const vertMap = {};
