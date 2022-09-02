@@ -5,7 +5,7 @@ const ctx = canvas.getContext('2d');
 
 function thickness(t) { ctx.lineWidth = t; }
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
-function scaleInPlace(s, x, y) { ctx.translate(x, y); ctx.scale(s, s); ctx.translate(-x, -y); }
+function scaleInPlace(s, x, y, s2) { ctx.translate(x, y); ctx.scale(s, s2 || s); ctx.translate(-x, -y); }
 
 function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor = null) {
     const xfm = ctx.getTransform();

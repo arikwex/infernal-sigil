@@ -1,5 +1,4 @@
 On Deck
-- Switch/button that closes on a timer (fireball gate)
 - Juicy destructables (torch, post, statue)
 
 - Death animation
@@ -17,6 +16,7 @@ On Deck
 - Enemy Archer
 - Enemy
 
+- Bazard (fireball gate)
 - Talk to spirits / read signs?
 - Text explaining recent upgrade
 - Do not render out of frame

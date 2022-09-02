@@ -6,6 +6,7 @@ import Map from './map';
 import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
+import Decoration from './decoration';
 
 async function initialize() {
     const m = new Map();
@@ -13,7 +14,8 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    // add(new FlameSFX(100*31, 100*66, 1, 5));
+    add(new Decoration(100*47, 100*72, 0));
+    add(new Decoration(100*51, 100*72, 0));
     getObjectsByTag('player')[0].grant(0);
     getObjectsByTag('player')[0].grant(1);
     getObjectsByTag('player')[0].grant(2);
