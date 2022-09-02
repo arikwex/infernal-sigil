@@ -43,7 +43,6 @@ function Skeleton(x, y, type) {
 
     function update(dT) {
         if (hp <= 0) {
-            bus.emit('bone:spawn', [x,y-55,4,1]);
             return true;
         }
 
@@ -121,6 +120,9 @@ function Skeleton(x, y, type) {
             targetFacing = -Math.sign(dir);
             injured = 1;
             hp -= 1;
+            if (hp <= 0) {
+                bus.emit('bone:spawn', [x,y-55,4,1]);
+            }
             bus.emit('attack:hit', [owner]);
         }
     }
