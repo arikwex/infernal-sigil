@@ -5,7 +5,7 @@ function Parallax(x, y) {
     const z = 1 + Math.random() * 3;
     const terrain = [-100, 0];
     const islandMesh = [
-        ['', 5, 0],
+        ['', 1, 0],
         terrain
     ];
     for (let i = -100; i < 100;) {
@@ -42,11 +42,11 @@ function Parallax(x, y) {
             return;
         }
 
-        const color = `rgb(${theme[0]/k},${theme[1]/k},${theme[2]/k})`;
+        const color = 'rgba(0,0,0,0.13)';//`rgba(${theme[0]/k},${theme[1]/k},${theme[2]/k}, 0.2)`;
         islandMesh[0][0] = color;
 
         const xfm = ctx.getTransform();
-        scaleInPlace(2/(1 + z * 0.3), px, py);
+        scaleInPlace(3.5/(1 + z * 0.6), px, py);
         renderMesh(islandMesh, px, py, 0, 0, 0, color);
         ctx.setTransform(xfm);
     }
