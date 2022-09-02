@@ -23,8 +23,8 @@ On Deck
 - Map loader + compressor improvements
 - Minimap overlay
 - Audio
+- Upgrade effect (light from above)
 - Swift wind swirl on land / impact
-- Procedural background (fixed seed)
 - Mandatory combat rooms
 - png compression magic
 - Game timer (bottom right for speed runners)

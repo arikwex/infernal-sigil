@@ -4,9 +4,9 @@ import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
 import { physicsCheck } from './utils';
+import { getCurrentGameState } from './gamestate';
 
 function Player(x, y) {
-    console.log('??')
     const thickness = 9;
     let anim = 0;
     let climbAnim = 0;
@@ -22,6 +22,7 @@ function Player(x, y) {
     let playerHitbox = new BoundingBox(x, y, -14, -55, 28, 50);
     let injured = 0;
     let hasClaws = false;
+    let isDead = false;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -108,6 +109,7 @@ function Player(x, y) {
 
 
     function update(dT) {
+        if (isDead) { return; }
         anim += dT;
 
         attackTime = Math.min(attackTime + dT, 1);
@@ -284,6 +286,7 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
+            if (isDead) { return; }
             if (playerHitbox.isTouching(enemyHitbox) && injured <= 0 && attackTime > 0.15) {
                 injured = 1;
                 attackTime = 0;
@@ -294,6 +297,12 @@ function Player(x, y) {
                     vx = -targetFacing * 300;
                 }
                 bus.emit('player:hit', 1);
+                if (getCurrentGameState().getHp() <= 0) {
+                    playerHitbox.ox = -1000;
+                    bus.emit('bone:spawn', [x, y - 30, 1, 2]);
+                    bus.emit('bone:spawn', [x, y - 30, 8, 1]);
+                    isDead = true;
+                }
             }
         });
 
@@ -316,10 +325,12 @@ function Player(x, y) {
         timeSinceJump += dT;
         injured = Math.max(0, injured - dT);
 
-        playerHitbox.set(x, y, -14, -55, 28, 50);
+        if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
     }
 
     function render(ctx) {
+        if (isDead) { return; }
+
         const heading = Math.sign(vx) * Math.pow(Math.abs(vx / MAX_SPEED), 0.5);
         const attacking = smoothAttacking;
         const notAttack = 1 - attacking;

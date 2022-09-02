@@ -9,6 +9,8 @@ function Parallax(x, y) {
         ['', 1, 0],
         terrain
     ];
+    const color = 'rgba(0,0,0,0.13)';
+
     for (let i = -100; i < 100;) {
         i += Math.random() * 10 + 10;
         const p = i / 100;
@@ -33,8 +35,6 @@ function Parallax(x, y) {
         const camera = getObjectsByTag('camera')[0];
         const cx = camera.getX();
         const cy = camera.getY();
-        const theme = camera.getBgBot();
-        const k = 2;
         const k2 = (1 + z * 0.6);
 
         const px = x + camera.getX() / k2;
@@ -43,13 +43,12 @@ function Parallax(x, y) {
             return;
         }
 
-        const color = 'rgba(0,0,0,0.13)';//`rgba(${theme[0]/k},${theme[1]/k},${theme[2]/k}, 0.2)`;
         islandMesh[0][0] = color;
 
-        const xfm = ctx.getTransform();
-        scaleInPlace(3.5/(1 + z * 0.6), px, py);
+        // const xfm = ctx.getTransform();
+        // scaleInPlace(3.5/(1 + z * 0.6), px, py);
         renderMesh(islandMesh, px, py, 0, 0, angle, color);
-        ctx.setTransform(xfm);
+        // ctx.setTransform(xfm);
     }
 
     return {
