@@ -6,6 +6,7 @@ import * as bus from './bus';
 import { physicsCheck } from './utils';
 
 function Player(x, y) {
+    console.log('??')
     const thickness = 9;
     let anim = 0;
     let climbAnim = 0;

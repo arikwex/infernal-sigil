@@ -51,7 +51,7 @@ function Skeleton(x, y, type) {
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
         [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox);
-        if (onGround && vy > 500) { hp = 0; }
+        if (onGround && vy > 500) { hp = 0; bus.emit('bone:spawn', [x,y-55,4,1]); }
         if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
         if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
         if (onGround || onRoof) { vy = 0; }
@@ -115,7 +115,7 @@ function Skeleton(x, y, type) {
     }
 
     function hitCheck([attackHitbox, dir, owner]) {
-        if (enemyHitbox.isTouching(attackHitbox)) {
+        if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);
             injured = 1;

@@ -12,6 +12,7 @@ import Switch from './switch';
 import Shrine from './shrine';
 import Web from './web';
 import Decoration from './decoration';
+import Parallax from './parallax';
 
 function Map() {
     let img = new Image();
@@ -129,6 +130,15 @@ function Map() {
                 const V2 = get(x, y-1);
                 if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
                     add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
+                }
+            }
+        }
+
+        // Place parallax objects
+        for (let x = 0; x < W; x++) {
+            for (let y = 5; y < H; y++) {
+                if (Math.abs(Math.cos(x*x*7321+y*y*4831))%1.0 < 0.07) {
+                    add(new Parallax(x * BLOCK_SIZE, y * BLOCK_SIZE));
                 }
             }
         }

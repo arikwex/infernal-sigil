@@ -1,6 +1,4 @@
 On Deck
-- Autoplace decorations
-
 - Death animation
 - Checkpoint system
 - On death, go to checkpoint at full HP and lose some bones
@@ -20,12 +18,13 @@ On Deck
 - Talk to spirits / read signs?
 - Text explaining recent upgrade
 - Do not render out of frame
+- Use flameSFX for tail
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Map loader + compressor improvements
 - Minimap overlay
 - Audio
+- Swift wind swirl on land / impact
 - Procedural background (fixed seed)
-- Procedural destructables (fixed seed)
 - Mandatory combat rooms
 - png compression magic
 - Game timer (bottom right for speed runners)
