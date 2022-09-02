@@ -1,23 +1,13 @@
+import { boneMeshAsset, headMeshAsset } from "./assets";
 import { renderMesh, renderText } from "./canvas";
 import { getCurrentGameState } from "./gamestate";
+import { copy } from "./utils";
 
 function HUD() {
     let anim = 0;
 
-    const headMesh = [
-        ['#e22', 9, 0],
-        [14, -40, 18, -26, 1, 0, -1, 0, -18, -26, -14, -40],
-        [-7, -11, 7, -11],
-        ['#fff', 4, 5],
-        [-9, -11, -3, -9],
-        [9, -11, 3, -9],
-    ];
-
-    const boneMesh = [
-        ['#fff', 6, 0],
-        [-11, -7, -7, -7, 7, 7, 7, 11],
-        [-7, -11, -7, -7, 7, 7, 11, 7],
-    ];
+    const headMesh = copy(headMeshAsset);
+    const boneMesh = copy(boneMeshAsset);
 
     function update(dT) {
         anim += dT;

@@ -3,8 +3,9 @@ import { color, renderMesh } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
-import { physicsCheck } from './utils';
+import { copy, physicsCheck } from './utils';
 import { getCurrentGameState } from './gamestate';
+import { headMeshAsset } from './assets';
 
 function Player(x, y) {
     const thickness = 9;
@@ -57,14 +58,7 @@ function Player(x, y) {
     const TERMINAL_VELOCITY = 800;
     const CLIMB_SPEED = 370;
 
-    const headMesh = [
-        ['#e22', thickness, 0],
-        [14, -40, 18, -26, 1, 0, -1, 0, -18, -26, -14, -40],
-        [-7, -11, 7, -11],
-        ['#fff', 4, 5],
-        [-9, -11, -3, -9],
-        [9, -11, 3, -9],
-    ];
+    const headMesh = copy(headMeshAsset);
     const bodyMesh = [
         ['#e22', thickness, 0],
         [0, -37, 0, 20-37],

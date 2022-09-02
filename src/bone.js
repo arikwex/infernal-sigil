@@ -2,7 +2,8 @@ import * as bus from './bus';
 import { BoundingBox } from "./bbox"
 import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
-import { physicsCheck } from './utils';
+import { copy, physicsCheck } from './utils';
+import { boneMeshAsset } from './assets';
 
 // t=1 -> value = 1
 // t=2 -> value = 10
@@ -17,11 +18,7 @@ function Bone(x, y, vx, vy, t=1) {
     const collectHitbox = new BoundingBox(x,y,1,1);
     let boneMesh;
     if (t == 1) {
-        boneMesh = [
-            ['#fff', 6, 0],
-            [-11, -7, -7, -7, 7, 7, 7, 11],
-            [-7, -11, -7, -7, 7, 7, 11, 7],
-        ];
+        boneMesh = copy(boneMeshAsset);
     } else {
         boneMesh = [
             ['#fff', 9, 0],

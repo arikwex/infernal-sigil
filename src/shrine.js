@@ -2,6 +2,8 @@ import { BoundingBox, isTouching } from "./bbox";
 import { renderMesh } from "./canvas";
 import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
+import { symbolMeshAssets } from "./assets";
+import { copy } from "./utils";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -30,15 +32,7 @@ function Shrine(x, y, grantType) {
         a2.push(Math.sin(i * step * 2) * 100, -Math.cos(i * step * 2) * 100);
     }
     pentagramMesh.push(a1, a2);
-    
-    // Symbols
-    const symbolMeshes = [
-        [['#4af', 2, 0], [0, -15, 10, 0, 0, 15, -10, 0, 0, -15]],
-        [['#4af', 2, 0], [10, -15, -10, -7, 10, 0, -10, 7, 10, 15]],
-        [['#4af', 2, 0], [0, -18, 0, -5, 12, 0, 0, 12, -12, 0]],
-        [['#4af', 2, 0], [10, -12, 15, 12, -15, 12, 0, 0, -10, 0]],
-        [['#4af', 2, 0], [-15, -11, -15, 11, 0, 11, 0, -11, 15, -11, 15, 11]],
-    ];
+    const symbolMeshes = copy(symbolMeshAssets);
 
     const physics = new BoundingBox(x-200,y,0,0,400,50);
     const physics2 = new BoundingBox(x-100,y-50,0,0,200,50);

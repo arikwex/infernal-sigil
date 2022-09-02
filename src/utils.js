@@ -2,6 +2,10 @@ function clamp(v, min, max) {
     return Math.max(Math.min(v, max), min);
 }
 
+function copy(arr) {
+    return JSON.parse(JSON.stringify(arr));
+}
+
 const physicsResult = [0, 0, false, false, false, false];
 function physicsCheck(physicsObjects, myHitbox) {
     let x = myHitbox.x;
@@ -77,6 +81,7 @@ function groundCheck(physicsObjects, myHitbox) {
 
 export {
     clamp,
+    copy,
     physicsCheck,
     groundCheck,
 }

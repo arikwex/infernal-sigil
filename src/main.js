@@ -6,6 +6,7 @@ import Map from './map';
 import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
+import Checkpoint from './checkpoint';
 
 async function initialize() {
     const m = new Map();
@@ -13,7 +14,8 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    // add(new Decoration(100*47, 100*72, 0));
+    add(new Checkpoint(100*32, 100*62, 0));
+    add(new Checkpoint(100*28, 100*62, 1));
     getObjectsByTag('player')[0].grant(0);
     getObjectsByTag('player')[0].grant(1);
     getObjectsByTag('player')[0].grant(2);
@@ -24,6 +26,7 @@ async function initialize() {
     });
     bus.on('bone:collect', (v) => getCurrentGameState().addBones(v));
     bus.on('player:hit', (v) => getCurrentGameState().addHp(-v));
+    bus.on('player:cpt', (v) => getCurrentGameState().setCheckpointId(v));
     bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
     bus.on('sfx:flame', ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 
