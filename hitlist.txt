@@ -1,5 +1,5 @@
 On Deck
-- Juicy destructables (torch, post, statue)
+- Autoplace decorations
 
 - Death animation
 - Checkpoint system

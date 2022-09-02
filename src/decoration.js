@@ -13,7 +13,6 @@ function Decoration(x, y, t) {
     let scale = 1;
     let flip = Math.random() > 0.5 ? 1 : -1;
     
-    t = 3;
     // TORCH
     if (t == 0) {
         shapeMeshes.push([
@@ -39,7 +38,7 @@ function Decoration(x, y, t) {
             ['#ccc', 7, 0],
             [15, 50, 19,  6 * Math.random()]
         ]);
-        scale = Math.random() * 0.5 + 1;
+        scale = Math.random() * 0.5 + 0.6;
     }
     // GRASS
     if (t == 2) {

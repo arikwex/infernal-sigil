@@ -1,7 +1,6 @@
 import terrain from './game-map.png';
 import { canvas } from './canvas';
-import { add, getObjectsByTag } from './engine';
-import { BoundingBox } from './bbox';
+import { add } from './engine';
 import Player from './player';
 import Camera from './camera';
 import Skeleton from './skeleton';
@@ -12,6 +11,7 @@ import Gate from './gate';
 import Switch from './switch';
 import Shrine from './shrine';
 import Web from './web';
+import Decoration from './decoration';
 
 function Map() {
     let img = new Image();
@@ -19,10 +19,10 @@ function Map() {
     let W, H;
     const BLOCK_SIZE = 100;
     const WALL_MAP = {
-      [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10],
-      [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40],
-      [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 60, 10, 50],
-      [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30],
+      [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3]],
+      [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0]],
+      [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 60, 10, 50, [1, 1, 1, 3, 0]],
+      [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0]],
     };
     const themeLookup = {};
 
@@ -63,7 +63,11 @@ function Map() {
                     if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
                     if (D0 == 0x02) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 1, D1)); }
                     if (D0 == 0x03) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
-                    if (D0 == 0x04) { add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
+                    if (D0 == 0x04) {
+                        add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1));
+                        add(new Decoration((x - 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
+                        add(new Decoration((x + 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
+                    }
                     if (D0 == 0x05) { add(new Web(x * BLOCK_SIZE, y * BLOCK_SIZE)); }
                 }
 
@@ -114,6 +118,17 @@ function Map() {
                     // scan adjacent surface nodes and mark them for skipping
                     let o = outlineFinder(x, y, q, vm[1]);
                     add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
+                }
+            }
+        }
+
+        // Place decorations
+        for (let x = 0; x < W; x++) {
+            for (let y = 1; y < H; y++) {
+                const V = WALL_MAP[get(x, y)];
+                const V2 = get(x, y-1);
+                if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
+                    add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
                 }
             }
         }

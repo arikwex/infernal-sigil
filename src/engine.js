@@ -25,7 +25,7 @@ function tick(currentFrameMs) {
 
 function add(obj) {
     gameObjects.push(obj);
-    gameObjects.sort((a, b) => a.order - b.order);
+    gameObjects.sort((a, b) => (a.order || 0) - (b.order || 0));
     obj.tags?.map((tag) => {
         gameObjectsByTag[tag] = (gameObjectsByTag[tag] ?? []);
         gameObjectsByTag[tag].push(obj);
