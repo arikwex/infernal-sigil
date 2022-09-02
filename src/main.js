@@ -6,7 +6,6 @@ import Map from './map';
 import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
-import Checkpoint from './checkpoint';
 
 async function initialize() {
     const m = new Map();
@@ -14,8 +13,7 @@ async function initialize() {
     add(m);
     add(new HUD());
 
-    add(new Checkpoint(100*32, 100*62, 0));
-    add(new Checkpoint(100*28, 100*62, 1));
+    // add(new Checkpoint(100*32, 100*62, 0));
     getObjectsByTag('player')[0].grant(0);
     getObjectsByTag('player')[0].grant(1);
     getObjectsByTag('player')[0].grant(2);

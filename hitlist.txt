@@ -1,7 +1,5 @@
 On Deck
-- Death animation
-- Checkpoint system
-- On death, go to checkpoint at full HP and lose some bones
+- Checkpoint system in map
 - GameState that is effectively load/reload
 
 - Enemy spider

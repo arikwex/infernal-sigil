@@ -13,6 +13,7 @@ import Shrine from './shrine';
 import Web from './web';
 import Decoration from './decoration';
 import Parallax from './parallax';
+import Checkpoint from './checkpoint';
 
 function Map() {
     let img = new Image();
@@ -70,6 +71,7 @@ function Map() {
                         add(new Decoration((x + 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
                     }
                     if (D0 == 0x05) { add(new Web(x * BLOCK_SIZE, y * BLOCK_SIZE)); }
+                    if (D0 == 0x06) { add(new Checkpoint(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
                 }
 
                 // compute theme avg
