@@ -13,6 +13,7 @@ function Bone(x, y, vx, vy, t=1) {
     let popOut = 0;
     let collected = false;
     let lifeTime = 0;
+    let vanish = 10 + Math.random() * 3;
     let offset = -15 + 20 * Math.random();
 
     const collectHitbox = new BoundingBox(x,y,1,1);
@@ -33,6 +34,9 @@ function Bone(x, y, vx, vy, t=1) {
         anim += dT;
         lifeTime += dT;
         vy += 2000 * dT;
+        if (lifeTime > vanish) {
+            collected = true;
+        }
 
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), collectHitbox);

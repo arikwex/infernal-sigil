@@ -296,6 +296,7 @@ function Player(x, y) {
                     bus.emit('bone:spawn', [x, y - 30, 1, 2]);
                     bus.emit('bone:spawn', [x, y - 30, 8, 1]);
                     isDead = true;
+                    setTimeout((() => bus.emit('player:rst')), 1500);
                 }
             }
         });
@@ -505,6 +506,13 @@ function Player(x, y) {
         ctx.setTransform(xfm);
     }
 
+    function reset(x_, y_) {
+        isDead = false;
+        playerHitbox.x = x_ + 50;
+        playerHitbox.y = y_;
+        getObjectsByTag('camera')[0].aim(x_, y_, 1, true);
+    }
+
     function enable() {
         bus.on('player:grant', grant);
     }
@@ -522,6 +530,7 @@ function Player(x, y) {
         tags: ['player'],
         playerHitbox,
         grant,
+        reset,
     };
 }
 

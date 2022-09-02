@@ -76,10 +76,18 @@ function Checkpoint(x, y, checkpointId) {
         renderMesh(bloodMesh, x, y, 0, 0, 0);
     }
 
+    function onReset() {
+        if (checkpointId == getCurrentGameState().getCheckpointId()) {
+            getObjectsByTag('player')[0].reset(x, y - 150);
+        }
+    }
+
     function enable() {
+        bus.on('player:rst', onReset);
     }
 
     function disable() {
+        bus.off('player:rst', onReset);
     }
 
     return {

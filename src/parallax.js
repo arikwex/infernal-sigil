@@ -44,11 +44,7 @@ function Parallax(x, y) {
         }
 
         islandMesh[0][0] = color;
-
-        // const xfm = ctx.getTransform();
-        // scaleInPlace(3.5/(1 + z * 0.6), px, py);
         renderMesh(islandMesh, px, py, 0, 0, angle, color);
-        // ctx.setTransform(xfm);
     }
 
     return {

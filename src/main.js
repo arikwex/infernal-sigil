@@ -21,12 +21,11 @@ async function initialize() {
     getObjectsByTag('player')[0].grant(2);
 
     // Game events
-    bus.on('bone:spawn', ([x,y,N,t]) => {
-        while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); }
-    });
+    bus.on('bone:spawn', ([x,y,N,t]) => { while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });
     bus.on('bone:collect', (v) => getCurrentGameState().addBones(v));
     bus.on('player:hit', (v) => getCurrentGameState().addHp(-v));
     bus.on('player:cpt', (v) => getCurrentGameState().setCheckpointId(v));
+    bus.on('player:rst', (v) => getCurrentGameState().respawn());
     bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
     bus.on('sfx:flame', ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 

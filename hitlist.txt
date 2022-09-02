@@ -6,14 +6,14 @@ On Deck
 
 - Enemy spider
 - Enemy bat
-- Background gradient (change in different regions)
 - Game world layout
+- Throne room / game over
 
 - Enemy Orba
 - Enemy Ironclaw (TBD Skeleton attack behavior)
 - Enemy Archer
-- Enemy
 
+- Optimize background parallax objects
 - Consider making switches one-time use for simplicity
 - Bazard (fireball gate)
 - Talk to spirits / read signs?

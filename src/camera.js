@@ -65,10 +65,15 @@ function Camera(x, y) {
         return bgBot;
     }
 
-    function aim(tx_, ty_, tz_) {
+    function aim(tx_, ty_, tz_, jump_) {
         tx = tx_;
         ty = ty_;
         tz = tz_ * canvas.width / 1400;
+        if (jump_) {
+            x = tx;
+            y = ty;
+            z = tz;
+        }
     }
 
     bus.on('player:hit', () => shake=0.5);
