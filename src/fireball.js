@@ -19,10 +19,13 @@ function Fireball(x, y, dir) {
 
     function update(dT) {
         // TBD if this can be less aggressive
+        if (!self) {
+            return true;
+        }
         bus.emit('attack', [myHitbox, dir, self, true]);
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
-        if (!self || onGround || onRight || onLeft || onRoof) {
+        if (onGround || onRight || onLeft || onRoof) {
             bus.emit('sfx:flame', [x, y, 2, 0.5]);
             return true;
         }

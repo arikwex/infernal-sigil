@@ -3,6 +3,7 @@ import { getObjectsByTag } from "./engine";
 
 function Parallax(x, y) {
     const z = 1 + Math.random() * 3;
+    const angle = (Math.random() - 0.5) * 0.3;
     const terrain = [-100, 0];
     const islandMesh = [
         ['', 1, 0],
@@ -14,7 +15,7 @@ function Parallax(x, y) {
         if (p > 0.95) {
             continue;
         }
-        terrain.push(i, (1 - p * p) * (30 + 50 * Math.random()));
+        terrain.push(i, (1 - p * p) * (50 + 20 * Math.random()));
     }
     terrain.push(100, 0);
     for (let i = 100; i > -100;) {
@@ -47,7 +48,7 @@ function Parallax(x, y) {
 
         const xfm = ctx.getTransform();
         scaleInPlace(3.5/(1 + z * 0.6), px, py);
-        renderMesh(islandMesh, px, py, 0, 0, 0, color);
+        renderMesh(islandMesh, px, py, 0, 0, angle, color);
         ctx.setTransform(xfm);
     }
 
