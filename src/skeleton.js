@@ -58,9 +58,6 @@ function Skeleton(x, y, type) {
 
         if (injured <= 0 && onGround) {
             vx = 60 * facing;
-            if (Math.random > 0.98) {
-                targetFacing = -targetFacing;
-            }
         }
 
         if (injured > 0) {

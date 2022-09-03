@@ -37,8 +37,8 @@ function physicsCheck(physicsObjects, myHitbox) {
                     onGround = true;
                 }
                 // Hit head on bottom of surface
-                if (y - 15 > physics.y + physics.h) {
-                    y = physics.y + physics.oy + physics.h - myHitbox.oy;
+                if (y + myHitbox.oy + myHitbox.h/2 > physics.y + physics.h) {
+                    y = physics.y + physics.oy + physics.h - myHitbox.oy + 0.1;
                     onRoof = true;
                 }
             }
@@ -56,19 +56,20 @@ function physicsCheck(physicsObjects, myHitbox) {
 }
 
 const groundResult = [false, false];
-function groundCheck(physicsObjects, myHitbox) {
+function groundCheck(physicsObjects, myHitbox, wx = 1, wy = 0) {
     let hasRight = false;
     let hasLeft = false;
     let ox = myHitbox.x;
     let oy = myHitbox.y;
     physicsObjects.map(({ physics }) => {
-        myHitbox.y = oy + 2;
-        myHitbox.x = ox + 40;
-        if (myHitbox.isTouching(physics)) {
+        let sx = ox + 40 * wx - 4 * wy;
+        let sy = oy + 4 * wx + 40 * wy;
+        if (physics.containPt(sx, sy)) {
             hasRight = true;
         }
-        myHitbox.x = ox - 40;
-        if (myHitbox.isTouching(physics)) {
+        sx = ox - 40 * wx - 4 * wy;
+        sy = oy + 4 * wx - 40 * wy;
+        if (physics.containPt(sx, sy)) {
             hasLeft = true;
         }
     });

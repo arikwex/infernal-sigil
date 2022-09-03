@@ -4,9 +4,14 @@ import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck } from './utils';
 
-const legPhase = { 0: 0, 1: 3.1, 2: 4.7, 3: 1.5};
+const legPhase = [0, 3.1, 4.7, 1.5];
+const bboxMapOX = [-50, 0, -50, -59];
+const bboxMapOY = [-59, -50, 0, -50];
+const bboxMapW = [100, 60, 100, 60];
+const bboxMapH = [60, 100, 60, 100];
 
 function Spider(x, y, type) {
+    type = 3;
     const thickness = 5;
     const size = 1.3;
     let anim = Math.random() * 10;
@@ -17,7 +22,15 @@ function Spider(x, y, type) {
     let injured = 0;
     let maxHp = 5;
     let hp = maxHp;
+    
+    let wa = type * 6.28 / 4;
+    let wx = Math.cos(wa);
+    let wy = Math.sin(wa);
+    x -= wy * 50;
+    y += wx * 50;
+
     const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
+    enemyHitbox.debug = true;
 
     const face = [];
     for (let i = 0; i < 21; i++) {
@@ -52,25 +65,41 @@ function Spider(x, y, type) {
             return true;
         }
 
-        vy += 1400 * dT;
+        vx -= wy * 800 * dT;
+        vy += wx * 800 * dT;
 
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
-        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox);
-        if (onGround && vy > 500) { hp = 0; bus.emit('bone:spawn', [x,y-55,4,1]); }
-        if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
-        if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
-        if (onGround || onRoof) { vy = 0; }
 
-        if (injured <= 0 && onGround) {
-            vx = 160 * facing;
-            if (Math.random > 0.98) {
-                targetFacing = -targetFacing;
-            }
+        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox, wx * 1.8, wy * 1.8);
+        if (type == 0) {
+            if (onRightWall || !hasRight) { targetFacing = -1; }
+            if (onLeftWall || !hasLeft) { targetFacing = 1; }
+            if (onGround || onRoof) { vy = 0; }
         }
+        if (type == 1) {
+            if (onGround || !hasRight) { targetFacing = -1; }
+            if (onRoof || !hasLeft) { targetFacing = 1; }
+            if (onRightWall || onLeftWall) { vx = 0; }
+        }
+        if (type == 2) {
+            if (onRightWall || !hasLeft) { targetFacing = 1; }
+            if (onLeftWall || !hasRight) { targetFacing = -1; }
+            if (onGround || onRoof) { vy = 0; }
+        }
+        if (type == 3) {
+            if (onGround || !hasLeft) { targetFacing = 1; }
+            if (onRoof || !hasRight) { targetFacing = -1; }
+            if (onRightWall || onLeftWall) { vx = 0; }
+        }
+        
 
-        if (injured > 0) {
+        if (injured <= 0) {
+            if (type % 2 == 0) { vx = 160 * facing * wx; }
+            if (type % 2 == 1) { vy = 160 * facing * wy; }
+        } else {
             vx -= vx * 12 * dT;
+            vy -= vy * 12 * dT;
         }
 
         anim += dT;
@@ -79,8 +108,7 @@ function Spider(x, y, type) {
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
-        enemyHitbox.set(x, y, -50, -59, 100, 60);
-        enemyHitbox.debug = true;
+        enemyHitbox.set(x, y, bboxMapOX[type], bboxMapOY[type], bboxMapW[type], bboxMapH[type]);
     }
 
     function render(ctx) {
@@ -92,8 +120,8 @@ function Spider(x, y, type) {
         const xfm = ctx.getTransform();
         scaleInPlace(size, x, y);
 
-        const dy = Math.cos(a) * 1;
-        const pBodyP = (Math.cos(a/2) / 15) * walking;
+        const dy = 32 + Math.cos(a);
+        const pBodyP = (Math.cos(a/2) / 15) * walking + wa;
 
         // Leg animation
         for (let i = 0; i < 4; i++) {
@@ -112,21 +140,22 @@ function Spider(x, y, type) {
         if (injured > 0.2) {
             ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
         }
-        renderMesh(legMesh, x, y-21, 0, -t * 1.4, 0);
-        renderMesh(bodyMesh, x, y-32+dy, 0, t/2, t/2 + pBodyP, '#fff');
-        renderMesh(eyeMesh, x, y-32+dy, 17, -t, -t/2 + pBodyP, '#fff');
+        renderMesh(legMesh, x+21*wy, y-21*wx, 0, -t * 1.4, wa);
+        renderMesh(bodyMesh, x+dy*wy, y-dy*wx, 0, t/2, t/2 + pBodyP, '#fff');
+        renderMesh(eyeMesh, x+dy*wy, y-dy*wx, 17, -t, -t/2 + pBodyP, '#fff');
         ctx.globalAlpha = 1;
         ctx.setTransform(xfm);
     }
 
     function hitCheck([attackHitbox, dir, owner]) {
         if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
-            vx = dir * 600;
-            targetFacing = -Math.sign(dir);
+            vx = dir * 300;
+            vy = -targetFacing * 300;
+            targetFacing = -targetFacing;
             injured = 1;
             hp -= 1;
             if (hp <= 0) {
-                bus.emit('bone:spawn', [x,y-55,9,1]);
+                bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,9,1]);
             }
             bus.emit('attack:hit', [owner]);
         }

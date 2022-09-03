@@ -1,5 +1,9 @@
 On Deck
 - Enemy spider
+- Dash mechanic?
+- Shrine should use single symbol type
+- Aim direction
+- Pogo on down-hit
 - Enemy bat
 - Game world layout
 - GameState that is effectively load/reload
@@ -22,6 +26,7 @@ On Deck
 - Game timer (bottom right for speed runners)
 - Joystick
 
+- Enemy that splits up
 - Enemy Orba
 - Enemy Ironclaw (TBD Skeleton attack behavior)
 - Enemy Archer
