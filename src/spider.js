@@ -5,24 +5,25 @@ import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck } from './utils';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
-const bboxMapOX = [-50, 0, -50, -59];
-const bboxMapOY = [-59, -50, 0, -50];
-const bboxMapW = [100, 60, 100, 60];
-const bboxMapH = [60, 100, 60, 100];
 
 function Spider(x, y, type) {
     type = 3;
     const thickness = 5;
-    const size = 1.3;
+    const size = 1.1;
     let anim = Math.random() * 10;
     let vx = 0;
     let vy = 0;
     let targetFacing = (type > 127) ? -1 : 1;
+    let walkPattern = type % 4;
     let facing = targetFacing;
     let injured = 0;
-    let maxHp = 5;
+    let maxHp = 4;
     let hp = maxHp;
     
+    const bboxMapOX = [-50, 0, -50, -59].map((a) => a*size/1.3);
+    const bboxMapOY = [-59, -50, 0, -50].map((a) => a*size/1.3);
+    const bboxMapW = [100, 60, 100, 60].map((a) => a*size/1.3);
+    const bboxMapH = [60, 100, 60, 100].map((a) => a*size/1.3);
     let wa = type * 6.28 / 4;
     let wx = Math.cos(wa);
     let wy = Math.sin(wa);
@@ -71,23 +72,24 @@ function Spider(x, y, type) {
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
 
-        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox, wx * 1.8, wy * 1.8);
-        if (type == 0) {
+        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
+        // TODO: optimize
+        if (walkPattern == 0) {
             if (onRightWall || !hasRight) { targetFacing = -1; }
             if (onLeftWall || !hasLeft) { targetFacing = 1; }
             if (onGround || onRoof) { vy = 0; }
         }
-        if (type == 1) {
+        if (walkPattern == 1) {
             if (onGround || !hasRight) { targetFacing = -1; }
             if (onRoof || !hasLeft) { targetFacing = 1; }
             if (onRightWall || onLeftWall) { vx = 0; }
         }
-        if (type == 2) {
+        if (walkPattern == 2) {
             if (onRightWall || !hasLeft) { targetFacing = 1; }
             if (onLeftWall || !hasRight) { targetFacing = -1; }
             if (onGround || onRoof) { vy = 0; }
         }
-        if (type == 3) {
+        if (walkPattern == 3) {
             if (onGround || !hasLeft) { targetFacing = 1; }
             if (onRoof || !hasRight) { targetFacing = -1; }
             if (onRightWall || onLeftWall) { vx = 0; }
@@ -95,8 +97,8 @@ function Spider(x, y, type) {
         
 
         if (injured <= 0) {
-            if (type % 2 == 0) { vx = 160 * facing * wx; }
-            if (type % 2 == 1) { vy = 160 * facing * wy; }
+            if (walkPattern % 2 == 0) { vx = 160 * facing * wx; }
+            if (walkPattern % 2 == 1) { vy = 160 * facing * wy; }
         } else {
             vx -= vx * 12 * dT;
             vy -= vy * 12 * dT;
@@ -108,11 +110,10 @@ function Spider(x, y, type) {
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
-        enemyHitbox.set(x, y, bboxMapOX[type], bboxMapOY[type], bboxMapW[type], bboxMapH[type]);
+        enemyHitbox.set(x, y, bboxMapOX[walkPattern], bboxMapOY[walkPattern], bboxMapW[walkPattern], bboxMapH[walkPattern]);
     }
 
     function render(ctx) {
-        const idle = 0;
         const walking = 1;
 
         const t = facing * 0.6;
@@ -155,7 +156,7 @@ function Spider(x, y, type) {
             injured = 1;
             hp -= 1;
             if (hp <= 0) {
-                bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,9,1]);
+                bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
             }
             bus.emit('attack:hit', [owner]);
         }
