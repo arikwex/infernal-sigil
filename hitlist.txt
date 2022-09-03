@@ -1,10 +1,8 @@
 On Deck
-- Horizontal pogo -- momentum on hit
-- Enemy spider map placement
+- Dash wall physics / lookahead
 - Dash mechanic?
 - Shrine should use single symbol type
-- Aim direction
-- Pogo on down-hit
+- Upgrade effect (light from above)
 - Enemy bat
 - Game world layout
 - GameState that is effectively load/reload
@@ -26,6 +24,9 @@ On Deck
 - Death counter
 - Game timer (bottom right for speed runners)
 - Joystick
+- Refactor damage system from player attack
+- Aim direction
+- Pogo on down-hit
 
 - Enemy that splits up
 - Enemy Orba
@@ -35,7 +36,6 @@ On Deck
 - Bazard (fireball gate)
 - Do not render out of frame
 - Use flameSFX for tail
-- Upgrade effect (light from above)
 - Swift wind swirl on land / impact
 - Mandatory combat rooms
 - Game timer (bottom right for speed runners)

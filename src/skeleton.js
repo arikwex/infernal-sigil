@@ -116,7 +116,7 @@ function Skeleton(x, y, type) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);
             injured = 1;
-            hp -= 1;
+            hp -= isFlame ? 2 : 1;
             if (hp <= 0) {
                 bus.emit('bone:spawn', [x,y-55,4,1]);
             }

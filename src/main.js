@@ -17,6 +17,7 @@ async function initialize() {
     getObjectsByTag('player')[0].grant(0);
     getObjectsByTag('player')[0].grant(1);
     getObjectsByTag('player')[0].grant(2);
+    getObjectsByTag('player')[0].grant(3);
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => { while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });

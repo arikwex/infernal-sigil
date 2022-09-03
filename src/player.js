@@ -1,4 +1,4 @@
-import { horizontal, vertical, jump, holdingJump, attack, ignite } from './controls';
+import { horizontal, vertical, jump, holdingJump, attack, ignite, dash } from './controls';
 import { color, renderMesh } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
@@ -38,6 +38,12 @@ function Player(x, y) {
     let attackSeq = 0;
     let MAX_NUM_ATTACK = 3;
 
+    // Dash
+    let dashTimer = 1;
+    let dashing = false;
+    let canDash = false; // can you dash right now? (grounded or walled)
+    let hasDash = false; // was ability learned yet?
+
     // Fireball attack
     let fireballTime = 0;
     let hasFlame = false;
@@ -58,7 +64,12 @@ function Player(x, y) {
     const TERMINAL_VELOCITY = 800;
     const CLIMB_SPEED = 370;
 
-    const headMesh = copy(headMeshAsset);
+    let headMesh = copy(headMeshAsset);
+    headMesh[1].pop(); headMesh[1].pop();
+    headMesh[1].shift(); headMesh[1].shift();
+    headMesh[1][0] = 10; headMesh[1][1] = -16;
+    headMesh[1][6] = -10; headMesh[1][7] = -16;
+
     const bodyMesh = [
         ['#e22', thickness, 0],
         [0, -37, 0, 20-37],
@@ -99,6 +110,11 @@ function Player(x, y) {
             MAX_NUM_AIRJUMP = 1;
             wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
         }
+        // Dash
+        if (ability == 3) {
+            hasDash = true;
+            headMesh = copy(headMeshAsset);
+        }
     }
 
 
@@ -110,12 +126,22 @@ function Player(x, y) {
         attackSwipe = Math.min(attackSwipe + 2 * dT, 1);
         attackSwipe2 = Math.min(attackSwipe2 + 2 * dT, 1);
         fireballTime += dT;
+        dashTimer += dT;
 
         // Horizontal movement
         const h = horizontal();
         let v = vertical();
         const requestAttack = attack();
         const requestFireball = ignite();
+        const requestDash = dash();
+
+        if (requestDash && canDash && hasDash && state != 3 && dashTimer > 0.85) {
+            dashTimer = 0;
+            dashing = true;
+            attackTime = 0.0;
+            canDash = false;
+            vx = targetFacing * 1000;
+        }
 
         // If wall-climbing, respect horizontal control as "up"
         if (state == 3 && Math.abs(v) < 0.3 && (Math.abs(h) > 0.3 && Math.sign(h) == Math.sign(facing))) {
@@ -137,6 +163,7 @@ function Player(x, y) {
             groundTime = 0.15;
             numAirjumpsUsed = 0;
             onGround = true;
+            canDash = true;
         }
 
         if (onRoof) {
@@ -145,18 +172,20 @@ function Player(x, y) {
 
         if (state != 3) {
             // Default controls
-            if (Math.abs(h) > 0.3) {
-                if (attackTime > 0.2) {
-                    vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 6);
-                    anim += 2 * dT;
-                    targetRunning += (1 - targetRunning) * 4 * dT;
+            if (!dashing) {
+                if (Math.abs(h) > 0.3) {
+                    if (attackTime > 0.2) {
+                        vx += 3000 * Math.sign(h) * dT * Math.pow(1 - targetClimbing, 6);
+                        anim += 2 * dT;
+                        targetRunning += (1 - targetRunning) * 4 * dT;
+                    }
+                    targetFacing = Math.sign(h);
+                } else {
+                    targetRunning += (0 - targetRunning) * 4 * dT;
                 }
-                targetFacing = Math.sign(h);
-            } else {
-                targetRunning += (0 - targetRunning) * 4 * dT;
-            }
-            if (Math.sign(h) != Math.sign(vx) || (attackTime < 0.2)) {
-                vx -= vx * 14 * dT;
+                if (Math.sign(h) != Math.sign(vx) || (attackTime < 0.2)) {
+                    vx -= vx * 14 * dT;
+                }
             }
 
             // Attack
@@ -207,6 +236,7 @@ function Player(x, y) {
                     vy = -1000;
                     timeSinceJump = 0;
                     groundTime = 0;
+                    dashing = false;
                 } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
                     numAirjumpsUsed += 1;
@@ -214,6 +244,9 @@ function Player(x, y) {
                     vy = -1000;
                     timeSinceJump = 0;
                     groundTime = 0;
+                    dashing = false;
+                    canDash = true;
+                    dashTimer = 1;
                 }
             } else {
                 // Wall Jumping
@@ -244,18 +277,21 @@ function Player(x, y) {
         else if (onWall && !onGround && attackTime > 0.3 && hasClaws) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
+            dashing = false;
             attackTime = 1;
             vx = 0;
         }
         else if (onWall && onGround && v > 0.3 && hasClaws) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
+            dashing = false;
             attackTime = 1;
             vx = 0;
         }
 
 
         if (state == 3) {
+            canDash = true;
             // Wall climb physics
             if (vy >= 0) {
                 vy -= 20 * vy * dT;
@@ -280,7 +316,7 @@ function Player(x, y) {
 
         // Enemy collision checks
         getObjectsByTag('enemy').map(({ enemyHitbox }) => {
-            if (isDead) { return; }
+            if (isDead || dashTimer < 0.3) { return; }
             if (playerHitbox.isTouching(enemyHitbox) && injured <= 0 && attackTime > 0.15) {
                 injured = 1;
                 attackTime = 0;
@@ -301,9 +337,21 @@ function Player(x, y) {
             }
         });
 
+        // DASH
+        if (dashing) {
+            if (dashTimer < 0.27) {
+                vx = targetFacing * 4800 * (0.33 - dashTimer);
+                vy = 0;
+            } else {
+                dashing = false;
+            }
+        }
+
         facing += (targetFacing - facing) * 15 * dT;
         if (injured <= 0.7) {
-            vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+            if (!dashing) {
+                vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+            }
         }
         vy = Math.min(vy, TERMINAL_VELOCITY);
         tailWhip += (vy - tailWhip) * 17 * dT;
@@ -501,6 +549,19 @@ function Player(x, y) {
             ctx.stroke();
             ctx.beginPath();
             ctx.ellipse(5, -25, 76, 30, 0.1, -swipe2, 3 - 4 * swipe2);
+            ctx.stroke();
+        }
+
+        // Dash trail
+        if (dashTimer < 0.24) {
+            ctx.translate(-120, 0);
+            color('#e22');
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.ellipse(5, -36, 80, 10, -0.1, 1 - dashTimer * 9, 3 - dashTimer * 12);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.ellipse(5, -36, 70, 5, 0.1, 1 - dashTimer * 9, 3 - dashTimer * 12);
             ctx.stroke();
         }
         ctx.setTransform(xfm);

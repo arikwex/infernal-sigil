@@ -28,8 +28,12 @@ function attack() {
     return (Date.now() - pressed['KeyX']) < 100;
 }
 
-function ignite() {
+function dash() {
     return (Date.now() - pressed['KeyC']) < 100;
+}
+
+function ignite() {
+    return (Date.now() - pressed['KeyV']) < 100;
 }
 
 function holdingJump() {
@@ -42,5 +46,6 @@ export {
     jump,
     attack,
     ignite,
+    dash,
     holdingJump,
 }

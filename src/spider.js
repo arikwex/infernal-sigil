@@ -148,11 +148,13 @@ function Spider(x, y, type) {
 
     function hitCheck([attackHitbox, dir, owner, isFlame]) {
         if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
-            vx = dir * 300 * Math.abs(wx) + wy * 200;
-            vy = -wx * 200;
+            if (injured <= 0) {
+                vx = dir * 300 * Math.abs(wx) + wy * 200;
+                vy -= wx * 200;
+            }
             targetFacing = -dir;
             injured = 1;
-            hp -= 1;
+            hp -= isFlame ? 2 : 1;
             if (hp <= 0) {
                 bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
             }
