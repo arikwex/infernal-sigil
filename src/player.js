@@ -555,13 +555,13 @@ function Player(x, y) {
         // Dash trail
         if (dashTimer < 0.24) {
             ctx.translate(-120, 0);
-            color('#e22');
+            color('#eee');
             ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.ellipse(5, -36, 80, 10, -0.1, 1 - dashTimer * 9, 3 - dashTimer * 12);
+            ctx.ellipse(5, -36, 80, 10, -0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(5, -36, 70, 5, 0.1, 1 - dashTimer * 9, 3 - dashTimer * 12);
+            ctx.ellipse(5, -36, 70, 5, 0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
             ctx.stroke();
         }
         ctx.setTransform(xfm);
