@@ -1,37 +1,38 @@
 On Deck
-- Checkpoint system in map
-- GameState that is effectively load/reload
-
 - Enemy spider
 - Enemy bat
 - Game world layout
+- GameState that is effectively load/reload
 - Throne room / game over
+
+- Audio
+- Optimize background parallax objects
+- Consider making switches one-time use for simplicity
+- Room loader/unloader mechanism (automatic from map file ideally, grid system)
+- Main menu => New Game vs Continue
+
+- Minimap overlay
+- Talk to spirits / read signs?
+- Text explaining recent upgrade
+- Map loader + compressor improvements
+- Favicon
+- Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
+- Death counter
+- Game timer (bottom right for speed runners)
+- Joystick
 
 - Enemy Orba
 - Enemy Ironclaw (TBD Skeleton attack behavior)
 - Enemy Archer
 
-- Optimize background parallax objects
-- Consider making switches one-time use for simplicity
 - Bazard (fireball gate)
-- Talk to spirits / read signs?
-- Text explaining recent upgrade
 - Do not render out of frame
 - Use flameSFX for tail
-- Room loader/unloader mechanism (automatic from map file ideally, grid system)
-- Map loader + compressor improvements
-- Minimap overlay
-- Audio
 - Upgrade effect (light from above)
 - Swift wind swirl on land / impact
 - Mandatory combat rooms
-- png compression magic
 - Game timer (bottom right for speed runners)
 - Boss fights?
-- Parallax BG / FG
-- Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
-- Favicon
-- Joystick
 - Symbols above gates to "link them" to eachother mentally
 - Bug (that I kinda like) where attacking then jumping gives tall jump
 
