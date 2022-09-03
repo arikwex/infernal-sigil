@@ -4,6 +4,8 @@ import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck } from './utils';
 
+const legPhase = { 0: 0, 1: 3.1, 2: 4.7, 3: 1.5};
+
 function Spider(x, y, type) {
     const thickness = 5;
     const size = 1.3;
@@ -61,7 +63,7 @@ function Spider(x, y, type) {
         if (onGround || onRoof) { vy = 0; }
 
         if (injured <= 0 && onGround) {
-            vx = 60 * facing;
+            vx = 160 * facing;
             if (Math.random > 0.98) {
                 targetFacing = -targetFacing;
             }
@@ -72,7 +74,7 @@ function Spider(x, y, type) {
         }
 
         anim += dT;
-        // x += vx * dT;
+        x += vx * dT;
         y += vy * dT;
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
@@ -84,12 +86,13 @@ function Spider(x, y, type) {
         const idle = 0;
         const walking = 1;
 
-        const t = Math.cos(Date.now() / 1000) * 0.6;//facing * 0.6;
-        const a = anim * 6;
+        const t = facing * 0.6;//-0.6;//Math.cos(Date.now() / 1000) * 0.6;//facing * 0.6;
+        const a = anim * 16;
         const xfm = ctx.getTransform();
         scaleInPlace(size, x, y);
 
-        const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
+        const dy = Math.cos(a) * 1;
+        const pBodyP = (Math.cos(a/2) / 15) * walking;
         const pHand1X = 7 * t * (idle + walking) + pBodyP * 50;
         const pHand1Y =
             (-33 - 2 * t + Math.cos(a)) * idle +
@@ -101,10 +104,18 @@ function Spider(x, y, type) {
         const pHeadY = (-40 + Math.cos(a+1)) * (idle + walking);
 
         // Leg animation
-        // legMesh[1][0] = -8 * idle + (Math.cos(a) * 8 * facing) * walking;
-        // legMesh[1][1] = (Math.min(0, Math.sin(a)) * 4) * walking;
-        // legMesh[1][4] = -8 * idle + (Math.cos(a+3) * 8 * facing) * walking;
-        // legMesh[1][5] = (Math.min(0, Math.sin(a+3)) * 4) * walking;
+        for (let i = 0; i < 4; i++) {
+            const s = i % 2 ? 1 : -1;
+            const p = legPhase[i];
+            const L = i < 2 ? -3 : 7;
+            const idx = i < 2 ? 1 + i : 2 + i;
+            legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing) * walking;
+            legMesh[idx][3] = (12) * walking;
+            legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing) * walking;
+            legMesh[idx][5] = (-5 + Math.cos(a+p) * 4) * walking;
+            legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing) * walking;
+            legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0)) * walking;
+        }
 
         if (injured > 0.2) {
             ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
@@ -112,8 +123,8 @@ function Spider(x, y, type) {
         renderMesh(legMesh, x, y-21, 0, -t * 1.4, 0);
         // renderMesh(handMesh, x + pHand1X, y + pHand1Y, -4, t * 2.1, -t/3);
         // renderMesh(handMesh, x + pHand2X, y + pHand2Y, 4, t * 2.1 + 3.14, -t/3);
-        renderMesh(bodyMesh, x, y-32, 0, t/2, t/2, '#fff');
-        renderMesh(eyeMesh, x, y-32, 17, -t, -t/2, '#fff');
+        renderMesh(bodyMesh, x, y-32+dy, 0, t/2, t/2 + pBodyP, '#fff');
+        renderMesh(eyeMesh, x, y-32+dy, 17, -t, -t/2 + pBodyP, '#fff');
         // renderMesh(headMesh, x, y + pHeadY, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
         ctx.globalAlpha = 1;
         ctx.setTransform(xfm);
