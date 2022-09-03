@@ -7,13 +7,20 @@ function inBound(x, w, x2, w2) {
 function isTouching(a, b) {
     const c = inBound(a.x+a.ox, a.w, b.x+b.ox, b.w) && inBound(a.y+a.oy, a.h, b.y+b.oy, b.h);
     // DEBUG
-    // ctx.beginPath();
-    // ctx.lineWidth = 3;
-    // ctx.strokeStyle = '#fff';
-    // ctx.strokeStyle = c ? '#f0f' : '#0f0';
-    // ctx.rect(b.x+b.ox, b.y+b.oy, b.w, b.h);
-    // ctx.rect(a.x+a.ox, a.y+a.oy, a.w, a.h);
-    // ctx.stroke();
+    if (a.debug) {
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = c ? '#f0f' : '#0f0';
+        ctx.rect(a.x+a.ox, a.y+a.oy, a.w, a.h);
+        ctx.stroke();
+    }
+    if (b.debug) {
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = c ? '#f0f' : '#0f0';
+        ctx.rect(b.x+b.ox, b.y+b.oy, b.w, b.h);
+        ctx.stroke();
+    }
     //
     return c;
 }

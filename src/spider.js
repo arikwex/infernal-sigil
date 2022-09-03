@@ -15,7 +15,7 @@ function Spider(x, y, type) {
     let targetFacing = (type > 127) ? -1 : 1;
     let facing = targetFacing;
     let injured = 0;
-    let maxHp = 3;
+    let maxHp = 5;
     let hp = maxHp;
     const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
 
@@ -79,29 +79,21 @@ function Spider(x, y, type) {
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
 
-        enemyHitbox.set(x, y, -20, -59, 40, 60);
+        enemyHitbox.set(x, y, -50, -59, 100, 60);
+        enemyHitbox.debug = true;
     }
 
     function render(ctx) {
         const idle = 0;
         const walking = 1;
 
-        const t = facing * 0.6;//-0.6;//Math.cos(Date.now() / 1000) * 0.6;//facing * 0.6;
+        const t = facing * 0.6;
         const a = anim * 16;
         const xfm = ctx.getTransform();
         scaleInPlace(size, x, y);
 
         const dy = Math.cos(a) * 1;
         const pBodyP = (Math.cos(a/2) / 15) * walking;
-        const pHand1X = 7 * t * (idle + walking) + pBodyP * 50;
-        const pHand1Y =
-            (-33 - 2 * t + Math.cos(a)) * idle +
-            (-33 - 2 * t + Math.cos(a-1)) * walking;
-        const pHand2X = 7 * t * (idle + walking) + pBodyP * 50;
-        const pHand2Y =
-            (-33 + 2 * t + Math.cos(a)) * idle +
-            (-33 + 2 * t + Math.cos(a+2)) * walking;
-        const pHeadY = (-40 + Math.cos(a+1)) * (idle + walking);
 
         // Leg animation
         for (let i = 0; i < 4; i++) {
@@ -121,11 +113,8 @@ function Spider(x, y, type) {
             ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
         }
         renderMesh(legMesh, x, y-21, 0, -t * 1.4, 0);
-        // renderMesh(handMesh, x + pHand1X, y + pHand1Y, -4, t * 2.1, -t/3);
-        // renderMesh(handMesh, x + pHand2X, y + pHand2Y, 4, t * 2.1 + 3.14, -t/3);
         renderMesh(bodyMesh, x, y-32+dy, 0, t/2, t/2 + pBodyP, '#fff');
         renderMesh(eyeMesh, x, y-32+dy, 17, -t, -t/2 + pBodyP, '#fff');
-        // renderMesh(headMesh, x, y + pHeadY, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
         ctx.globalAlpha = 1;
         ctx.setTransform(xfm);
     }
@@ -137,7 +126,7 @@ function Spider(x, y, type) {
             injured = 1;
             hp -= 1;
             if (hp <= 0) {
-                bus.emit('bone:spawn', [x,y-55,4,1]);
+                bus.emit('bone:spawn', [x,y-55,9,1]);
             }
             bus.emit('attack:hit', [owner]);
         }

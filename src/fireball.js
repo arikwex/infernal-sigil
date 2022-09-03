@@ -8,6 +8,7 @@ function Fireball(x, y, dir) {
     let vx = 300 * dir;
     x += dir * 40;
     let self = this;
+    let lifetime = 0;
 
     const ballMesh = [
         ['#fb1', 10, 0],
@@ -18,10 +19,11 @@ function Fireball(x, y, dir) {
     const myHitbox = new BoundingBox(x, y, -20, -15, 30, 30);
 
     function update(dT) {
-        // TBD if this can be less aggressive
-        if (!self) {
+        lifetime += dT;
+        if (!self || lifetime > 9) {
             return true;
         }
+        // TBD if this can be less aggressive
         bus.emit('attack', [myHitbox, dir, self, true]);
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
