@@ -84,7 +84,7 @@ function Shrine(x, y, grantType) {
         ctx.globalAlpha = 1;
         for (let i = 0; i < 5; i++) {
             const dr = Math.cos(i*0.2 + anim * 3) * 3 + 130;
-            renderMesh(symbolMeshes[i], x + Math.sin(i * step) * dr, y + dy - Math.cos(i * step) * dr, 0, 0, engaging * engaging * 7 * (i % 2 - 0.5));
+            renderMesh(symbolMeshes[grantType], x + Math.sin(i * step) * dr, y + dy - Math.cos(i * step) * dr, 0, 0, engaging * engaging * 7 * (i % 2 - 0.5));
         }
     }
 

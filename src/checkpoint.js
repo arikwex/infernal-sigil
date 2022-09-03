@@ -70,7 +70,7 @@ function Checkpoint(x, y, checkpointId) {
             renderMesh(headMesh, x, y - 50 + Math.cos(anim * 5) * 4, 0, anim, 0);
         }
         for (let i = 0; i < 5; i++) {
-            renderMesh(symbolMeshes[i], x + (i-2.1) * 40, y + 25, 0, 0, 0);
+            renderMesh(symbolMeshes[i], x - (i-1.9) * 40, y + 25, 0, 0, 0);
         }
         ctx.globalAlpha = 1;
         renderMesh(bloodMesh, x, y, 0, 0, 0);

@@ -96,24 +96,24 @@ function Player(x, y) {
     const WING_FILL = 'rgba(230,100,70,0.5)';
 
     function grant(ability) {
-        // Claws
+        // Dash
         if (ability == 0) {
+            hasDash = true;
+            headMesh = copy(headMeshAsset);
+        }
+        // Claws
+        if (ability == 1) {
             hasClaws = true;
             handMesh.push(['#def', 3, 0], [18, 5, 25, 8], [15, 9, 22, 13]);
         }
         // Flame
-        if (ability == 1) {
+        if (ability == 2) {
             hasFlame = true;
         }
         // Wings
-        if (ability == 2) {
+        if (ability == 3) {
             MAX_NUM_AIRJUMP = 1;
             wingMesh.push([0, 0, -20, -10, -50, -5, -55, 15, -25, 6, -40, -5, -25, 6, -20, -10, -25, 6, 0, 4]);
-        }
-        // Dash
-        if (ability == 3) {
-            hasDash = true;
-            headMesh = copy(headMeshAsset);
         }
     }
 

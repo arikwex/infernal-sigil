@@ -1,6 +1,4 @@
 On Deck
-- Dash wall physics / lookahead
-- physics head hitting from above check?
 - Shrine should use single symbol type
 - Upgrade effect (light from above)
 - Enemy bat
