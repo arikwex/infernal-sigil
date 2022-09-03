@@ -6,11 +6,11 @@ function inBound(x, w, x2, w2) {
 
 function containPt(a, x, y) {
     // DEBUG
-    ctx.beginPath();
-    ctx.lineWidth = 10;
-    ctx.strokeStyle = '#f00';
-    ctx.rect(x - 2, y - 2, 4, 4);
-    ctx.stroke();
+    // ctx.beginPath();
+    // ctx.lineWidth = 10;
+    // ctx.strokeStyle = '#f00';
+    // ctx.rect(x - 2, y - 2, 4, 4);
+    // ctx.stroke();
     //
     return (x > a.x+a.ox) && (x < a.x+a.ox+a.w) && (y > a.y+a.oy) && (y < a.y+a.oy+a.h);
 }

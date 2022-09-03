@@ -111,7 +111,7 @@ function Skeleton(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([attackHitbox, dir, owner]) {
+    function hitCheck([attackHitbox, dir, owner, isFlame]) {
         if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
             vx = dir * 600;
             targetFacing = -Math.sign(dir);

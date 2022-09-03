@@ -1,5 +1,6 @@
 On Deck
-- Enemy spider
+- Horizontal pogo -- momentum on hit
+- Enemy spider map placement
 - Dash mechanic?
 - Shrine should use single symbol type
 - Aim direction

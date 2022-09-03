@@ -7,7 +7,6 @@ import { physicsCheck, groundCheck } from './utils';
 const legPhase = [0, 3.1, 4.7, 1.5];
 
 function Spider(x, y, type) {
-    type = 3;
     const thickness = 5;
     const size = 1.1;
     let anim = Math.random() * 10;
@@ -31,7 +30,6 @@ function Spider(x, y, type) {
     y += wx * 50;
 
     const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
-    enemyHitbox.debug = true;
 
     const face = [];
     for (let i = 0; i < 21; i++) {
@@ -66,8 +64,8 @@ function Spider(x, y, type) {
             return true;
         }
 
-        vx -= wy * 800 * dT;
-        vy += wx * 800 * dT;
+        vx -= wy * 1300 * dT;
+        vy += wx * 1300 * dT;
 
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
@@ -77,22 +75,22 @@ function Spider(x, y, type) {
         if (walkPattern == 0) {
             if (onRightWall || !hasRight) { targetFacing = -1; }
             if (onLeftWall || !hasLeft) { targetFacing = 1; }
-            if (onGround || onRoof) { vy = 0; }
+            if (onGround && vy > 0) { vy = 0; }
         }
         if (walkPattern == 1) {
             if (onGround || !hasRight) { targetFacing = -1; }
             if (onRoof || !hasLeft) { targetFacing = 1; }
-            if (onRightWall || onLeftWall) { vx = 0; }
+            if (onLeftWall && vx < 0) { vx = 0; }
         }
         if (walkPattern == 2) {
             if (onRightWall || !hasLeft) { targetFacing = 1; }
             if (onLeftWall || !hasRight) { targetFacing = -1; }
-            if (onGround || onRoof) { vy = 0; }
+            if (onRoof && vy < 0) { vy = 0; }
         }
         if (walkPattern == 3) {
             if (onGround || !hasLeft) { targetFacing = 1; }
             if (onRoof || !hasRight) { targetFacing = -1; }
-            if (onRightWall || onLeftWall) { vx = 0; }
+            if (onRightWall && vx > 0) { vx = 0; }
         }
         
 
@@ -100,8 +98,8 @@ function Spider(x, y, type) {
             if (walkPattern % 2 == 0) { vx = 160 * facing * wx; }
             if (walkPattern % 2 == 1) { vy = 160 * facing * wy; }
         } else {
-            vx -= vx * 12 * dT;
-            vy -= vy * 12 * dT;
+            if (walkPattern % 2 == 0) { vx -= vx * 12 * dT; }
+            if (walkPattern % 2 == 1) { vy -= vy * 12 * dT; }
         }
 
         anim += dT;
@@ -148,17 +146,17 @@ function Spider(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([attackHitbox, dir, owner]) {
+    function hitCheck([attackHitbox, dir, owner, isFlame]) {
         if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
-            vx = dir * 300;
-            vy = -targetFacing * 300;
-            targetFacing = -targetFacing;
+            vx = dir * 300 * Math.abs(wx) + wy * 200;
+            vy = -wx * 200;
+            targetFacing = -dir;
             injured = 1;
             hp -= 1;
             if (hp <= 0) {
                 bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
             }
-            bus.emit('attack:hit', [owner]);
+            bus.emit('attack:hit', [owner, isFlame ? 0 : dir]);
         }
     }
 

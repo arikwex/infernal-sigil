@@ -425,10 +425,10 @@ function Player(x, y) {
         if (swipe1 < 0.95) {
             ctx.lineWidth = hasClaws ? 4 : 2;
             ctx.beginPath();
-            ctx.ellipse(5, -25, 80, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.ellipse(5, -25, 86, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(5, -25, 70, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
+            ctx.ellipse(5, -25, 76, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
             ctx.stroke();
         }
         ctx.setTransform(xfm);
@@ -497,10 +497,10 @@ function Player(x, y) {
         if (swipe2 < 0.95) {
             ctx.lineWidth = hasClaws ? 4 : 2;
             ctx.beginPath();
-            ctx.ellipse(5, -25, 80, 20, 0.2, -swipe2, 3 - 4 * swipe2);
+            ctx.ellipse(5, -25, 86, 20, 0.2, -swipe2, 3 - 4 * swipe2);
             ctx.stroke();
             ctx.beginPath();
-            ctx.ellipse(5, -25, 70, 30, 0.1, -swipe2, 3 - 4 * swipe2);
+            ctx.ellipse(5, -25, 76, 30, 0.1, -swipe2, 3 - 4 * swipe2);
             ctx.stroke();
         }
         ctx.setTransform(xfm);
@@ -513,12 +513,20 @@ function Player(x, y) {
         getObjectsByTag('camera')[0].aim(x_, y_, 1, true);
     }
 
+    function onAttackHit([attack, dir]) {
+        if (dir) {
+            vx = -dir * 300;
+        }
+    }
+
     function enable() {
         bus.on('player:grant', grant);
+        bus.on('attack:hit', onAttackHit);
     }
 
     function disable() {
         bus.off('player:grant', grant);
+        bus.off('attack:hit', onAttackHit);
     }
 
     return {
