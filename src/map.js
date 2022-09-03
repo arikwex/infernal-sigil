@@ -4,6 +4,7 @@ import { add } from './engine';
 import Player from './player';
 import Camera from './camera';
 import Skeleton from './skeleton';
+import Spider from './spider';
 import Treasure from './treasure';
 import Wall from './wall';
 import Hazard from './hazard';
@@ -50,16 +51,18 @@ function Map() {
                 const D0 = (V >> 16) & 0xff;
                 const D1 = (V >> 8) & 0xff;
                 const D2 = V & 0xff;
+                // PLAYER
                 if (V == 0x00ff00) {
                     add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
                     add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
                 }
-                if (D0 == 0xff && D1 == 0x00) {
-                    add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));
+                // ENEMIES + HAZARDS
+                if (D0 == 0xff) {
+                    if (D1 == 0x00) { add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
+                    if (D1 == 0x01) { add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
+                    if (D1 == 0x02) { add(new Spider(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
                 }
-                if (D0 == 0xff && D1 == 0x01) {
-                    add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2));
-                }
+                // GAME FLOW
                 if (D2 == 0xff) {
                     if (D0 == 0x00) { add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1)); }
                     if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }

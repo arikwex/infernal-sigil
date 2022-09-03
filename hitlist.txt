@@ -6,6 +6,7 @@ On Deck
 - Throne room / game over
 
 - Audio
+- Arrow trap
 - Optimize background parallax objects
 - Consider making switches one-time use for simplicity
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
