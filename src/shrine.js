@@ -1,5 +1,5 @@
 import { BoundingBox, isTouching } from "./bbox";
-import { renderMesh } from "./canvas";
+import { ctx, renderMesh } from "./canvas";
 import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
@@ -9,6 +9,7 @@ function Shrine(x, y, grantType) {
     let anim = 0;
     let engaging = 0;
     let used = false;
+    let timeSinceUpgrade = 0;
 
     const platformMesh = [
         ['#777', 5, 0],
@@ -34,6 +35,11 @@ function Shrine(x, y, grantType) {
     pentagramMesh.push(a1, a2);
     const symbolMeshes = copy(symbolMeshAssets);
 
+    const gradient = ctx.createLinearGradient(x, y-50, x, y-250);
+    gradient.addColorStop(0, 'rgba(255,255,110,0.5)');
+    gradient.addColorStop(0.3, 'rgba(255,255,110,0.2)');
+    gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
+
     const physics = new BoundingBox(x-200,y,0,0,400,50);
     const physics2 = new BoundingBox(x-100,y-50,0,0,200,50);
     const touchbox = new BoundingBox(x-75,y-60,0,0,150,10);
@@ -57,6 +63,7 @@ function Shrine(x, y, grantType) {
             }
         } else {
             engaging = 3;
+            timeSinceUpgrade += dT;
         }
     }
 
@@ -68,20 +75,23 @@ function Shrine(x, y, grantType) {
             bus.emit('bone:spawn', [x+(Math.random() - 0.5) * 150,y-100,1,1]);
         }
         bus.emit('player:grant', grantType);
+        timeSinceUpgrade = 0;
     }
 
     function render(ctx) {
         const dy = -200 + Math.sin(anim*2) * 5;
         renderMesh(platformMesh, x, y, 0, 0, 0, '#777');
-        renderMesh(bloodMesh, x, y, 0, 0, 0);
         if (used) {
             pentagramMesh[0][1] = 4;
+            ctx.fillStyle = gradient;
+            ctx.fillRect(x - 100, y - 250, 200, 200);
         } else {
             ctx.globalAlpha = Math.cos(engaging * engaging * 10) * 0.5 + 0.5;
             pentagramMesh[0][1] = 6 * (1-engaging/3);
         }
         renderMesh(pentagramMesh, x, y + dy, 0, 0, -engaging*1.256/3);
         ctx.globalAlpha = 1;
+        renderMesh(bloodMesh, x, y, 0, 0, 0);
         for (let i = 0; i < 5; i++) {
             const dr = Math.cos(i*0.2 + anim * 3) * 3 + 130;
             renderMesh(symbolMeshes[grantType], x + Math.sin(i * step) * dr, y + dy - Math.cos(i * step) * dr, 0, 0, engaging * engaging * 7 * (i % 2 - 0.5));

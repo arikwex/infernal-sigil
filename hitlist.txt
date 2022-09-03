@@ -1,8 +1,8 @@
 On Deck
-- Shrine should use single symbol type
 - Upgrade effect (light from above)
 - Enemy bat
 - Game world layout
+- Portals
 - GameState that is effectively load/reload
 - Throne room / game over
 
