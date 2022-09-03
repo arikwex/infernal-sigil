@@ -359,16 +359,25 @@ function Player(x, y) {
         targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * ((state == 3) ? 17 : 8) * dT;
         smoothAttacking += (((attackTime < 0.35) ? 1 : 0) - smoothAttacking) * 17 * dT;
         smoothAirjump += (airJump - smoothAirjump) * 17 * dT;
-        y += dT * vy;
-        x += dT * vx;
+        
+        // Smoother player physics to avoid clipping
+        let N = 3;
+        playerHitbox.x = x;
+        playerHitbox.y = y;
+        for (let i = 0; i < N; i++) {
+            playerHitbox.x += dT * vx / N;
+            playerHitbox.y += dT * vy / N;
+            [x, y, _, _, _, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
+            if (onRoof) { vy = 0; }
+            if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
+        }
+
         groundTime -= dT;
         unstick -= dT;
         stick += dT;
         airJump = Math.max(airJump - ((state==3) ? 3 * dT : dT), 0);
         timeSinceJump += dT;
         injured = Math.max(0, injured - dT);
-
-        if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
     }
 
     function render(ctx) {
