@@ -1,15 +1,19 @@
 On Deck
-- Upgrade effect (light from above)
-- Enemy bat
+- Switches one-time use for simplicity
+- Switches + Gate quick cutscene
+- Region labels
 - Game world layout
+- Enemy bat
 - Portals
+- Collectables...
 - GameState that is effectively load/reload
 - Throne room / game over
+- Death counter / Cone counter
+- Game timer (bottom right for speed runners)
 
 - Audio
 - Arrow trap
 - Optimize background parallax objects
-- Consider making switches one-time use for simplicity
 - Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Main menu => New Game vs Continue
 
@@ -19,8 +23,6 @@ On Deck
 - Map loader + compressor improvements
 - Favicon
 - Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
-- Death counter
-- Game timer (bottom right for speed runners)
 - Joystick
 - Refactor damage system from player attack
 - Aim direction
@@ -36,7 +38,6 @@ On Deck
 - Use flameSFX for tail
 - Swift wind swirl on land / impact
 - Mandatory combat rooms
-- Game timer (bottom right for speed runners)
 - Boss fights?
 - Symbols above gates to "link them" to eachother mentally
 - Bug (that I kinda like) where attacking then jumping gives tall jump
