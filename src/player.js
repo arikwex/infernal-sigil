@@ -69,6 +69,9 @@ function Player(x, y) {
     headMesh[1].shift(); headMesh[1].shift();
     headMesh[1][0] = 10; headMesh[1][1] = -16;
     headMesh[1][6] = -10; headMesh[1][7] = -16;
+    headMesh.unshift([10, -16, 11, -27]);
+    headMesh.unshift([-10, -16, -11, -27]);
+    headMesh.unshift(['#caa', 6, 0]);
 
     const bodyMesh = [
         ['#e22', thickness, 0],
@@ -78,7 +81,8 @@ function Player(x, y) {
     ];
     const handMesh = [
         ['#e22', thickness, 0],
-        [4, 0, 14, 6]
+        [4, 0, 14, 6],
+        ['#e66', 2, 0], [18, 5, 22, 8], [15, 9, 19, 13]
     ];
     const tailMesh = [
         ['#e22', thickness, 0],
@@ -104,6 +108,7 @@ function Player(x, y) {
         // Claws
         if (ability == 1) {
             hasClaws = true;
+            handMesh.pop();handMesh.pop();handMesh.pop();
             handMesh.push(['#def', 3, 0], [18, 5, 25, 8], [15, 9, 22, 13]);
         }
         // Flame
