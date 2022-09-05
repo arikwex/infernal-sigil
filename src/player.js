@@ -469,7 +469,8 @@ function Player(x, y) {
             t * 0.3 +
             0.2 * heading +
             (facing * tailWhip/2000) * notClimbing +
-            (-facing * 1.1) * climbing;
+            (-facing * 1.1) * climbing +
+            (dashing ? (0.3-dashTimer)*4*facing : 0);
         let pHeadT =
             t +
             (Math.sin(climbAnim*1.2) * 0.15 - 0.2) * climbing +
