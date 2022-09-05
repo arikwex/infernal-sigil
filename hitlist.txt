@@ -1,12 +1,6 @@
 On Deck
-- Spikes stick out back too far
-- Region labels
-- Map region background for throne area
-- Game world layout
 - (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
-- Enemy bat
 - Map correctness check (no duplicate switches or checkpoints or conversations or shrines)
-- Portals
 - Collectables...
 - GameState that is effectively load/reload
 - Throne room / game over
@@ -19,6 +13,8 @@ On Deck
 - Main menu => New Game vs Continue
 
 - Minimap overlay
+- Portals
+- Enemy bat
 - Talk to spirits / read signs?
 - Text explaining recent upgrade
 - Map loader + compressor improvements
