@@ -32,9 +32,14 @@ function FlameSFX(x, y, scale, lifetime) {
         ctx.fill();
     }
 
+    function inView(cx, cy) {
+        return !(x > cx + 900 || y > cy + 600 || x < cx - 900 || y < cy - 600);
+    }
+
     return {
         update,
         render,
+        inView,
         order: -4500
     }
 };

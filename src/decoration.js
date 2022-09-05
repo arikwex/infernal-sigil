@@ -137,11 +137,16 @@ function Decoration(x, y, t) {
        bus.off('attack', hitCheck);
     }
 
+    function inView(cx, cy) {
+        return !(x > cx + 900 || y > cy + 600 || x < cx - 900 || y < cy - 600);
+    }
+
     return {
         update,
         render,
         enable,
         disable,
+        inView,
         order: -6000,
     }
 }
