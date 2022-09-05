@@ -15,6 +15,7 @@ import Web from './web';
 import Decoration from './decoration';
 import Parallax from './parallax';
 import Checkpoint from './checkpoint';
+import * as bus from './bus';
 
 function Map() {
     let img = new Image();
@@ -22,12 +23,13 @@ function Map() {
     let W, H;
     const BLOCK_SIZE = 100;
     const WALL_MAP = {
-      [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3]],
-      [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0]],
-      [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0]],
-      [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0]],
-      [0xc8c800]: ['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0]],
+      [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3], 'The Styx'],
+      [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0], 'Asphodel Meadows'],
+      [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0], 'Elysian Boneyard'],
+      [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0], 'Fields of Mourning'],
+      [0xc8c800]: ['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0], 'Throne Room'],
     };
+    let exactTheme = 0x000000;
     const themeLookup = {};
 
     async function generate() {
@@ -196,13 +198,15 @@ function Map() {
     }
 
     function computeTheme(x, y) {
-        const avgTheme = [0, 0, 0, 0, 0, 0];
+        let avgTheme = [0, 0, 0, 0, 0, 0, null];
+        const foundThemes = {};
         let N = 0.001;
-        for (let dx = -8; dx <= 8; dx++) {
-            for (let dy = -8; dy <= 8; dy++) {
+        for (let dx = -5; dx <= 5; dx++) {
+            for (let dy = -5; dy <= 5; dy++) {
                 const V = get(x + dx, y + dy);
                 const wallData = WALL_MAP[V];
                 if (wallData) {
+                    foundThemes[V] = true;
                     for (let i = 0; i < 6; i++) {
                         avgTheme[i] += wallData[2 + i];
                     }
@@ -210,14 +214,24 @@ function Map() {
                 }
             }
         }
-        return avgTheme.map((v) => v / N);
+        const keys = Object.keys(foundThemes);
+        avgTheme = avgTheme.map((v) => v / N);
+        if (keys.length == 1) {
+            avgTheme[6] = keys[0];
+        }
+        return avgTheme;
     }
 
-    let themeData = [0, 0, 0, 0, 0, 0];
+    let themeData = [0, 0, 0, 0, 0, 0, null];
     function getTheme(x, y) {
         const t = themeLookup[parseInt(x)]?.[parseInt(y)];
         if (t) {
             themeData = t;
+            // Pure theme change detection
+            if (t[6] && exactTheme != t[6]) {
+                bus.emit('region', WALL_MAP[t[6]][9]);
+                exactTheme = t[6];
+            }
         }
         return themeData;
     }
