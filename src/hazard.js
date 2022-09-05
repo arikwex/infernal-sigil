@@ -5,7 +5,7 @@ const spikeMesh = [
   ['#f52', 6, 0],
 ];
 for (let i = -50; i < 50; i+=26) {
-  spikeMesh.push([i, 50, i + 10, 25, i+10, 150, i + 10, 25, i+20, 50]);
+  spikeMesh.push([i, 50, i + 10, 25, i+10, 140, i + 10, 25, i+20, 50]);
 }
 const lavaMesh = [
   ['#f82', 40, 0],
@@ -45,8 +45,8 @@ function Hazard(x, y, t) {
 
   function render(ctx) {
     const dA = t * 1.57;
-    const dx = Math.sin(dA) * extended * 100;
-    const dy = -Math.cos(dA) * extended * 100;
+    const dx = Math.sin(dA) * extended * 93;
+    const dy = -Math.cos(dA) * extended * 93;
     if (t == 8) {
       ctx.fillStyle = '#f82';
       ctx.beginPath();

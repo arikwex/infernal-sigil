@@ -1,5 +1,4 @@
 On Deck
-- Spider attacks aren't very interesting
 - Spikes stick out back too far
 - Region labels
 - Map region background for throne area
