@@ -1,5 +1,5 @@
 On Deck
-- Checkpoints restore full health on change
+- Spider attacks aren't very interesting
 - Region labels
 - Map region background for throne area
 - Game world layout

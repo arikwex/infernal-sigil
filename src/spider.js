@@ -3,6 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck } from './utils';
+import { jump } from './controls';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
 
@@ -18,6 +19,10 @@ function Spider(x, y, type) {
     let injured = 0;
     let maxHp = 4;
     let hp = maxHp;
+    let jumping = 0;
+    let charging = 0;
+    let needJump = false;
+    let waiting = Math.random() * 3;
     
     const bboxMapOX = [-50, 0, -50, -59].map((a) => a*size/1.3);
     const bboxMapOY = [-59, -50, 0, -50].map((a) => a*size/1.3);
@@ -93,20 +98,42 @@ function Spider(x, y, type) {
             if (onRightWall && vx > 0) { vx = 0; }
         }
         
-
-        if (injured <= 0) {
-            if (walkPattern % 2 == 0) { vx = 160 * facing * wx; }
-            if (walkPattern % 2 == 1) { vy = 160 * facing * wy; }
-        } else {
-            if (walkPattern % 2 == 0) { vx -= vx * 12 * dT; }
-            if (walkPattern % 2 == 1) { vy -= vy * 12 * dT; }
+        if (waiting < 0) {
+            charging = 0.5;
+            vx = 0;
+            vy = 0;
+            needJump = true;
+            waiting = Math.random() * 2 + 1.5;
+        }
+        if (charging <= 0 && needJump) {
+            jumping = 0.6;
+            needJump = false;
+        }
+        if (jumping > 0) {
+            if (walkPattern % 2 == 0) { vx = (800 * jumping + 100) * facing * wx; }
+            if (walkPattern % 2 == 1) { vy = (800 * jumping + 100) * facing * wy; }
         }
 
-        anim += dT;
+        if (charging <= 0) {
+            if (injured <= 0) {
+                if (jumping <= 0) {
+                    if (walkPattern % 2 == 0) { vx = 50 * facing * wx; }
+                    if (walkPattern % 2 == 1) { vy = 50 * facing * wy; }
+                }
+            } else {
+                if (walkPattern % 2 == 0) { vx -= vx * 12 * dT; }
+                if (walkPattern % 2 == 1) { vy -= vy * 12 * dT; }
+            }
+        }
+
+        anim += (charging > 0) ? -dT*2 : dT * (1 + jumping * 2);
         x += vx * dT;
         y += vy * dT;
         facing += (targetFacing - facing) * 8 * dT;
         injured = Math.max(0, injured - dT * 2);
+        jumping = Math.max(0, jumping - dT);
+        charging = Math.max(0, charging - dT);
+        waiting -= dT;
 
         enemyHitbox.set(x, y, bboxMapOX[walkPattern], bboxMapOY[walkPattern], bboxMapW[walkPattern], bboxMapH[walkPattern]);
     }
@@ -115,12 +142,13 @@ function Spider(x, y, type) {
         const walking = 1;
 
         const t = facing * 0.6;
-        const a = anim * 16;
+        const a = anim * 11;
         const xfm = ctx.getTransform();
         scaleInPlace(size, x, y);
 
         const dy = 32 + Math.cos(a);
-        const pBodyP = (Math.cos(a/2) / 15) * walking + wa;
+        const dx = needJump ? (-10 + 40 * charging * charging) * facing : 0;
+        const pBodyP = (Math.cos(a/2) / 15) * walking + wa + jumping * facing;
 
         // Leg animation
         for (let i = 0; i < 4; i++) {
@@ -128,20 +156,20 @@ function Spider(x, y, type) {
             const p = legPhase[i];
             const L = i < 2 ? -3 : 7;
             const idx = i < 2 ? 1 + i : 2 + i;
-            legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing) * walking;
+            legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing * walking);
             legMesh[idx][3] = (12) * walking;
-            legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing) * walking;
-            legMesh[idx][5] = (-5 + Math.cos(a+p) * 4) * walking;
-            legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing) * walking;
-            legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0)) * walking;
+            legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing * walking);
+            legMesh[idx][5] = (-5 + Math.cos(a+p) * 4 * walking);
+            legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing * walking);
+            legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0) * walking);
         }
 
         if (injured > 0.2) {
             ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
         }
         renderMesh(legMesh, x+21*wy, y-21*wx, 0, -t * 1.4, wa);
-        renderMesh(bodyMesh, x+dy*wy, y-dy*wx, 0, t/2, t/2 + pBodyP, '#fff');
-        renderMesh(eyeMesh, x+dy*wy, y-dy*wx, 17, -t, -t/2 + pBodyP, '#fff');
+        renderMesh(bodyMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 0, t/2, t/2 + pBodyP, '#fff');
+        renderMesh(eyeMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 17, -t, -t/2 + pBodyP, '#fff');
         ctx.globalAlpha = 1;
         ctx.setTransform(xfm);
     }
@@ -152,7 +180,9 @@ function Spider(x, y, type) {
                 vx = dir * 300 * Math.abs(wx) + wy * 200;
                 vy -= wx * 200;
             }
-            targetFacing = -dir;
+            if (jumping <= 0 && charging <= 0) {
+                targetFacing = -dir;
+            }
             injured = 1;
             hp -= isFlame ? 2 : 1;
             if (hp <= 0) {
