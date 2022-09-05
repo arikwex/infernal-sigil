@@ -140,14 +140,14 @@ function Map() {
         }
 
         // Place parallax objects
-        for (let x = 0; x < W; x++) {
-            for (let y = 5; y < H; y++) {
-                if (x > 40 || y < 60) { continue; }
-                if (Math.abs(Math.cos(x*x*7321+y*y*4831))%1.0 < 0.1) {
-                    add(new Parallax(x * BLOCK_SIZE, y * BLOCK_SIZE));
-                }
-            }
-        }
+        // for (let x = 0; x < W; x++) {
+        //     for (let y = 5; y < H; y++) {
+        //         if (x > 40 || y < 60) { continue; }
+        //         if (Math.abs(Math.cos(x*x*7321+y*y*4831))%1.0 < 0.1) {
+        //             add(new Parallax(x * BLOCK_SIZE, y * BLOCK_SIZE));
+        //         }
+        //     }
+        // }
     }
 
     function outlineFinder(x, y, ex, ey) {

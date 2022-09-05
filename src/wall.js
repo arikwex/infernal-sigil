@@ -1,5 +1,6 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
+import { getObjectsByTag } from "./engine";
 
 function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     const w = (ex - x) * BLOCK_SIZE;
@@ -29,8 +30,13 @@ function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
         renderMesh(wallMesh,x,y,0,0,0);
     }
 
+    function inView(cx, cy) {
+        return !(x > cx + 900 || y > cy + 600 || x + w < cx - 900 || y + h < cy - 600);
+    }
+
     return {
         render,
+        inView,
         tags: ['physics'],
         physics,
         order: -5000
