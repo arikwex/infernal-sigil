@@ -1,22 +1,21 @@
 On Deck
-- Switches one-time use for simplicity
-- (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
+- Checkpoints restore full health on change
 - Region labels
 - Map region background for throne area
 - Game world layout
+- (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Enemy bat
-- Map correctness check (no duplicate switches)
+- Map correctness check (no duplicate switches or checkpoints or conversations or shrines)
 - Portals
 - Collectables...
 - GameState that is effectively load/reload
 - Throne room / game over
 - Switches + Gate quick cutscene
 - Death counter / Cone counter
+- Optimize background parallax objects
 - Game timer (bottom right for speed runners)
-
 - Audio
 - Arrow trap
-- Optimize background parallax objects
 - Main menu => New Game vs Continue
 
 - Minimap overlay
@@ -73,7 +72,7 @@ VFX
 
 The Styx (Biome)
 [X] Ash + Gray
-[ ] Crossroads to other regions + Starting location
+[X] Crossroads to other regions + Starting location
 [X] Skeletons
 [X] Platforming
 [X] Lava
@@ -88,10 +87,9 @@ Asphodel Meadows (Biome)
 
 Elysian Boneyard (Biome)
 [X] Bones + Light Purple
-[ ] Spiders
+[X] Spiders
 [X] Moving spike traps
-[ ] Web gates
-[ ] Timed push buttons
+[X] Web gates
 [X] GRANT: INFERNAL FLAME
 
 Fields of Mourning (Biome)

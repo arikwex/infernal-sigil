@@ -5,6 +5,7 @@ module.exports = {
     buildMap: (path) => {
         const elements = [];
         let originalMapData = fs.readFileSync(path);
+        let uniqueEntries = {};
 
         // Parse it
         let png = PNG.sync.read(originalMapData, {
@@ -22,6 +23,7 @@ module.exports = {
                 const idxBase = (png.width * y + x)
                 const idx = idxBase << 2;
                 const v = (data[idx] << 16) | (data[idx + 1] << 8) | data[idx + 2];
+                uniqueEntries[v] = true;
                 if (v == 0x000000) {
                     continue;
                 }
@@ -34,6 +36,7 @@ module.exports = {
                 }
             }
         }
+        console.log(`** Map unique entries = ${Object.keys(uniqueEntries).length} **`);
         // const u8 = new Uint8Array(elements);
         // var decoder = new TextDecoder('utf8');
         // var b64encoded = btoa(decoder.decode(u8));

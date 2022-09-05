@@ -14,7 +14,7 @@ async function initialize() {
     add(new HUD());
 
     // add(new Checkpoint(100*32, 100*62, 0));
-    // getObjectsByTag('player')[0].grant(0);
+    getObjectsByTag('player')[0].grant(0);
     // getObjectsByTag('player')[0].grant(1);
     // getObjectsByTag('player')[0].grant(2);
     // getObjectsByTag('player')[0].grant(3);

@@ -12,7 +12,7 @@ function GameState() {
     function addBones(b) { bones = Math.max(bones + b, 0); }
     function getBones() { return bones; }
     function respawn() { bones = parseInt(bones / 2); hp = maxHp; }
-    function setCheckpointId(id) { checkpointId = id; }
+    function setCheckpointId(id) { checkpointId = id; hp = maxHp; }
     function getCheckpointId() { return checkpointId; }
 
     return {
