@@ -279,7 +279,7 @@ function Player(x, y) {
             // Touching ground while climbing should release climb
             state = 0;
         }
-        else if (onWall && !onGround && attackTime > 0.3 && hasClaws) {
+        else if (onWall && !onGround && (attackTime > 0.3 || dashing) && hasClaws) {
             // Touching wall and no ground should enter climbing mode
             state = 3;
             dashing = false;

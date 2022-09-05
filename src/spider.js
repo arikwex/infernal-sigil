@@ -23,7 +23,7 @@ function Spider(x, y, type) {
     const bboxMapOY = [-59, -50, 0, -50].map((a) => a*size/1.3);
     const bboxMapW = [100, 60, 100, 60].map((a) => a*size/1.3);
     const bboxMapH = [60, 100, 60, 100].map((a) => a*size/1.3);
-    let wa = type * 6.28 / 4;
+    let wa = walkPattern * 6.28 / 4;
     let wx = Math.cos(wa);
     let wy = Math.sin(wa);
     x -= wy * 50;
