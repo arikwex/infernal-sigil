@@ -1,20 +1,22 @@
 On Deck
 - Switches one-time use for simplicity
-- Switches + Gate quick cutscene
+- (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Region labels
+- Map region background for throne area
 - Game world layout
 - Enemy bat
+- Map correctness check (no duplicate switches)
 - Portals
 - Collectables...
 - GameState that is effectively load/reload
 - Throne room / game over
+- Switches + Gate quick cutscene
 - Death counter / Cone counter
 - Game timer (bottom right for speed runners)
 
 - Audio
 - Arrow trap
 - Optimize background parallax objects
-- Room loader/unloader mechanism (automatic from map file ideally, grid system)
 - Main menu => New Game vs Continue
 
 - Minimap overlay
