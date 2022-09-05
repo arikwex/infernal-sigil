@@ -1,21 +1,22 @@
 import terrain from './game-map.png';
 import { canvas } from './canvas';
 import { add } from './engine';
-import Player from './player';
-import Camera from './camera';
-import Skeleton from './skeleton';
-import Spider from './spider';
-import Treasure from './treasure';
+// import Player from './player';
+// import Camera from './camera';
+// import Skeleton from './skeleton';
+// import Spider from './spider';
+// import Treasure from './treasure';
 import Wall from './wall';
-import Hazard from './hazard';
-import Gate from './gate';
-import Switch from './switch';
-import Shrine from './shrine';
-import Web from './web';
+// import Hazard from './hazard';
+// import Gate from './gate';
+// import Switch from './switch';
+// import Shrine from './shrine';
+// import Web from './web';
 import Decoration from './decoration';
-import Parallax from './parallax';
-import Checkpoint from './checkpoint';
+// import Parallax from './parallax';
+// import Checkpoint from './checkpoint';
 import * as bus from './bus';
+import LOOKUP from './GENERATED-map-lookup';
 
 function Map() {
     let img = new Image();
@@ -51,34 +52,39 @@ function Map() {
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
-                const D0 = (V >> 16) & 0xff;
-                const D1 = (V >> 8) & 0xff;
-                const D2 = V & 0xff;
-                // PLAYER
-                if (V == 0x00ff00) {
-                    add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
-                    add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                const entityClass = LOOKUP[V*2];
+                const entityData = LOOKUP[V*2+1];
+                if (entityClass) {
+                    add(new entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
                 }
-                // ENEMIES + HAZARDS
-                if (D0 == 0xff) {
-                    if (D1 == 0x00) { add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                    if (D1 == 0x01) { add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                    if (D1 == 0x02) { add(new Spider(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                }
-                // GAME FLOW
-                if (D2 == 0xff) {
-                    if (D0 == 0x00) { add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1)); }
-                    if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
-                    if (D0 == 0x02) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 1, D1)); }
-                    if (D0 == 0x03) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
-                    if (D0 == 0x04) {
-                        add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1));
-                        add(new Decoration((x - 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
-                        add(new Decoration((x + 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
-                    }
-                    if (D0 == 0x05) { add(new Web(x * BLOCK_SIZE, y * BLOCK_SIZE)); }
-                    if (D0 == 0x06) { add(new Checkpoint(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
-                }
+                // const D0 = (V >> 16) & 0xff;
+                // const D1 = (V >> 8) & 0xff;
+                // const D2 = V & 0xff;
+                // // PLAYER
+                // if (V == 0x00ff00) {
+                //     add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                //     add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
+                // }
+                // // ENEMIES + HAZARDS
+                // if (D0 == 0xff) {
+                //     if (D1 == 0x00) { add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
+                //     if (D1 == 0x01) { add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
+                //     if (D1 == 0x02) { add(new Spider(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
+                // }
+                // // GAME FLOW
+                // if (D2 == 0xff) {
+                //     if (D0 == 0x00) { add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1)); }
+                //     if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
+                //     if (D0 == 0x02) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 1, D1)); }
+                //     if (D0 == 0x03) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
+                //     if (D0 == 0x04) {
+                //         add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1));
+                //         add(new Decoration((x - 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
+                //         add(new Decoration((x + 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
+                //     }
+                //     if (D0 == 0x05) { add(new Web(x * BLOCK_SIZE, y * BLOCK_SIZE)); }
+                //     if (D0 == 0x06) { add(new Checkpoint(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
+                // }
 
                 // compute theme avg
                 themeLookup[x] = themeLookup[x] || {};
@@ -194,7 +200,8 @@ function Map() {
 
     function get(x, y) {
         const baseIdx = (x + y * W) << 2;
-        return (data[baseIdx] << 16) | (data[baseIdx + 1] << 8) | data[baseIdx + 2]
+        //return (data[baseIdx] << 16) | (data[baseIdx + 1] << 8) | data[baseIdx + 2]
+        return data[baseIdx + 2];
     }
 
     function computeTheme(x, y) {

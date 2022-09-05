@@ -1,0 +1,67 @@
+import Player from './player';
+import Skeleton from './skeleton';
+import Spider from './spider';
+import Treasure from './treasure';
+import Hazard from './hazard';
+import Gate from './gate';
+import Switch from './switch';
+import Shrine from './shrine';
+import Web from './web';
+import Checkpoint from './checkpoint';
+
+export default [0,0,
+  0,0,
+  Web,0,
+  Treasure,2,
+  Skeleton,0,
+  Treasure,1,
+  Treasure,3,
+  Spider,2,
+  Hazard,3,
+  Hazard,1,
+  0,0,
+  Spider,3,
+  Hazard,8,
+  Skeleton,128,
+  0,0,
+  Checkpoint,4,
+  Shrine,4,
+  Hazard,0,
+  Gate,6,
+  Shrine,3,
+  Switch,6,
+  0,0,
+  Checkpoint,5,
+  Spider,0,
+  0,0,
+  0,0,
+  Spider,128,
+  Hazard,6,
+  Switch,1,
+  Gate,1,
+  Shrine,0,
+  Gate,4,
+  Switch,2,
+  Gate,2,
+  Switch,4,
+  Checkpoint,2,
+  Gate,0,
+  Checkpoint,1,
+  Switch,0,
+  Checkpoint,0,
+  Spider,1,
+  Switch,5,
+  Checkpoint,3,
+  Hazard,2,
+  Gate,3,
+  Switch,3,
+  Switch,8,
+  Gate,5,
+  Hazard,4,
+  Gate,7,
+  Player,0,
+  Gate,8,
+  Switch,7,
+  Shrine,2,
+  Shrine,1,
+];
