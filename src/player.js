@@ -584,8 +584,10 @@ function Player(x, y) {
 
     function reset(x_, y_) {
         isDead = false;
-        playerHitbox.x = x_ + 50;
+        playerHitbox.x = x_;
         playerHitbox.y = y_;
+        vx = 0;
+        vy = 0;
         getObjectsByTag('camera')[0].aim(x_, y_, 1, true);
     }
 

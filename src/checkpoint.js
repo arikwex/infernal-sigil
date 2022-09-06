@@ -78,6 +78,7 @@ function Checkpoint(x, y, checkpointId) {
 
     function onReset() {
         if (checkpointId == getCurrentGameState().getCheckpointId()) {
+            console.log(x, y);
             getObjectsByTag('player')[0].reset(x, y - 150);
         }
     }

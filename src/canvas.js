@@ -3,7 +3,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight * canvas.width / window.innerWidth;
 const ctx = canvas.getContext('2d');
 
-function thickness(t) { ctx.lineWidth = t; }
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
 function scaleInPlace(s, x, y, s2) { ctx.translate(x, y); ctx.scale(s, s2 || s); ctx.translate(-x, -y); }
 
@@ -19,7 +18,7 @@ function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor = null) {
         const data = mesh[r];
         if (data.length == 3) {
             color(data[0], fillColor || data[0]);
-            thickness(data[1]);
+            ctx.lineWidth = data[1];
             z = baseZ + data[2];
         } else {
             ctx.beginPath();
