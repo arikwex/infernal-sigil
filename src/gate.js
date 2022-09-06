@@ -1,6 +1,7 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
+import { inView } from "./utils";
 
 function Gate(x, y, switchNum) {
     let open = false;
@@ -45,6 +46,7 @@ function Gate(x, y, switchNum) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         tags: ['physics'],
         physics,
         order: -7000

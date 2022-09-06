@@ -2,7 +2,7 @@ import { renderMesh, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
-import { physicsCheck, groundCheck } from './utils';
+import { physicsCheck, groundCheck, inView } from './utils';
 import { jump } from './controls';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
@@ -205,6 +205,7 @@ function Spider(x, y, type) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
         tags: ['enemy'],
         enemyHitbox,

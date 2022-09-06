@@ -22,7 +22,7 @@ function Camera(x, y) {
         x += (tx - x) * 12 * dT;
         y += (ty - y) * 12 * dT;
         z += (tz - z) * 3 * dT;
-        tz += (canvas.width / 1400 - tz) * 4 * dT;
+        tz += (canvas.width / 1400 / 3 - tz) * 4 * dT;
 
         if (player) {
             const px = player.playerHitbox.x;

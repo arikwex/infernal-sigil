@@ -2,6 +2,7 @@ import * as bus from './bus';
 import { scaleInPlace } from './canvas';
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
+import { inView } from './utils';
 
 // Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
@@ -70,6 +71,7 @@ function Treasure(x, y, t) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000,
     }
 }

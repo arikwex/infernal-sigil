@@ -4,7 +4,7 @@ import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
-import { copy } from "./utils";
+import { copy, inView } from "./utils";
 import { getCurrentGameState } from "./gamestate";
 
 function Checkpoint(x, y, checkpointId) {
@@ -95,6 +95,7 @@ function Checkpoint(x, y, checkpointId) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         tags: ['physics'],
         physics,
         order: -8000

@@ -3,6 +3,7 @@ import { renderMesh, scaleInPlace } from "./canvas";
 import { add, remove } from "./engine";
 import FlameSFX from "./flame-sfx";
 import * as bus from "./bus";
+import { inView } from "./utils";
 
 function Decoration(x, y, t) {
     let isHit = false;
@@ -137,16 +138,12 @@ function Decoration(x, y, t) {
        bus.off('attack', hitCheck);
     }
 
-    function inView(cx, cy) {
-        return !(x > cx + 900 || y > cy + 600 || x < cx - 900 || y < cy - 600);
-    }
-
     return {
         update,
         render,
         enable,
         disable,
-        inView,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000,
     }
 }

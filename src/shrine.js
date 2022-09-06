@@ -3,7 +3,7 @@ import { ctx, renderMesh } from "./canvas";
 import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
-import { copy } from "./utils";
+import { copy, inView } from "./utils";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -111,6 +111,7 @@ function Shrine(x, y, grantType) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         tags: ['physics'],
         physics,
         order: -8000

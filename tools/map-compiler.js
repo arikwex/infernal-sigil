@@ -126,14 +126,12 @@ function compileMapReader(uniqueEntries) {
     export default [
     `;
     const keys = Object.keys(uniqueEntries).sort((a, b) => uniqueEntries[a] - uniqueEntries[b]);
-    console.log(keys, keys.map((k) => uniqueEntries[k]));
     for (let i = 0; i < keys.length; i++) {
         const serial = SERIALIZE(keys[i]);
         code += '  ' + serial[0] + ',' + serial[1] + ',\n';
     }
     code += '];';
 
-    console.log(code);
     fs.writeFileSync('./src/GENERATED-map-lookup.js', code);
 }
 

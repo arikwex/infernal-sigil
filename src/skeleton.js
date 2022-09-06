@@ -2,7 +2,7 @@ import { renderMesh, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
-import { physicsCheck, groundCheck } from './utils';
+import { physicsCheck, groundCheck, inView } from './utils';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -137,6 +137,7 @@ function Skeleton(x, y, type) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
         tags: ['enemy'],
         enemyHitbox,

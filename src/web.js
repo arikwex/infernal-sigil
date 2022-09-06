@@ -1,6 +1,7 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
+import { inView } from "./utils";
 
 function Web(x, y) {
     y -= 50;
@@ -108,6 +109,7 @@ function Web(x, y) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: -9000,
         tags: ['physics'],
         physics,

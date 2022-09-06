@@ -165,7 +165,6 @@ function Map() {
 
     function get(x, y) {
         const baseIdx = (x + y * W) << 2;
-        //return (data[baseIdx] << 16) | (data[baseIdx + 1] << 8) | data[baseIdx + 2]
         return data[baseIdx + 2];
     }
 
@@ -175,7 +174,7 @@ function Map() {
         let N = 0.001;
         for (let dx = -5; dx <= 5; dx++) {
             for (let dy = -5; dy <= 5; dy++) {
-                const V = get(x + dx, y + dy);
+                const V = get(x + dx, y + dy) << 1;
                 const wallData = WALL_MAP[V];
                 if (wallData) {
                     foundThemes[V] = true;

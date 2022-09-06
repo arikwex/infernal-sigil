@@ -1,6 +1,7 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
+import { inView } from "./utils";
 
 function Switch(x, y, switchNum, t = 0) {
     let active = false;
@@ -51,6 +52,7 @@ function Switch(x, y, switchNum, t = 0) {
         render,
         enable,
         disable,
+        inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000
     }
 }

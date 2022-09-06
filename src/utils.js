@@ -6,6 +6,10 @@ function copy(arr) {
     return JSON.parse(JSON.stringify(arr));
 }
 
+function inView(x, y, cx, cy) {
+    return !(x > cx + 900 || y > cy + 600 || x < cx - 900 || y < cy - 600);
+}
+
 const physicsResult = [0, 0, false, false, false, false];
 function physicsCheck(physicsObjects, myHitbox) {
     let x = myHitbox.x;
@@ -83,6 +87,7 @@ function groundCheck(physicsObjects, myHitbox, wx = 1, wy = 0) {
 export {
     clamp,
     copy,
+    inView,
     physicsCheck,
     groundCheck,
 }
