@@ -6,7 +6,7 @@ const objectsToRemove = [];
 let lastFrameMs = 0;
 
 function tick(currentFrameMs) {
-    const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.03);
+    const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.018);
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const originalXfm = ctx.getTransform();
