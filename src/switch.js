@@ -2,7 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 
-function Switch(x, y, t, switchNum) {
+function Switch(x, y, switchNum, t = 0) {
     let active = false;
     const phase = t == 1;
     let angle = 0;
@@ -55,4 +55,9 @@ function Switch(x, y, t, switchNum) {
     }
 }
 
-export default Switch;
+function Switch2(x,y,n) { return Switch(x,y,n,1); }
+
+export {
+    Switch,
+    Switch2
+};

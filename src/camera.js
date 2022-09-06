@@ -3,6 +3,9 @@ import { canvas } from "./canvas";
 import { getObjectsByTag } from "./engine"
 
 function Camera(x, y) {
+    const player = getObjectsByTag('player')[0];
+    x = player.playerHitbox.x;
+    y = player.playerHitbox.y;
     let anim = 0;
     let shake = 0;
     let tx = x;
@@ -15,7 +18,6 @@ function Camera(x, y) {
 
     function update(dT) {
         anim += dT;
-        const player = getObjectsByTag('player')[0];
         shake = Math.max(shake-dT,0);
         x += (tx - x) * 12 * dT;
         y += (ty - y) * 12 * dT;

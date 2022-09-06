@@ -45,8 +45,8 @@ function Hazard(x, y, t) {
 
   function render(ctx) {
     const dA = t * 1.57;
-    const dx = Math.sin(dA) * extended * 93;
-    const dy = -Math.cos(dA) * extended * 93;
+    const dx = Math.sin(dA) * extended * 91;
+    const dy = -Math.cos(dA) * extended * 91;
     if (t == 8) {
       ctx.fillStyle = '#f82';
       ctx.beginPath();

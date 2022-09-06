@@ -1,20 +1,8 @@
 import terrain from './game-map.png';
 import { canvas } from './canvas';
 import { add } from './engine';
-// import Player from './player';
-// import Camera from './camera';
-// import Skeleton from './skeleton';
-// import Spider from './spider';
-// import Treasure from './treasure';
 import Wall from './wall';
-// import Hazard from './hazard';
-// import Gate from './gate';
-// import Switch from './switch';
-// import Shrine from './shrine';
-// import Web from './web';
 import Decoration from './decoration';
-// import Parallax from './parallax';
-// import Checkpoint from './checkpoint';
 import * as bus from './bus';
 import LOOKUP from './GENERATED-map-lookup';
 
@@ -23,13 +11,19 @@ function Map() {
     let data = null;
     let W, H;
     const BLOCK_SIZE = 100;
-    const WALL_MAP = {
-      [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3], 'The Styx'],
-      [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0], 'Asphodel Meadows'],
-      [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0], 'Elysian Boneyard'],
-      [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0], 'Fields of Mourning'],
-      [0xc8c800]: ['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0], 'Throne Room'],
-    };
+    // const WALL_MAP = {
+    //   [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3], 'The Styx'],
+    //   [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0], 'Asphodel Meadows'],
+    //   [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0], 'Elysian Boneyard'],
+    //   [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0], 'Fields of Mourning'],
+    //   [0xc8c800]: ['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0], 'Throne Room'],
+    // };
+    const WALL_MAP = {};
+    LOOKUP.map((entry, index) => {
+        if (entry[0]) { WALL_MAP[index] = entry; }
+    });
+    console.log(WALL_MAP);
+
     let exactTheme = 0x000000;
     const themeLookup = {};
 
@@ -39,7 +33,6 @@ function Map() {
             img.src = terrain;
         });
 
-        //
         let context = canvas.getContext('2d');
         context.drawImage(img, 0, 0);
 
@@ -54,37 +47,9 @@ function Map() {
                 const V = get(x, y);
                 const entityClass = LOOKUP[V*2];
                 const entityData = LOOKUP[V*2+1];
-                if (entityClass) {
+                if (entityClass && !entityClass[0]) {
                     add(new entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
                 }
-                // const D0 = (V >> 16) & 0xff;
-                // const D1 = (V >> 8) & 0xff;
-                // const D2 = V & 0xff;
-                // // PLAYER
-                // if (V == 0x00ff00) {
-                //     add(new Player(x * BLOCK_SIZE, y * BLOCK_SIZE));
-                //     add(new Camera(x * BLOCK_SIZE, y * BLOCK_SIZE));
-                // }
-                // // ENEMIES + HAZARDS
-                // if (D0 == 0xff) {
-                //     if (D1 == 0x00) { add(new Skeleton(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                //     if (D1 == 0x01) { add(new Hazard(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                //     if (D1 == 0x02) { add(new Spider(x * BLOCK_SIZE, y * BLOCK_SIZE, D2)); }
-                // }
-                // // GAME FLOW
-                // if (D2 == 0xff) {
-                //     if (D0 == 0x00) { add(new Treasure(x * BLOCK_SIZE, (y + 0.5) * BLOCK_SIZE, D1)); }
-                //     if (D0 == 0x01) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 0, D1)); }
-                //     if (D0 == 0x02) { add(new Switch(x * BLOCK_SIZE, y * BLOCK_SIZE, 1, D1)); }
-                //     if (D0 == 0x03) { add(new Gate(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
-                //     if (D0 == 0x04) {
-                //         add(new Shrine(x * BLOCK_SIZE, y * BLOCK_SIZE, D1));
-                //         add(new Decoration((x - 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
-                //         add(new Decoration((x + 2.5) * BLOCK_SIZE, y * BLOCK_SIZE, 0));
-                //     }
-                //     if (D0 == 0x05) { add(new Web(x * BLOCK_SIZE, y * BLOCK_SIZE)); }
-                //     if (D0 == 0x06) { add(new Checkpoint(x * BLOCK_SIZE, y * BLOCK_SIZE, D1)); }
-                // }
 
                 // compute theme avg
                 themeLookup[x] = themeLookup[x] || {};
@@ -96,11 +61,11 @@ function Map() {
         const vertMap = {};
         for (let x = 0; x < W; x++) {
             for (let y = 0; y < H; y++) {
-                const V = get(x, y);
+                const V = get(x, y) << 1;
                 if (WALL_MAP[V] && !vertMap[x+','+y]) {
                     let q = y;
                     while (q < H) {
-                        const V2 = get(x, q);
+                        const V2 = get(x, q) << 1;
                         if (V != V2) {
                             break;
                         }
@@ -140,7 +105,7 @@ function Map() {
         // Place decorations
         for (let x = 0; x < W; x++) {
             for (let y = 1; y < H; y++) {
-                const V = WALL_MAP[get(x, y)];
+                const V = WALL_MAP[get(x, y) << 1];
                 const V2 = get(x, y-1);
                 if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
                     add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
@@ -165,7 +130,7 @@ function Map() {
         let drawing = [];
         let drawing2 = [];
         for (let i = y; i < ey; i++) {
-            const sample = get(ex, i);
+            const sample = get(ex, i) << 1;
             if (!drawing.length && !WALL_MAP[sample]) {
                 drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
             }
@@ -175,7 +140,7 @@ function Map() {
                 drawing = [];
             }
 
-            const sample2 = get(x-1, i);
+            const sample2 = get(x-1, i) << 1;
             if (!drawing2.length && !WALL_MAP[sample2]) {
                 drawing2.push(0, (i-y) * BLOCK_SIZE);
             }

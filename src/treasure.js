@@ -11,6 +11,7 @@ const colorMap = {1: '#a63', 2: '#889', 3: '#db1'};
 const bgColorMap = {1: '#742', 2: '#667', 3: '#b90'};
 
 function Treasure(x, y, t) {
+    y += 50;
     let hitTimer = 0;
     let phase = 0;
     let hp = 3 * t;

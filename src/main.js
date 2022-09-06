@@ -3,6 +3,7 @@ import { start, add, getObjectsByTag } from './engine';
 import { getCurrentGameState } from './gamestate';
 import HUD from './hud';
 import Map from './map';
+import Camera from './camera';
 import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
@@ -11,6 +12,7 @@ async function initialize() {
     const m = new Map();
     await m.generate();
     add(m);
+    add(new Camera());
     add(new HUD());
 
     // add(new Checkpoint(100*32, 100*62, 0));

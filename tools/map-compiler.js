@@ -39,14 +39,14 @@ function ENTITY(V) {
 
 function SERIALIZE(V) {
     const wallType = ({
-        [0x000000]: 'Empty',
-        [0xffffff]: 'The Styx',
-        [0x64ff64]: 'Asphodel Meadows',
-        [0xff80ff]: 'Elysian Boneyard',
-        [0xff800a]: 'Fields of Mourning',
-        [0xc8c800]: 'Throne Room',
+        [0x000000]: [0, 0],
+        [0xffffff]: ["['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3], 'The Styx']", 0],
+        [0x64ff64]: ["['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0], 'Asphodel Meadows']", 0],
+        [0xff80ff]: ["['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0], 'Elysian Boneyard']", 0],
+        [0xff800a]: ["['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0], 'Fields of Mourning']", 0],
+        [0xc8c800]: ["['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0], 'Throne Room']", 0],
     })[V];
-    if (wallType) return [0, 0];
+    if (wallType) return wallType;
 
     if (V == 0x00ff00) return ['Player', 0];
     if (V == 0x7f7f7f) return [0, 0];
@@ -112,19 +112,19 @@ function printStats(humanNameCount) {
 }
 
 function compileMapReader(uniqueEntries) {
-    let code = ```
+    let code = `
     import Player from './player';
     import Skeleton from './skeleton';
     import Spider from './spider';
     import Treasure from './treasure';
     import Hazard from './hazard';
     import Gate from './gate';
-    import Switch from './switch';
+    import { Switch, Switch2 } from './switch';
     import Shrine from './shrine';
     import Web from './web';
     import Checkpoint from './checkpoint';
     export default [
-    ```;
+    `;
     const keys = Object.keys(uniqueEntries).sort((a, b) => uniqueEntries[a] - uniqueEntries[b]);
     console.log(keys, keys.map((k) => uniqueEntries[k]));
     for (let i = 0; i < keys.length; i++) {
@@ -134,12 +134,40 @@ function compileMapReader(uniqueEntries) {
     code += '];';
 
     console.log(code);
-    // fs.writeFileSync('./src/GENERATED-map-lookup.js', code);
+    fs.writeFileSync('./src/GENERATED-map-lookup.js', code);
 }
 
 module.exports = {
+    buildMapIndex: (path) => {
+        let originalMapData = fs.readFileSync(path);
+        let entryId = 0;
+        let uniqueEntries = {};
+
+        // Parse it
+        let png = PNG.sync.read(originalMapData, {
+            filterType: 0,
+            colorType: 0,
+            bitDepth: 8,
+            bgColor: { red: 0, green: 0, blue: 0 },
+            deflateChunkSize: 256
+        });
+
+        const data = png.data;
+        for (let y = 0; y < png.height; y++) {
+            for (let x = 0; x < png.width; x++) {
+                const idxBase = (png.width * y + x)
+                const idx = idxBase << 2;
+                const v = (data[idx] << 16) | (data[idx + 1] << 8) | data[idx + 2];
+                if (uniqueEntries[v] == undefined) {
+                    uniqueEntries[v] = entryId++;
+                }
+            }
+        }
+
+        compileMapReader(uniqueEntries);
+    },
+
     buildMap: (path) => {
-        const elements = [];
         let originalMapData = fs.readFileSync(path);
 
         let entryId = 0;
@@ -170,28 +198,11 @@ module.exports = {
                     humanNameCount[v] = [ENTITY(v), 0];
                 }
                 humanNameCount[v][1] += 1;
-
-                // DEBUG
-                // if (ENTITY(v) == 'Switch 6') {
-                //     console.log(x + ', ' + y);
-                // }
-
-                if (v == 0x000000) {
-                    continue;
-                }
-                else if (v != 0xffffff) {
-                    // elements.push(x, y, parseInt(Math.random() * 30), parseInt(Math.random() * 30));
-                    // data[idx] = 0;
-                    // data[idx + 1] = 0;
-                    // data[idx + 2] = 0;
-                    // data[idx + 3] = 0;
-                }
             }
         }
 
         checkErrors(humanNameCount);
         printStats(humanNameCount);
-        compileMapReader(uniqueEntries);
         console.log(`** Map unique entries = ${Object.keys(uniqueEntries).length} **`);
 
         // Remap to grayscale
@@ -207,10 +218,6 @@ module.exports = {
                 data[idx + 3] = 255;
             }
         }
-
-        // const u8 = new Uint8Array(elements);
-        // var decoder = new TextDecoder('utf8');
-        // var b64encoded = btoa(decoder.decode(u8));
 
         // Pack it back into a PNG data
         let buff = PNG.sync.write(png, {
