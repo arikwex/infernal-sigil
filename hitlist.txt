@@ -1,16 +1,14 @@
 On Deck
-- (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
-- Map correctness check (no duplicate switches or checkpoints or conversations or shrines)
+- Audio
 - Collectables...
 - GameState that is effectively load/reload
-- Throne room / game over
+- Game over
 - Switches + Gate quick cutscene
 - Death counter / Cone counter
-- Optimize background parallax objects
 - Game timer (bottom right for speed runners)
-- Audio
 - Arrow trap
 - Main menu => New Game vs Continue
+- Optimize background parallax objects
 
 - Minimap overlay
 - Portals
@@ -24,13 +22,14 @@ On Deck
 - Refactor damage system from player attack
 - Aim direction
 - Pogo on down-hit
+- (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
 
 - Enemy that splits up
 - Enemy Orba
 - Enemy Ironclaw (TBD Skeleton attack behavior)
 - Enemy Archer
 
-- Bazard (fireball gate)
+- Bazar (fireball gate)
 - Do not render out of frame
 - Use flameSFX for tail
 - Swift wind swirl on land / impact

@@ -111,7 +111,7 @@ function Shrine(x, y, grantType) {
         render,
         enable,
         disable,
-        inView: (cx, cy) => inView(x, y, cx, cy),
+        inView: (cx, cy) => inView(x, y-100, cx, cy),
         tags: ['physics'],
         physics,
         order: -8000
