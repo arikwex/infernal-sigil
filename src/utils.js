@@ -7,7 +7,7 @@ function copy(arr) {
 }
 
 function inView(x, y, cx, cy) {
-    return !(x > cx + 900 || y > cy + 600 || x < cx - 900 || y < cy - 600);
+    return !(x > cx + 900 || y > cy + 700 || x < cx - 900 || y < cy - 700);
 }
 
 const physicsResult = [0, 0, false, false, false, false];
