@@ -63,9 +63,9 @@ function Audio() {
         });
 
         // Music
-        const beat = 1.5;
+        const beat = 1.3;
         const b = 3.4;
-        musicBuffer = audioCtx.createBuffer(1, sampleRate * 32 * beat, sampleRate);
+        musicBuffer = audioCtx.createBuffer(1, sampleRate * 44 * beat, sampleRate);
         const buffer = musicBuffer.getChannelData(0);
         const song = [
             // Bass
@@ -76,58 +76,56 @@ function Audio() {
             [-18, 8, 11, 1],
             [-6, 10, 11, 1],
             [-11, 12, 21, 1],
+            
             [-18, 16, 21, 1],
             [-19, 20, 21, 1],
             [-6, 24, 21, 1],
             [-11, 28, 21, 1],
             
-            // Melody 1
-            [6, 0, b, 2],
-            [8, 0.5, b, 2],
-            [9, 1, b, 2],
-            [6, 2, b, 2],
-            [8, 2.5, b, 2],
-            [9, 3, b, 2],
-            [13, 4, b, 2],
-            [11, 4.5, b, 2],
-            [8, 5, b, 2],
-            [13, 6, b, 2],
-            [11, 6.5, b, 2],
-            [8, 7, b, 2],
-
-            // Melody 2
-            [6, 8, b, 2],
-            [13, 8.5, b, 2],
-            [18, 9, b, 2],
-            [21, 9.5, b, 2],
-            [20, 10, b*2, 2],
-            [18, 11, b*2, 2],
-            [17, 12, b, 2],
-            [14, 12.5, b, 2],
-            [11, 13, b, 2],
-            [8, 13.5, b, 2],
-            [13, 14, b*2, 2],
+            [-18, 32, 21, 1],
+            [-19, 36, 21, 1],
+            [-6, 24, 21, 1],
+            [-11, 28, 21, 1],
             
-            // Melody 3
-            [6, 16, b, 2],
-            [9, 17, b, 2],
-            [6, 18, b, 2],
-            [9, 22, b, 2],
-            [11, 23.5, b, 2],
-            [13, 25, b, 2],
-            [6, 26, b, 2],
-            [9, 27, b, 2],
-            [6, 28, b, 2],
-            [9, 30, b, 2],
+            // Melody 1
+            [6, 0+8, b, 2],
+            [8, 0.5+8, b, 2],
+            [9, 1+8, b, 2],
+            [6, 2+8, b, 2],
+            [8, 2.5+8, b, 2],
+            [9, 3+8, b, 2],
+            [13, 4+8, b, 2],
+            [11, 4.5+8, b, 2],
+            [8, 5+8, b, 2],
+            [13, 6+8, b, 2],
+            [11, 6.5+8, b, 2],
+            [8, 7+8, b, 2],
+
+            // // Melody 2
+            [6, 8+16, b, 2],
+            [13, 8.5+16, b, 2],
+            [18, 9+16, b, 2],
+            [21, 9.5+16, b, 2],
+            [20, 10+16, b*2, 2],
+            [18, 11+16, b*2, 2],
+            [17, 12+16, b, 2],
+            [14, 12.5+16, b, 2],
+            [11, 13+16, b, 2],
+            [8, 13.5+16, b, 2],
+            [13, 14+16, b*2, 2],
         ];
         for (let i = 0; i < song.length; i++) {
             let note, start, duration, amp;
             [note, start, duration, amp] = song[i];
             writeNote(buffer, note, start * beat, duration * beat, amp);
-            // writeNote(buffer, 7, 1, 1.9);
-            // writeNote(buffer, 7, 2, 1.9);
-            // writeNote(buffer, 7, 3, 1.9);
-            // writeNote(buffer, -2, 4, 1.9);
+        }
+        for (let i = 0; i < 64; i++) {
+            const W = 0.1 * sampleRate;
+            for (let j = 0; j < W; j++) {
+                buffer[i * sampleRate * beat + j] += 0.03 * (sin(j/(70 + j/300)) + Math.random() / 3) * (1 - j / W);
+                buffer[(i + 0.5) * sampleRate * beat + j] += 0.01 * Math.random() * (1 - j / W);
+                buffer[(i + 0.75) * sampleRate * beat + j] += 0.01 * Math.random() * (1 - j / W);
+            }
         }
     }
 
