@@ -6,6 +6,7 @@ window.onkeydown = (evt) => {
     if (!pressed[evt.code]) {
         pressed[evt.code] = Date.now();
     }
+    bus.emit('any');
 }
 
 window.onkeyup = (evt) => {

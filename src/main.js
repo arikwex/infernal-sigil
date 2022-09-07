@@ -7,11 +7,15 @@ import Camera from './camera';
 import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
+import Audio from './audio';
 
 async function initialize() {
+    new Audio();
+    
     const m = new Map();
     await m.generate();
     add(m);
+
     add(new Camera());
     add(new HUD());
 
