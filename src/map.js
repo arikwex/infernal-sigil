@@ -11,18 +11,10 @@ function Map() {
     let data = null;
     let W, H;
     const BLOCK_SIZE = 100;
-    // const WALL_MAP = {
-    //   [0xffffff]: ['#a99', '#433', 50, 10, 40, 90, 20, 10, [0, 0, 0, 1, 3], 'The Styx'],
-    //   [0x64ff64]: ['#474', '#242', 20, 30, 10, 10, 50, 40, [2, 2, 2, 0], 'Asphodel Meadows'],
-    //   [0xff80ff]: ['#b5c', '#535', 70, 70, 40, 20, 10, 20, [1, 1, 1, 3, 0], 'Elysian Boneyard'],
-    //   [0xff800a]: ['#b72', '#741', 10, 20, 70, 70, 50, 30, [3, 3, 1, 2, 0], 'Fields of Mourning'],
-    //   [0xc8c800]: ['#fc1', '#a71', 90, 90, 30, 10, 10, 0, [0], 'Throne Room'],
-    // };
     const WALL_MAP = {};
     LOOKUP.map((entry, index) => {
         if (entry[0]) { WALL_MAP[index] = entry; }
     });
-    console.log(WALL_MAP);
 
     let exactTheme = 0x000000;
     const themeLookup = {};
