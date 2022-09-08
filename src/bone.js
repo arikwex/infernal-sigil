@@ -42,7 +42,12 @@ function Bone(x, y, vx, vy, t=1) {
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), collectHitbox);
         if (onRightWall || onLeftWall) { vx = -vx; }
         if (onGround) {
-            vy = (vy > 300) ? -0.4 * vy : 0;
+            if (vy > 200) {
+                bus.emit('bone:dink');
+                vy *= -0.4;
+            } else {
+                vy = 0;
+            }
             vx -= vx * 9.0 * dT;
         }
         if (onRoof) { vy = 0; }

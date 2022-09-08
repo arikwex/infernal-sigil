@@ -13,6 +13,7 @@ function Audio() {
     let dashSound;
     let flapSound;
     let fireballSound;
+    let boneCollectSound;
 
     // Musics
     let musicStyxBuffer;
@@ -85,12 +86,22 @@ function Audio() {
 
         // Player dash sound
         dashSound = generate(0.3, (i) => {
-            return 0.015 * saw(i/(34-i/300));
+            return 0.03 * (sin(i/(14+i*i/1000000)) + Math.random()/2);
         });
 
         // Player flap sound
         flapSound = generate(0.3, (i) => {
             return 0.02 * sin(i/(200 - i / 30));
+        });
+
+        // Player fireball sound
+        fireballSound = generate(0.4, (i) => {
+            return 0.01 * (sqr(i/(20 + i / 100) + Math.random()));
+        });
+
+        // Bone collect sound
+        boneCollectSound = generate(0.04, (i) => {
+            return 0.02 * saw(i/3);
         });
 
         // MUSIC GENERATION
@@ -178,6 +189,8 @@ function Audio() {
         bus.on('dash', play(dashSound));
         bus.on('flap', play(flapSound));
         bus.on('fireball', play(fireballSound));
+        bus.on('bone:collect', play(boneCollectSound));
+        bus.on('bone:dink', play(boneCollectSound));
         bus.on('region', onRegion);
         
         gainNodeA = new GainNode(audioCtx);
