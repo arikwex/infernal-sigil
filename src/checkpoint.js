@@ -6,7 +6,7 @@ import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { getCheckpointId } from "./gamestate";
-import { EVENT_FOCUS, EVENT_FOCUS_STOP } from "./events";
+import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_CHECKPOINT } from "./events";
 
 function Checkpoint(x, y, checkpointId) {
     let anim = 0;
@@ -55,7 +55,7 @@ function Checkpoint(x, y, checkpointId) {
                 const beta = 1 - alpha;
                 cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha, alpha);
                 if (engaging > 3) {
-                    bus.emit('player:cpt', [checkpointId]);
+                    bus.emit(EVENT_PLAYER_CHECKPOINT, [checkpointId]);
                 }
             } else {
                 if (engagedLastFrame) {

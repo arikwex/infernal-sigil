@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -233,9 +233,9 @@ function Audio() {
             focusNode.start(); 
         });
         bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
-        bus.on('player:grant', play(grantSound));
-        bus.on('player:cpt', play(grantSound));
-        bus.on('boing', play(boingSound));
+        bus.on(EVENT_PLAYER_ABILITY_GRANT, play(grantSound));
+        bus.on(EVENT_PLAYER_CHECKPOINT, play(grantSound));
+        bus.on(EVENT_WEB_BOING, play(boingSound));
         
         gainNodeA = new GainNode(audioCtx);
         gainNodeA.connect(audioCtx.destination);

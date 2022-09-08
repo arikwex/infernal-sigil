@@ -4,7 +4,7 @@ import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
-import { EVENT_FOCUS, EVENT_FOCUS_STOP } from "./events";
+import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_ABILITY_GRANT } from "./events";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -84,7 +84,7 @@ function Shrine(x, y, grantType) {
         for (let i = 0; i < 20; i++) {
             bus.emit('bone:spawn', [x+(Math.random() - 0.5) * 150,y-100,1,1]);
         }
-        bus.emit('player:grant', grantType);
+        bus.emit(EVENT_PLAYER_ABILITY_GRANT, grantType);
         timeSinceUpgrade = 0;
     }
 

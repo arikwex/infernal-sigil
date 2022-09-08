@@ -12,3 +12,6 @@ export const EVENT_SWITCH = 10;
 export const EVENT_REGION = 11;
 export const EVENT_FOCUS = 12;
 export const EVENT_FOCUS_STOP = 13;
+export const EVENT_PLAYER_ABILITY_GRANT = 14;
+export const EVENT_PLAYER_CHECKPOINT = 15;
+export const EVENT_WEB_BOING = 16;

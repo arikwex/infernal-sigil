@@ -6,7 +6,7 @@ import * as bus from './bus';
 import { copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
 
 function Player(x, y) {
     const thickness = 9;
@@ -616,12 +616,12 @@ function Player(x, y) {
     }
 
     function enable() {
-        bus.on('player:grant', grant);
+        bus.on(EVENT_PLAYER_ABILITY_GRANT, grant);
         bus.on(EVENT_ATTACK_HIT, onAttackHit);
     }
 
     function disable() {
-        bus.off('player:grant', grant);
+        bus.off(EVENT_PLAYER_ABILITY_GRANT, grant);
         bus.off(EVENT_ATTACK_HIT, onAttackHit);
     }
 
