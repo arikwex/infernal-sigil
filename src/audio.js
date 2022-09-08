@@ -13,21 +13,18 @@ function Audio() {
     let musicStyxBuffer;
     let musicAsphodelBuffer;
     let musicDrumBuffer;
+    let drumBuffer;
     let activeMusicSource;
     let gainNodeA;
     let gainNodeB;
     let usingA = true;
-    const beat = 0.8;//0.9;//1.3;
-    const signature = [0, 2, 3, 5, 7, 8, 11, 12, 3, 2, 7, 11, 12, 0, 8, 5];
+    const signatureStyx = [0, 2, 3, 7, 8, 12, 3, 2, 7, 0, 12];
+    const signatureAsphodel = [0, 2, 3, 5, 7, 8, 11, 12, 3, 2, 7, 11, 12, 0, 8, 5];
 
     const sin = (i) => Math.sin(i);
     const saw = (i) => ((i % 6.28) - 3.14) / 6.28;
     const sqr = (i) => clamp(Math.sin(i) * 1000, -1, 1);
     const sqrp = (i, p) => clamp(Math.sin(i) * p, -1, 1);
-    const win = (i, ts, te) => {
-        if (i < ts * 44100 || i > te * 44100) { return 0; }
-        return 1 - ((i / 44100) - ts) / (te - ts);
-    }
 
     function generate(duration, fn) {
         var audioBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
@@ -67,18 +64,17 @@ function Audio() {
         });
 
         // Player HIT sound
-        attackHitSound = generate(0.3, (i) => {
-            return 0.05 * sqr(i/(20+i/60));
+        attackHitSound = generate(0.2, (i) => {
+            return 0.04 * sqr(i/(10+i/160));
         });
 
         // MUSIC GENERATION
-        musicDrumBuffer = audioCtx.createBuffer(1, sampleRate * 1 * beat, sampleRate);
-        const drumBuffer = musicDrumBuffer.getChannelData(0);
+        musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
+        drumBuffer = musicDrumBuffer.getChannelData(0);
         const W = 0.1 * sampleRate;
         for (let j = 0; j < W; j++) {
             drumBuffer[j] += 0.01 * (sin(j/(70 + j/300)) + Math.random() / 3) * (1 - j / W);
-            drumBuffer[0.5 * sampleRate * beat + j] += 0.005 * Math.random() * (1 - j / W);
-            drumBuffer[0.75 * sampleRate * beat + j] += 0.005 * Math.random() * (1 - j / W);
+            drumBuffer[parseInt(0.5 * sampleRate) + j] += 0.005 * Math.random() * (1 - j / W);
         }
 
         const styxSong = [];
@@ -88,13 +84,13 @@ function Audio() {
             [-11, 28, 21, 1], [-18, 32, 21, 1], [-19, 36, 21, 1], [-6, 40, 21, 1],
         );
         for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 12; j++) {
+            for (let j = 0; j < 20; j++) {
                 if ((j + j*j + i * 3) % 11 < 7) {
-                    styxSong.push([-6+signature[(j + j*j*2 + i*2 + 3) % signature.length], j * 0.6666 + i * 12, 3, 2]);
+                    styxSong.push([-6+signatureStyx[(j + j*j*2 + i*2 + 3) % signatureStyx.length], j * 0.333 + i * 12, 0.5, 2]);
                 }
             }
         }
-        musicStyxBuffer = compileSong(styxSong, drumBuffer);
+        musicStyxBuffer = compileSong(styxSong, [[0, 0], [1, 1], [1.5, 1]], 1.3);
         
         const asphodelSong = [];
         for (let i = 0; i < 3; i++) {
@@ -108,14 +104,14 @@ function Audio() {
             );
             for (let j = 0; j < 32; j++) {
                 if ((j + j*j + i) % 7 < 4) {
-                    asphodelSong.push([-3+q+signature[(j + j*j*2 + i*i * 2) % signature.length], j * 0.5 + o, 3, 2]);
+                    asphodelSong.push([-3+q+signatureAsphodel[(j + j*j*2 + i*i * 2) % signatureAsphodel.length], j * 0.5 + o, 3, 2]);
                 }
             }
         }
-        musicAsphodelBuffer = compileSong(asphodelSong, drumBuffer);
+        musicAsphodelBuffer = compileSong(asphodelSong, [[0, 1], [0.5, 0]], 0.6);
     }
 
-    function compileSong(song, drumBuffer) {
+    function compileSong(song, drums, beat) {
         const targetBuffer = audioCtx.createBuffer(1, sampleRate * 44 * beat, sampleRate);
         const buffer = targetBuffer.getChannelData(0);
         for (let i = 0; i < song.length; i++) {
@@ -123,8 +119,16 @@ function Audio() {
             [note, start, duration, amp] = song[i];
             writeNote(buffer, note, start * beat, duration * beat, amp);
         }
-        for (let j = 0; j < buffer.length; j++) {
-            buffer[j] += drumBuffer[j % drumBuffer.length];
+        for (let q = 0; q < 44; q+=2) {
+            for (let j = 0; j < drums.length; j++) {
+                let type, drumStart;
+                [drumStart, type] = drums[j];
+                const noteOffset = parseInt(0.5 * sampleRate * type);
+                const startOffset = parseInt((drumStart + q) * sampleRate * beat);
+                for (let k = 0; k < sampleRate * 0.1; k++) {
+                    buffer[k + startOffset] += drumBuffer[k + noteOffset];
+                }
+            }
         }
         return targetBuffer;
     }
@@ -142,7 +146,7 @@ function Audio() {
         if (audioCtx) { return; }
         bus.off('any', enable);
         init();
-        bus.on('attack', play(attackSound));
+        bus.on('attack', ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on('attack:hit', play(attackHitSound));
         bus.on('region', onRegion);
         
@@ -150,11 +154,8 @@ function Audio() {
         gainNodeA.connect(audioCtx.destination);
         gainNodeB = new GainNode(audioCtx);
         gainNodeB.connect(audioCtx.destination);
-        // gainNodeA.gain = 5;
-        // gainNodeB.gain = 0;
 
         music(musicStyxBuffer);
-        // music(musicAsphodelBuffer);
     };
     bus.on('any', enable);
 
@@ -164,9 +165,6 @@ function Audio() {
             'Asphodel Meadows': musicAsphodelBuffer,
         };
         
-        // let fadeoutSource = activeMusicSource;
-        // let fadeAway = setInterval(() => activeMusicSource.vol)
-        // activeMusicSource?.stop();
         music(musicMap[region]);
     }
 
