@@ -121,7 +121,7 @@ function Audio() {
 
         // Grant ability sound
         grantSound = generate(2, (i) => {
-            return 0.03 * sqr(i/(1+i/900));
+            return 0.02 * sqr(i/(1+i/900));
         });
 
         // MUSIC GENERATION
@@ -137,7 +137,7 @@ function Audio() {
         const focusBuffer = musicFocusBuffer.getChannelData(0);
         for (let j = 0; j < sampleRate*3; j++) {
             const p = j / sampleRate;
-            focusBuffer[j] = sqrp(j/130, 10 + sin(j/10000+p*p*p*4) * 10) * p / 90;
+            focusBuffer[j] = sqrp(j/120, 10 + sin(j/10000+p*p*p*4) * 10) * p / 100;
         }
 
         const styxSong = [];
@@ -177,12 +177,12 @@ function Audio() {
     function compileSong(song, drums, beat) {
         const targetBuffer = audioCtx.createBuffer(1, sampleRate * 44 * beat, sampleRate);
         const buffer = targetBuffer.getChannelData(0);
-        for (let i = 0; i < song.length*0; i++) {
+        for (let i = 0; i < song.length; i++) {
             let note, start, duration, amp;
             [note, start, duration, amp] = song[i];
             writeNote(buffer, note, start * beat, duration * beat, amp);
         }
-        for (let q = 0; q < 44 * 0; q+=2) {
+        for (let q = 0; q < 44; q+=2) {
             for (let j = 0; j < drums.length; j++) {
                 let type, drumStart;
                 [drumStart, type] = drums[j];
@@ -231,7 +231,7 @@ function Audio() {
         gainNodeB = new GainNode(audioCtx);
         gainNodeB.connect(audioCtx.destination);
 
-        // music(musicStyxBuffer);
+        music(musicStyxBuffer);
     };
     bus.on('any', enable);
 
