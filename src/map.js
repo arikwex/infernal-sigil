@@ -179,7 +179,7 @@ function Map() {
             }
         }
         const keys = Object.keys(foundThemes);
-        avgTheme = avgTheme.map((v) => v / N);
+        avgTheme = avgTheme.map((v) => v * 10 / N);
         if (keys.length == 1) {
             avgTheme[6] = keys[0];
         }
