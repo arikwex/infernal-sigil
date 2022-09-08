@@ -147,6 +147,7 @@ function Player(x, y) {
             attackTime = 0.0;
             canDash = false;
             vx = targetFacing * 1000;
+            bus.emit('dash');
         }
 
         // If wall-climbing, respect horizontal control as "up"
@@ -255,6 +256,7 @@ function Player(x, y) {
                     timeSinceJump = 0;
                     groundTime = 0;
                     dashing = false;
+                    bus.emit('jump');
                 } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
                     numAirjumpsUsed += 1;
@@ -265,6 +267,7 @@ function Player(x, y) {
                     dashing = false;
                     canDash = true;
                     dashTimer = 1;
+                    bus.emit('flap');
                 }
             } else {
                 // Wall Jumping
@@ -276,6 +279,7 @@ function Player(x, y) {
                 groundTime = 0;
                 timeSinceJump = 0;
                 onWall = false;
+                bus.emit('jump');
             }
         }
 

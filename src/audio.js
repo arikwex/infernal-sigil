@@ -9,6 +9,10 @@ function Audio() {
     let attackSound;
     let attackHitSound;
     let walkSound;
+    let jumpSound;
+    let dashSound;
+    let flapSound;
+    let fireballSound;
 
     // Musics
     let musicStyxBuffer;
@@ -61,17 +65,32 @@ function Audio() {
 
         // Player swipe attack sound
         attackSound = generate(0.2, (i) => {
-            return 0.03 * (sin(i/(20+i/150))*0.3 + Math.random());
+            return 0.03 * saw(i/(0.3-220*Math.exp(-i/500)));
         });
-
-        // Player HIT sound
+        
+        // Player HIT ENEMY sound
         attackHitSound = generate(0.2, (i) => {
-            return 0.04 * sqr(i/(10+i/160));
+            return 0.05 * (sin(i/(20+i/150))*0.3 + Math.random());
         });
 
-        // Player HIT sound
+        // Player walk sound
         walkSound = generate(0.04, (i) => {
-            return 0.01 * sin(i/(14+i/100));
+            return 0.015 * sin(i/(14+i/100));
+        });
+
+        // Player jump sound
+        jumpSound = generate(0.13, (i) => {
+            return 0.015 * sin(i/(24+250*Math.exp(-i/1600)));
+        });
+
+        // Player dash sound
+        dashSound = generate(0.3, (i) => {
+            return 0.01 * sqr(i/(24+Math.random()));
+        });
+
+        // Player flap sound
+        flapSound = generate(0.3, (i) => {
+            return 0.02 * sin(i/(200 - i / 30));
         });
 
         // MUSIC GENERATION
@@ -155,6 +174,10 @@ function Audio() {
         bus.on('attack', ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on('attack:hit', play(attackHitSound));
         bus.on('walk', play(walkSound));
+        bus.on('jump', play(jumpSound));
+        bus.on('dash', play(dashSound));
+        bus.on('flap', play(flapSound));
+        bus.on('fireball', play(fireballSound));
         bus.on('region', onRegion);
         
         gainNodeA = new GainNode(audioCtx);
