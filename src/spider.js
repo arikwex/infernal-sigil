@@ -3,7 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { jump } from './controls';
+import { EVENT_ATTACK } from './events';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
 
@@ -193,11 +193,11 @@ function Spider(x, y, type) {
     }
 
     function enable() {
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
-        bus.off('attack', hitCheck);
+        bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {

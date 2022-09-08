@@ -2,6 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
+import { EVENT_ATTACK } from "./events";
 
 function Web(x, y) {
     y -= 50;
@@ -98,11 +99,11 @@ function Web(x, y) {
     }
 
     function enable() {
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
-        bus.off('attack', hitCheck);
+        bus.off(EVENT_ATTACK, hitCheck);
     }
 
     updateWebPos();

@@ -4,6 +4,7 @@ import { add, remove } from "./engine";
 import FlameSFX from "./flame-sfx";
 import * as bus from "./bus";
 import { inView } from "./utils";
+import { EVENT_ATTACK } from "./events";
 
 function Decoration(x, y, t) {
     let isHit = false;
@@ -130,12 +131,12 @@ function Decoration(x, y, t) {
             flameSfx.order = - 6500
             add(flameSfx);
         }
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
         if (flameSfx) { remove([flameSfx]); }
-       bus.off('attack', hitCheck);
+       bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {

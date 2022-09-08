@@ -17,7 +17,7 @@ function tick(currentFrameMs) {
 
     objectsToRemove.length = 0;
     gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
-    if (objectsToRemove.length > 0) { remove(objectsToRemove); }
+    if (objectsToRemove.length) { remove(objectsToRemove); }
     gameObjects.map((g) => { if (g.inView(cx, cy)) { g.render?.(ctx); }});
     requestAnimationFrame(tick);
     lastFrameMs = currentFrameMs;

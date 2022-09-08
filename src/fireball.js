@@ -3,6 +3,7 @@ import { BoundingBox } from "./bbox";
 import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { clamp, physicsCheck } from "./utils";
+import { EVENT_ATTACK } from './events';
 
 function Fireball(x, y, dir) {
     let vx = 300 * dir;
@@ -24,7 +25,7 @@ function Fireball(x, y, dir) {
             return true;
         }
         // TBD if this can be less aggressive
-        bus.emit('attack', [myHitbox, dir, self, true]);
+        bus.emit(EVENT_ATTACK, [myHitbox, dir, self, true]);
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
         if (onGround || onRight || onLeft || onRoof) {

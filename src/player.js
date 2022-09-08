@@ -6,6 +6,7 @@ import * as bus from './bus';
 import { copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
+import { EVENT_ATTACK } from './events';
 
 function Player(x, y) {
     const thickness = 9;
@@ -215,7 +216,7 @@ function Player(x, y) {
                 smoothAttacking = 1;
                 vx = targetFacing * 850;
                 vy = vy * 0.25 - 100;
-                bus.emit('attack', [new BoundingBox(x, y, -50 + 50 * targetFacing, -50, 100, 50), targetFacing]);
+                bus.emit(EVENT_ATTACK, [new BoundingBox(x, y, -50 + 50 * targetFacing, -50, 100, 50), targetFacing]);
             }
             if (attackTime > 0.4) {
                 attackSeq = 0;

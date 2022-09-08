@@ -3,6 +3,7 @@ import { scaleInPlace } from './canvas';
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
 import { inView } from './utils';
+import { EVENT_ATTACK } from './events';
 
 // Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
@@ -59,11 +60,11 @@ function Treasure(x, y, t) {
     }
 
     function enable() {
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
-        bus.off('attack', hitCheck);
+        bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {

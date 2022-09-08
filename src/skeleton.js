@@ -3,6 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
+import { EVENT_ATTACK } from './events';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -125,11 +126,11 @@ function Skeleton(x, y, type) {
     }
 
     function enable() {
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
-        bus.off('attack', hitCheck);
+        bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {

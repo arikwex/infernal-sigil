@@ -2,6 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
+import { EVENT_ATTACK } from "./events";
 
 function Switch(x, y, switchNum, t = 0) {
     let active = false;
@@ -40,11 +41,11 @@ function Switch(x, y, switchNum, t = 0) {
     }
 
     function enable() {
-        bus.on('attack', hitCheck);
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
-        bus.off('attack', hitCheck);
+        bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {
