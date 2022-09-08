@@ -12,7 +12,6 @@ function Web(x, y) {
     let cx = 0;
     let cy = 0;
     let omx = 0;
-    let omy = 0;
     const webMesh = [
         ['#fff', 4, 0]
     ];
@@ -27,16 +26,15 @@ function Web(x, y) {
         rads.push(R);
         webMesh.push([0, 0, Math.cos(a) * R, Math.sin(a) * R]);
     }
-    const webbing = new Array(64);
+    const webbing = [];
     webMesh.push(webbing);
     const physics = new BoundingBox(x-50, y-100, 0, 0, 100, 200);
 
     function update(dT) {
         anim += dT * 56;
         omx -= omx * 5 * dT;
-        omy -= omy * 5 * dT;
         cx = omx * Math.cos(anim);
-        cy = omy * Math.cos(anim / 1.4);
+        cy = omx*0.8 * Math.cos(anim / 1.4);
         updateWebPos();
 
         if (burnup) {
@@ -75,7 +73,6 @@ function Web(x, y) {
     function hitCheck([attackHitbox, dir, owner, flames]) {
         if (physics.isTouching(attackHitbox)) {
             omx = 10;
-            omy = 8;
             if (flames && !burnup) {
                 burnup = true;
                 // Flames
