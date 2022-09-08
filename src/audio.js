@@ -57,11 +57,9 @@ function Audio() {
         for (let i = 0; i < dur && i < dest.length; i++) {
             let v = 0; 
             const envelope = i / dur; 
-            if (a == 1) {
-                v += sqrp(i / (baseFreq * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2;
-            } else {
-                v += saw(i / (4.03 * baseFreq)) * 7;
-            }
+            v+= (a == 1) ?
+                sqrp(i / (baseFreq * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2 :
+                saw(i / (4.03 * baseFreq)) * 7;
             dest[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + a * 7)) * 100, 1) / 700;
         }
     }
@@ -97,7 +95,7 @@ function Audio() {
 
         // Player dash sound
         dashSound = generate(0.3, (i) => {
-            return 0.03 * (sin(i/(14+i*i/1000000)) + Math.random()/2);
+            return 0.03 * (sin(i/(14+i*i/1e6)) + Math.random()/2);
         });
 
         // Player flap sound
@@ -117,7 +115,7 @@ function Audio() {
 
         // Switch sound
         switchSound = generate(2, (i) => {
-            return 0.02 * (sqr(i/900) * 0.5 + 0.5) * saw(i/(190));
+            return 0.04 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(130));
         });
 
         // Grant ability sound AND Checkpoint sound

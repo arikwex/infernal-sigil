@@ -28,16 +28,16 @@ function Decoration(x, y, t) {
     if (t == 1) {
         shapeMeshes.push([
             ['#ccc', 7, 0],
-            [-17, 50, -23, 4 * Math.random() + 12]
+            [-17, 50, -23, 14]
         ], [
             ['#ccc', 7, 0],
-            [-6, 50, -11, 6 * Math.random()]
+            [-6, 50, -11, 3]
         ], [
             ['#ccc', 7, 0],
-            [5, 50, 4+4 * Math.random(), -9]
+            [5, 50, 6, -9]
         ], [
             ['#ccc', 7, 0],
-            [15, 50, 19,  6 * Math.random()]
+            [15, 50, 19, 3]
         ]);
         scale = Math.random() * 0.5 + 0.6;
     }

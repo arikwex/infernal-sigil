@@ -34,8 +34,8 @@ module.exports = {
 
     html: () => {
         var html = '';
-        html += '<html><title>INFERNAL SIGIL</title>';
-        html += '<link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" sizes="64x64"/>';
+        html += '<html><title>Infernal Throne</title>';
+        html += '<link rel="shortcut icon" type="image/x-icon" sizes="64x64"/>';
         html += '<style>canvas{width:100%;}body{overflow:none;background:#000;margin:0px;}</style>';
         html += '<canvas/><script>';
         html += fs.readFileSync(dest.bundle);
