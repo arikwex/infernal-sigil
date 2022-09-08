@@ -14,6 +14,7 @@ function Audio() {
     let flapSound;
     let fireballSound;
     let boneCollectSound;
+    let switchSound;
 
     // Musics
     let musicStyxBuffer;
@@ -104,6 +105,11 @@ function Audio() {
             return 0.02 * saw(i/3);
         });
 
+        // Switch sound
+        switchSound = generate(2, (i) => {
+            return 0.02 * (sqr(i/900) * 0.5 + 0.5) * saw(i/(190));
+        });
+
         // MUSIC GENERATION
         musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
         drumBuffer = musicDrumBuffer.getChannelData(0);
@@ -191,6 +197,7 @@ function Audio() {
         bus.on('fireball', play(fireballSound));
         bus.on('bone:collect', play(boneCollectSound));
         bus.on('bone:dink', play(boneCollectSound));
+        bus.on('switch', play(switchSound));
         bus.on('region', onRegion);
         
         gainNodeA = new GainNode(audioCtx);
