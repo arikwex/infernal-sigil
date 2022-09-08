@@ -79,13 +79,13 @@ function Audio() {
         });
 
         // Player jump sound
-        jumpSound = generate(0.13, (i) => {
-            return 0.015 * sin(i/(24+250*Math.exp(-i/1600)));
+        jumpSound = generate(0.1, (i) => {
+            return 0.008 * sqr(i/(20+150*Math.exp(-i/1600)));
         });
 
         // Player dash sound
         dashSound = generate(0.3, (i) => {
-            return 0.01 * sqr(i/(24+Math.random()));
+            return 0.015 * saw(i/(34-i/300));
         });
 
         // Player flap sound
