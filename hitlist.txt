@@ -1,7 +1,10 @@
 On Deck
+- Favicon
+- Web boing sound
+- Rename regions
 - Text explaining recent upgrade
 - Main menu => New Game vs Continue
-- Game over
+- Game over (stats: deaths, time, final bone count)
 
 - Talk to spirits / read signs?
 - Collectables...
