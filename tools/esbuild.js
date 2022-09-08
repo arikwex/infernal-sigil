@@ -1,6 +1,6 @@
 const path = require('path');
 const esbuild = require('esbuild');
-const { minify, optimize, html, zip, stats } = require('./packager');
+const { minify, optimize, html, zip, stats, mapInjector } = require('./packager');
 const { buildMap, buildMapIndex } = require('./map-compiler');
 
 const entry = path.resolve('./src/main.js');
@@ -12,17 +12,21 @@ let postBuildPlugin = {
     name: 'Post-Build',
     setup(build) {
         build.onStart(() => {
+            // Create GENERATED CODE that maps encoded values to instance data
             buildMapIndex('./src/game-map.png');
+            // Save the map as grayscale encoding
+            buildMap('./src/game-map.png');
         });
 
         build.onLoad({ filter: /\.png$/ }, (args) => {
             return {
                 contents: buildMap(args.path),
-                loader: 'dataurl',
+                loader: 'text',
             }
         })
 
         build.onEnd(async() => {
+            mapInjector();
             if (useMinify) {
                 minify();
             }

@@ -1,4 +1,3 @@
-import terrain from './game-map.png';
 import { canvas } from './canvas';
 import { add } from './engine';
 import Wall from './wall';
@@ -18,12 +17,19 @@ function Map() {
 
     let exactTheme = 0x000000;
     const themeLookup = {};
+    const terrain = '<<<';
 
     async function generate() {
-        await new Promise((r) => {
-            img.onload = r;
-            img.src = terrain;
-        });
+        // await new Promise((r) => {
+        //     img.onload = r;
+        //     // img.src = terrain;
+        //     console.log(terrain);
+        // });
+        const bytes = terrain.split('').map((c,i)=>terrain.charCodeAt(i));
+        // const bytes = [];
+        // let i = 0;
+        // while(i<terrain.length){bytes.push(terrain[i++])};
+        console.log(bytes);
 
         let context = canvas.getContext('2d');
         context.drawImage(img, 0, 0);

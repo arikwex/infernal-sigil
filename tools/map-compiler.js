@@ -227,6 +227,6 @@ module.exports = {
 
         // Write a PNG file
         fs.writeFileSync('./dist/processed-map.png', buff);
-        return buff;
-    }
+        return `<<<`;
+    },
 };
