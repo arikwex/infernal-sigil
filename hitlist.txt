@@ -3,6 +3,7 @@ On Deck
 - Web boing sound
 - Rename regions
 - Text explaining recent upgrade
+- "Loading" initial screen
 - Main menu => New Game vs Continue
 - Game over (stats: deaths, time, final bone count)
 

@@ -90,6 +90,9 @@ function Web(x, y) {
                 }
                 physics.h = 0;
             }
+            if (!flames) {
+                bus.emit('boing');
+            }
             bus.emit('attack:hit', [owner]);
         }
     }

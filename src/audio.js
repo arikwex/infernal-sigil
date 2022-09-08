@@ -17,6 +17,7 @@ function Audio() {
     let boneCollectSound;
     let switchSound;
     let grantSound;
+    let boingSound;
 
     // Musics
     let musicFocusBuffer;
@@ -119,9 +120,14 @@ function Audio() {
             return 0.02 * (sqr(i/900) * 0.5 + 0.5) * saw(i/(190));
         });
 
-        // Grant ability sound
+        // Grant ability sound AND Checkpoint sound
         grantSound = generate(2, (i) => {
             return 0.02 * sqr(i/(1+i/900));
+        });
+
+        // Boing when hitting web sound
+        boingSound = generate(0.6, (i) => {
+            return 0.03 * sin(i/(30+sin(i/900)+i/1300));
         });
 
         // MUSIC GENERATION
@@ -225,6 +231,7 @@ function Audio() {
         bus.on('focus:stop', () => focusNode.stop());
         bus.on('player:grant', play(grantSound));
         bus.on('player:cpt', play(grantSound));
+        bus.on('boing', play(boingSound));
         
         gainNodeA = new GainNode(audioCtx);
         gainNodeA.connect(audioCtx.destination);
