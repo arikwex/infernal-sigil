@@ -3,7 +3,7 @@ import { BoundingBox } from "./bbox";
 import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { clamp, physicsCheck } from "./utils";
-import { EVENT_ATTACK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
 
 function Fireball(x, y, dir) {
     let vx = 300 * dir;
@@ -55,11 +55,11 @@ function Fireball(x, y, dir) {
     }
 
     function enable() {
-        bus.on('attack:hit', onAttackHit);
+        bus.on(EVENT_ATTACK_HIT, onAttackHit);
     }
 
     function disable() {
-        bus.off('attack:hit', onAttackHit);
+        bus.off(EVENT_ATTACK_HIT, onAttackHit);
     }
 
     return {

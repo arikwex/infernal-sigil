@@ -2,7 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
-import { EVENT_ATTACK } from "./events";
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from "./events";
 
 function Web(x, y) {
     y -= 50;
@@ -94,7 +94,7 @@ function Web(x, y) {
             if (!flames) {
                 bus.emit('boing');
             }
-            bus.emit('attack:hit', [owner]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
         }
     }
 

@@ -2,7 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
-import { EVENT_ATTACK } from "./events";
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from "./events";
 
 function Switch(x, y, switchNum, t = 0) {
     let active = false;
@@ -35,7 +35,7 @@ function Switch(x, y, switchNum, t = 0) {
         if (myHitbox.isTouching(attackHitbox) && !active) {
             active = true;
             bus.emit('switch', [switchNum, active]);
-            bus.emit('attack:hit', [owner]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
             myHitbox.x = -1000;
         }
     }

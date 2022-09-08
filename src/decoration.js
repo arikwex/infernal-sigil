@@ -4,7 +4,7 @@ import { add, remove } from "./engine";
 import FlameSFX from "./flame-sfx";
 import * as bus from "./bus";
 import { inView } from "./utils";
-import { EVENT_ATTACK } from "./events";
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from "./events";
 
 function Decoration(x, y, t) {
     let isHit = false;
@@ -114,7 +114,7 @@ function Decoration(x, y, t) {
     function hitCheck([attackHitbox, dir, owner, projectile]) {
         // Decorations do not stop projectiles
         if (!projectile && !isHit && myHitbox.isTouching(attackHitbox)) {
-            bus.emit('attack:hit', [owner]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
             isHit = true;
             shapeMeshes.map((m, idx) => {
                 vx[idx] = (Math.random() - 0.5) * 250;

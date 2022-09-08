@@ -3,7 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { EVENT_ATTACK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -121,7 +121,7 @@ function Skeleton(x, y, type) {
             if (hp <= 0) {
                 bus.emit('bone:spawn', [x,y-55,4,1]);
             }
-            bus.emit('attack:hit', [owner]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
         }
     }
 

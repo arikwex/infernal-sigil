@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ATTACK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -215,7 +215,7 @@ function Audio() {
         bus.off('any', enable);
         init();
         bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
-        bus.on('attack:hit', play(attackHitSound));
+        bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
         bus.on('player:hit', play(injuredSound));
         bus.on('walk', play(walkSound));
         bus.on('jump', play(jumpSound));

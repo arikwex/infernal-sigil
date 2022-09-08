@@ -3,7 +3,7 @@ import { scaleInPlace } from './canvas';
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
 import { inView } from './utils';
-import { EVENT_ATTACK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
 
 // Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
@@ -55,7 +55,7 @@ function Treasure(x, y, t) {
             phase = Math.random() * 7;
             hp -= 1;
             bus.emit('bone:spawn', [x,y-20,1,1]);
-            bus.emit('attack:hit', [owner]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
         }
     }
 
