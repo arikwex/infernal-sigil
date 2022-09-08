@@ -57,9 +57,7 @@ function Audio() {
             let v = 0; 
             const envelope = i / dur; 
             if (a == 1) {
-                for (let j = 1; j < 4*0+2; j++) {
-                    v += sqrp(i / ((2**j) * baseFreq) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) / (1.5**-j);
-                }
+                v += sqrp(i / (baseFreq * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2;
             } else {
                 v += saw(i / (4.03 * baseFreq)) * 7;
             }
@@ -143,7 +141,7 @@ function Audio() {
         }
 
         // Generate 5 procedural songs
-        musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 7, 8, 12]), 1.6);
+        musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 5, 7, 12]), 1.6);
         musicAsphodelBuffer = compileSong(genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12]), 0.5);
         musicElysianBuffer = compileSong(genericSongBuilder(3, [0, 2, 3, 7, 8, 12]), 0.9);
         musicMourningBuffer = compileSong(genericSongBuilder(4, [0, 2, 3, 7, 8, 12]), 1.2);

@@ -1,18 +1,15 @@
 On Deck
-- Audio
 - Text explaining recent upgrade
+- Main menu => New Game vs Continue
+- Game over
+
+- Talk to spirits / read signs?
 - Collectables...
 - Minimap overlay
 - GameState that is effectively load/reload
-- Game over
-- Switches + Gate quick cutscene
 - Death counter / Cone counter
 - Game timer (bottom right for speed runners)
-- Arrow trap
-- Main menu => New Game vs Continue
-- Optimize background parallax objects
 
-- Talk to spirits / read signs?
 - Map loader + compressor improvements
 - Favicon
 - Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
@@ -22,12 +19,14 @@ On Deck
 - Pogo on down-hit
 - (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
 
+- Arrow trap
 - Enemy bat
 - Enemy that splits up
 - Enemy Orba
 - Enemy Ironclaw (TBD Skeleton attack behavior)
 - Enemy Archer
 
+- Optimize background parallax objects
 - Portals
 - Bazar (fireball gate)
 - Do not render out of frame
