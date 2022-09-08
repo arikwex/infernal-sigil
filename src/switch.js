@@ -31,7 +31,7 @@ function Switch(x, y, switchNum, t = 0) {
     }
 
     function hitCheck([attackHitbox, dir, owner]) {
-        if (myHitbox.isTouching(attackHitbox) && !active && (dir > 0) ^ phase) {
+        if (myHitbox.isTouching(attackHitbox) && !active) {
             active = true;
             bus.emit('switch', [switchNum, active]);
             bus.emit('attack:hit', [owner]);
