@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_DASH, EVENT_FIREBALL, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -223,11 +223,16 @@ function Audio() {
         bus.on(EVENT_FLAP, play(flapSound));
         bus.on(EVENT_FIREBALL, play(fireballSound));
         bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
-        bus.on('bone:dink', play(boneCollectSound));
-        bus.on('switch', play(switchSound));
-        bus.on('region', onRegion);
-        bus.on('focus', () => { focusNode = audioCtx.createBufferSource(); focusNode.buffer = musicFocusBuffer; focusNode.connect(audioCtx.destination); focusNode.start(); });
-        bus.on('focus:stop', () => focusNode.stop());
+        bus.on(EVENT_BONE_DINK, play(boneCollectSound));
+        bus.on(EVENT_SWITCH, play(switchSound));
+        bus.on(EVENT_REGION, onRegion);
+        bus.on(EVENT_FOCUS, () => {
+            focusNode = audioCtx.createBufferSource();
+            focusNode.buffer = musicFocusBuffer;
+            focusNode.connect(audioCtx.destination);
+            focusNode.start(); 
+        });
+        bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
         bus.on('player:grant', play(grantSound));
         bus.on('player:cpt', play(grantSound));
         bus.on('boing', play(boingSound));

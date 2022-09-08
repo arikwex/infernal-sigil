@@ -4,6 +4,7 @@ import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
+import { EVENT_FOCUS, EVENT_FOCUS_STOP } from "./events";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -52,7 +53,7 @@ function Shrine(x, y, grantType) {
         if (!used) {
             if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
                 if (!engagedLastFrame) {
-                    bus.emit('focus');
+                    bus.emit(EVENT_FOCUS);
                     engagedLastFrame = true;
                 }
                 engaging += dT;
@@ -66,7 +67,7 @@ function Shrine(x, y, grantType) {
             } else {
                 engaging -= engaging * 2 * dT;
                 if (engagedLastFrame) {
-                    bus.emit('focus:stop');
+                    bus.emit(EVENT_FOCUS_STOP);
                     engagedLastFrame = false;
                 }
             }

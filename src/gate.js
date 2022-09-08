@@ -2,6 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
+import { EVENT_SWITCH } from "./events";
 
 function Gate(x, y, switchNum) {
     let open = false;
@@ -34,11 +35,11 @@ function Gate(x, y, switchNum) {
     }
 
     function enable() {
-        bus.on('switch', onSwitch);
+        bus.on(EVENT_SWITCH, onSwitch);
     }
 
     function disable() {
-        bus.off('switch', onSwitch);
+        bus.off(EVENT_SWITCH, onSwitch);
     }
 
     return {

@@ -6,6 +6,7 @@ import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { getCheckpointId } from "./gamestate";
+import { EVENT_FOCUS, EVENT_FOCUS_STOP } from "./events";
 
 function Checkpoint(x, y, checkpointId) {
     let anim = 0;
@@ -45,7 +46,7 @@ function Checkpoint(x, y, checkpointId) {
         if (!used) {
             if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
                 if (!engagedLastFrame) {
-                    bus.emit('focus');
+                    bus.emit(EVENT_FOCUS);
                     engagedLastFrame = true;
                 }
                 engaging += dT;
@@ -58,7 +59,7 @@ function Checkpoint(x, y, checkpointId) {
                 }
             } else {
                 if (engagedLastFrame) {
-                    bus.emit('focus:stop');
+                    bus.emit(EVENT_FOCUS_STOP);
                     engagedLastFrame = false;
                 }
                 engaging -= engaging * 3 * dT;

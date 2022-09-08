@@ -5,6 +5,7 @@ import Wall from './wall';
 import Decoration from './decoration';
 import * as bus from './bus';
 import LOOKUP from './GENERATED-map-lookup';
+import { EVENT_REGION } from './events';
 
 function Map() {
     let img = new Image();
@@ -192,7 +193,7 @@ function Map() {
             themeData = t;
             // Pure theme change detection
             if (t[6] && exactTheme != t[6]) {
-                bus.emit('region', WALL_MAP[t[6]][9]);
+                bus.emit(EVENT_REGION, WALL_MAP[t[6]][9]);
                 exactTheme = t[6];
             }
         }

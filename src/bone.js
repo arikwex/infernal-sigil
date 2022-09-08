@@ -4,7 +4,7 @@ import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { copy, physicsCheck } from './utils';
 import { boneMeshAsset } from './assets';
-import { EVENT_BONE_COLLECT } from './events';
+import { EVENT_BONE_COLLECT, EVENT_BONE_DINK } from './events';
 
 // t=1 -> value = 1
 // t=2 -> value = 10
@@ -44,7 +44,7 @@ function Bone(x, y, vx, vy, t=1) {
         if (onRightWall || onLeftWall) { vx = -vx; }
         if (onGround) {
             if (vy > 200) {
-                bus.emit('bone:dink');
+                bus.emit(EVENT_BONE_DINK);
                 vy *= -0.4;
             } else {
                 vy = 0;

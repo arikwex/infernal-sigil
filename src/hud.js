@@ -3,6 +3,7 @@ import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
 import { canvas, color, renderMesh, renderText } from "./canvas";
 import { getBones, getHp, getMaxHp } from "./gamestate";
 import { clamp, copy } from "./utils";
+import { EVENT_REGION } from './events';
 
 function HUD() {
     let anim = 0;
@@ -60,11 +61,11 @@ function HUD() {
     }
 
     function enable() {
-        bus.on('region', onRegionChange);
+        bus.on(EVENT_REGION, onRegionChange);
     }
 
     function disable() {
-        bus.off('region', onRegionChange);
+        bus.off(EVENT_REGION, onRegionChange);
     }
 
     return {
