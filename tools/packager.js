@@ -14,7 +14,9 @@ const dest = {
 module.exports = {
     minify: () => {
         const originalBundle = fs.readFileSync(dest.bundle).toString();
-        fs.writeFileSync(dest.bundle, minify(originalBundle).code);
+        fs.writeFileSync(dest.bundle, minify(originalBundle, {
+            toplevel: true,
+        }).code);
     },
 
     optimize: async () => {
