@@ -10,6 +10,7 @@ function Shrine(x, y, grantType) {
     let engaging = 0;
     let used = false;
     let timeSinceUpgrade = 0;
+    let engagedLastFrame = false;
 
     const platformMesh = [
         ['#777', 5, 0],
@@ -50,6 +51,10 @@ function Shrine(x, y, grantType) {
 
         if (!used) {
             if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
+                if (!engagedLastFrame) {
+                    bus.emit('focus');
+                    engagedLastFrame = true;
+                }
                 engaging += dT;
                 const cam = getObjectsByTag('camera')[0];
                 const alpha = engaging / 3;
@@ -60,6 +65,10 @@ function Shrine(x, y, grantType) {
                 }
             } else {
                 engaging -= engaging * 2 * dT;
+                if (engagedLastFrame) {
+                    bus.emit('focus:stop');
+                    engagedLastFrame = false;
+                }
             }
         } else {
             engaging = 3;

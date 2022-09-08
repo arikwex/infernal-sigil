@@ -15,8 +15,10 @@ function Audio() {
     let fireballSound;
     let boneCollectSound;
     let switchSound;
+    let grantSound;
 
     // Musics
+    let musicFocusBuffer;
     let musicStyxBuffer;
     let musicAsphodelBuffer;
     let musicDrumBuffer;
@@ -24,6 +26,7 @@ function Audio() {
     let activeMusicSource;
     let gainNodeA;
     let gainNodeB;
+    let focusNode;
     let usingA = true;
     const signatureStyx = [0, 2, 3, 7, 8, 12, 3, 2, 7, 0, 12];
     const signatureAsphodel = [0, 2, 3, 5, 7, 8, 11, 12, 3, 2, 7, 11, 12, 0, 8, 5];
@@ -110,6 +113,11 @@ function Audio() {
             return 0.02 * (sqr(i/900) * 0.5 + 0.5) * saw(i/(190));
         });
 
+        // Grant ability sound
+        grantSound = generate(2, (i) => {
+            return 0.03 * sqr(i/(1+i/900));
+        });
+
         // MUSIC GENERATION
         musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
         drumBuffer = musicDrumBuffer.getChannelData(0);
@@ -117,6 +125,13 @@ function Audio() {
         for (let j = 0; j < W; j++) {
             drumBuffer[j] += 0.01 * (sin(j/(70 + j/300)) + Math.random() / 3) * (1 - j / W);
             drumBuffer[parseInt(0.5 * sampleRate) + j] += 0.005 * Math.random() * (1 - j / W);
+        }
+
+        musicFocusBuffer = audioCtx.createBuffer(1, sampleRate*3, sampleRate);
+        const focusBuffer = musicFocusBuffer.getChannelData(0);
+        for (let j = 0; j < sampleRate*3; j++) {
+            const p = j / sampleRate;
+            focusBuffer[j] = sqrp(j/130, 10 + sin(j/10000+p*p*p*4) * 10) * p / 90;
         }
 
         const styxSong = [];
@@ -199,13 +214,16 @@ function Audio() {
         bus.on('bone:dink', play(boneCollectSound));
         bus.on('switch', play(switchSound));
         bus.on('region', onRegion);
+        bus.on('focus', () => { focusNode = audioCtx.createBufferSource(); focusNode.buffer = musicFocusBuffer; focusNode.connect(audioCtx.destination); focusNode.start(); });
+        bus.on('focus:stop', () => focusNode.stop());
+        bus.on('player:grant', play(grantSound));
         
         gainNodeA = new GainNode(audioCtx);
         gainNodeA.connect(audioCtx.destination);
         gainNodeB = new GainNode(audioCtx);
         gainNodeB.connect(audioCtx.destination);
 
-        music(musicStyxBuffer);
+        // music(musicStyxBuffer);
     };
     bus.on('any', enable);
 

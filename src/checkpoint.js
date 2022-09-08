@@ -45,17 +45,17 @@ function Checkpoint(x, y, checkpointId) {
             if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
                 engaging += dT;
                 const cam = getObjectsByTag('camera')[0];
-                const alpha = engaging / 2;
+                const alpha = engaging / 3;
                 const beta = 1 - alpha;
                 cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha, alpha);
-                if (engaging > 2) {
+                if (engaging > 3) {
                     bus.emit('player:cpt', [checkpointId]);
                 }
             } else {
-                engaging -= engaging * 2 * dT;
+                engaging -= engaging * 3 * dT;
             }
         } else {
-            engaging = 2;
+            engaging = 3;
         }
     }
 
@@ -63,7 +63,7 @@ function Checkpoint(x, y, checkpointId) {
         symbolMeshes.map((m) => { m[0][0] = used ? '#ee2' : '#4af'; });
         renderMesh(platformMesh, x, y, 0, 0, 0, '#777');
         if (!used) {
-            ctx.globalAlpha = Math.cos(engaging * engaging * 20) * 0.5 + 0.5;
+            ctx.globalAlpha = Math.cos(engaging * engaging * 10) * 0.5 + 0.5;
         } else {
             ctx.fillStyle = gradient;
             ctx.fillRect(x - 50, y-200, 100, 200);
