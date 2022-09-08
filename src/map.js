@@ -164,8 +164,8 @@ function Map() {
         let avgTheme = [0, 0, 0, 0, 0, 0, null];
         const foundThemes = {};
         let N = 0.001;
-        for (let dx = -5; dx <= 5; dx++) {
-            for (let dy = -5; dy <= 5; dy++) {
+        for (let dx = -3; dx <= 3; dx++) {
+            for (let dy = -3; dy <= 3; dy++) {
                 const V = get(x + dx, y + dy) << 1;
                 const wallData = WALL_MAP[V];
                 if (wallData) {

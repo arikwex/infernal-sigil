@@ -72,7 +72,7 @@ function Checkpoint(x, y, checkpointId) {
         symbolMeshes.map((m) => { m[0][0] = used ? '#ee2' : '#4af'; });
         renderMesh(platformMesh, x, y, 0, 0, 0, '#777');
         if (!used) {
-            ctx.globalAlpha = Math.cos(engaging * engaging * 10) * 0.5 + 0.5;
+            ctx.globalAlpha = Math.cos(engaging * engaging * 15) * 0.5 + 0.5;
         } else {
             ctx.fillStyle = gradient;
             ctx.fillRect(x - 50, y-200, 100, 200);

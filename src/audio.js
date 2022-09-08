@@ -22,15 +22,17 @@ function Audio() {
     let musicFocusBuffer;
     let musicStyxBuffer;
     let musicAsphodelBuffer;
+    let musicElysianBuffer;
+    let musicMourningBuffer;
+    let musicThroneBuffer;
     let musicDrumBuffer;
+    
     let drumBuffer;
     let activeMusicSource;
     let gainNodeA;
     let gainNodeB;
     let focusNode;
     let usingA = true;
-    const signatureStyx = [0, 2, 3, 7, 8, 12, 3, 2, 7, 0, 12];
-    const signatureAsphodel = [0, 2, 3, 5, 7, 8, 11, 12, 3, 2, 7, 11, 12, 0, 8, 5];
 
     const sin = (i) => Math.sin(i);
     const saw = (i) => ((i % 6.28) - 3.14) / 6.28;
@@ -140,42 +142,42 @@ function Audio() {
             focusBuffer[j] = sqrp(j/120, 10 + sin(j/10000+p*p*p*4) * 10) * p / 100;
         }
 
-        const styxSong = [];
-        styxSong.push(
-            [-18, 0, 11, 1], [-6, 2, 11, 1], [-19, 4, 11, 1], [-7, 6, 11, 1], [-18, 8, 11, 1], [-6, 10, 11, 1],
-            [-11, 12, 21, 1], [-18, 16, 21, 1], [-19, 20, 21, 1], [-6, 24, 21, 1],
-            [-11, 28, 21, 1], [-18, 32, 21, 1], [-19, 36, 21, 1], [-6, 40, 21, 1],
-        );
-        for (let i = 0; i < 4; i++) {
-            for (let j = 0; j < 20; j++) {
-                if ((j + j*j + i * 3) % 11 < 7) {
-                    styxSong.push([-6+signatureStyx[(j + j*j*2 + i*2 + 3) % signatureStyx.length], j * 0.333 + i * 12, 0.5, 2]);
-                }
-            }
-        }
-        musicStyxBuffer = compileSong(styxSong, [[0, 0], [1, 1], [1.5, 1]], 1.3);
-        
-        const asphodelSong = [];
-        for (let i = 0; i < 3; i++) {
-            const o = i * 16;
-            const q = [0,3,-5][i];
-            asphodelSong.push(
-                [-15+q, 0+o, 6, 1], [-15+q, 1+o, 6, 1], [-20+q, 2+o, 6, 1], [-20+q, 3+o, 6, 1],
-                [-19+q, 4+o, 6, 1], [-19+q, 5+o, 6, 1], [-13+q, 6+o, 6, 1], [-12+q, 7+o, 6, 1],
-                [-15+q, 8+o, 6, 1], [-15+q, 9+o, 6, 1], [-8+q, 10+o, 6, 1], [-8+q, 11+o, 6, 1],
-                [-10+q, 12+o, 6, 1], [-12+q, 13+o, 6, 1], [-13+q, 14+o, 6, 1], [-16+q, 15+o, 6, 1],
-            );
-            for (let j = 0; j < 32; j++) {
-                if ((j + j*j + i) % 7 < 4) {
-                    asphodelSong.push([-3+q+signatureAsphodel[(j + j*j*2 + i*i * 2) % signatureAsphodel.length], j * 0.5 + o, 3, 2]);
-                }
-            }
-        }
-        musicAsphodelBuffer = compileSong(asphodelSong, [[0, 1], [0.5, 0]], 0.6);
+        // Generate 5 procedural songs
+        musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 7, 8, 12]), 1.6);
+        musicAsphodelBuffer = compileSong(genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12]), 0.5);
+        musicElysianBuffer = compileSong(genericSongBuilder(3, [0, 2, 3, 7, 8, 12]), 0.9);
+        musicMourningBuffer = compileSong(genericSongBuilder(4, [0, 2, 3, 7, 8, 12]), 1.2);
+        musicThroneBuffer = compileSong(genericSongBuilder(5, [0, 4, 5, 7, 12]), 0.8);
     }
 
-    function compileSong(song, drums, beat) {
-        const targetBuffer = audioCtx.createBuffer(1, sampleRate * 44 * beat, sampleRate);
+    function genericSongBuilder(seed, melodySignature) {
+        const genericSong = [];
+        const genericDrums = [];
+        const noteLength = [1,4,2,0.5,3,4][seed];
+        const noteSpace = [1,1,0.5,0.25,2,2][seed];
+        const bassNotes = [-15, -20, -19, -12];
+        genericDrums.push(
+            [((seed * seed * 3) * 0.5) % 2, (seed) % 2],
+            [((seed * seed * 3 + seed * 9) * 0.5) % 2, (seed+1) % 2],
+            [((seed * seed * 2 + seed * 11) * 0.5) % 2, (seed+1) % 2],
+        );
+        for (let i = 0; i < 3; i++) {
+            const o = i * 8;
+            const q = [0,3,-5][i];
+            for (let j = 0; j < 8; j++) {
+                genericSong.push([bassNotes[(seed*7+i*2+(j>>1)+j*j*3) % bassNotes.length]+q, j+o, 6, 1]);
+            }
+            for (let j = 0; j < 8/noteSpace; j++) {
+                if ((j + j*j + i+seed*3) % 7 < 4) {
+                    genericSong.push([-3+q+melodySignature[(j + j*j*2 + i*i*2+seed) % melodySignature.length], j * noteSpace + o, noteLength, 2]);
+                }
+            }
+        }
+        return [genericSong, genericDrums];
+    }
+
+    function compileSong([song, drums], beat) {
+        const targetBuffer = audioCtx.createBuffer(1, sampleRate * 8 * 3 * beat, sampleRate);
         const buffer = targetBuffer.getChannelData(0);
         for (let i = 0; i < song.length; i++) {
             let note, start, duration, amp;
@@ -239,6 +241,9 @@ function Audio() {
         const musicMap = {
             'The Styx': musicStyxBuffer,
             'Asphodel Meadows': musicAsphodelBuffer,
+            'Elysian Boneyard': musicElysianBuffer,
+            'Fields of Mourning': musicMourningBuffer,
+            'Throne Room': musicThroneBuffer,
         };
         
         music(musicMap[region]);
