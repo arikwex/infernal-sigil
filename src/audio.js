@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_DASH, EVENT_FIREBALL, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -216,13 +216,13 @@ function Audio() {
         init();
         bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
-        bus.on('player:hit', play(injuredSound));
-        bus.on('walk', play(walkSound));
-        bus.on('jump', play(jumpSound));
-        bus.on('dash', play(dashSound));
-        bus.on('flap', play(flapSound));
-        bus.on('fireball', play(fireballSound));
-        bus.on('bone:collect', play(boneCollectSound));
+        bus.on(EVENT_PLAYER_HIT, play(injuredSound));
+        bus.on(EVENT_WALK, play(walkSound));
+        bus.on(EVENT_JUMP, play(jumpSound));
+        bus.on(EVENT_DASH, play(dashSound));
+        bus.on(EVENT_FLAP, play(flapSound));
+        bus.on(EVENT_FIREBALL, play(fireballSound));
+        bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
         bus.on('bone:dink', play(boneCollectSound));
         bus.on('switch', play(switchSound));
         bus.on('region', onRegion);

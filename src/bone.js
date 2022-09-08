@@ -4,6 +4,7 @@ import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { copy, physicsCheck } from './utils';
 import { boneMeshAsset } from './assets';
+import { EVENT_BONE_COLLECT } from './events';
 
 // t=1 -> value = 1
 // t=2 -> value = 10
@@ -56,7 +57,7 @@ function Bone(x, y, vx, vy, t=1) {
             getObjectsByTag('player').map(({ playerHitbox }) => {
                 if (collectHitbox.isTouching(playerHitbox) && lifeTime > 0.35) {
                     collected = true;
-                    bus.emit('bone:collect', 9 * t - 8);
+                    bus.emit(EVENT_BONE_COLLECT, 9 * t - 8);
                 }
             });
         } else {

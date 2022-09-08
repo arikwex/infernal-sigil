@@ -6,7 +6,7 @@ import * as bus from './bus';
 import { copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
 
 function Player(x, y) {
     const thickness = 9;
@@ -148,7 +148,7 @@ function Player(x, y) {
             attackTime = 0.0;
             canDash = false;
             vx = targetFacing * 1000;
-            bus.emit('dash');
+            bus.emit(EVENT_DASH);
         }
 
         // If wall-climbing, respect horizontal control as "up"
@@ -191,7 +191,7 @@ function Player(x, y) {
                     if (onGround) {
                         walkTick += dT;
                         if (walkTick > 0.13) {
-                            bus.emit('walk');
+                            bus.emit(EVENT_WALK);
                             walkTick = -Math.random()/40;
                         }
                     }
@@ -229,7 +229,7 @@ function Player(x, y) {
                 smoothAttacking = 1;
                 vx = -targetFacing * 850;
                 vy = vy * 0.25 - 100;
-                bus.emit('fireball', [x, y-30, targetFacing]);
+                bus.emit(EVENT_FIREBALL, [x, y-30, targetFacing]);
             }
         } else {
             // Climbing controls
@@ -240,7 +240,7 @@ function Player(x, y) {
                 climbAnim += 18 * dT * v * inf;
                 walkTick += dT;
                 if (walkTick > 0.13) {
-                    bus.emit('walk');
+                    bus.emit(EVENT_WALK);
                     walkTick = -Math.random()/40;
                 }
             } else {
@@ -257,7 +257,7 @@ function Player(x, y) {
                     timeSinceJump = 0;
                     groundTime = 0;
                     dashing = false;
-                    bus.emit('jump');
+                    bus.emit(EVENT_JUMP);
                 } else if (numAirjumpsUsed < MAX_NUM_AIRJUMP) {
                     // Air jump
                     numAirjumpsUsed += 1;
@@ -268,7 +268,7 @@ function Player(x, y) {
                     dashing = false;
                     canDash = true;
                     dashTimer = 1;
-                    bus.emit('flap');
+                    bus.emit(EVENT_FLAP);
                 }
             } else {
                 // Wall Jumping
@@ -280,7 +280,7 @@ function Player(x, y) {
                 groundTime = 0;
                 timeSinceJump = 0;
                 onWall = false;
-                bus.emit('jump');
+                bus.emit(EVENT_JUMP);
             }
         }
 
@@ -349,7 +349,7 @@ function Player(x, y) {
                     state = 0;
                     vx = -targetFacing * 300;
                 }
-                bus.emit('player:hit', 1);
+                bus.emit(EVENT_PLAYER_HIT, 1);
                 if (getHp() <= 0) {
                     playerHitbox.ox = -1000;
                     bus.emit('bone:spawn', [x, y - 30, 1, 2]);

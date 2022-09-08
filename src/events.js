@@ -1,2 +1,9 @@
 export const EVENT_ATTACK = 0;
 export const EVENT_ATTACK_HIT = 1;
+export const EVENT_PLAYER_HIT = 2;
+export const EVENT_WALK = 3;
+export const EVENT_JUMP = 4;
+export const EVENT_DASH = 5;
+export const EVENT_FLAP = 6;
+export const EVENT_FIREBALL = 7;
+export const EVENT_BONE_COLLECT = 8;

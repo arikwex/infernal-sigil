@@ -8,6 +8,7 @@ import Bone from './bone';
 import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
 import Audio from './audio';
+import { EVENT_BONE_COLLECT, EVENT_FIREBALL, EVENT_PLAYER_HIT } from './events';
 
 async function initialize() {
     // Game
@@ -28,11 +29,11 @@ async function initialize() {
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => { while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });
-    bus.on('bone:collect', (v) => addBones(v));
-    bus.on('player:hit', (v) => addHp(-v));
+    bus.on(EVENT_BONE_COLLECT, (v) => addBones(v));
+    bus.on(EVENT_PLAYER_HIT, (v) => addHp(-v));
     bus.on('player:cpt', (v) => setCheckpointId(v));
     bus.on('player:rst', (v) => respawn());
-    bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
+    bus.on(EVENT_FIREBALL, ([x, y, dir]) => add(new Fireball(x, y, dir)));
     bus.on('sfx:flame', ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 
     start();

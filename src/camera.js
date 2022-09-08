@@ -1,6 +1,7 @@
 import * as bus from './bus';
 import { canvas } from "./canvas";
 import { getObjectsByTag } from "./engine"
+import { EVENT_PLAYER_HIT } from './events';
 import { getHp } from './gamestate';
 
 function Camera(x, y) {
@@ -79,7 +80,7 @@ function Camera(x, y) {
         }
     }
 
-    bus.on('player:hit', () => shake=0.5);
+    bus.on(EVENT_PLAYER_HIT, () => shake=0.5);
     bus.on('player:grant', () => shake=0.5);
     bus.on('player:cpt', () => shake=0.5);
 
