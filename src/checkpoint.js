@@ -11,6 +11,7 @@ function Checkpoint(x, y, checkpointId) {
     let anim = 0;
     let engaging = 0;
     let used = false;
+    let engagedLastFrame = false;
 
     const platformMesh = [
         ['#777', 5, 0],
@@ -43,6 +44,10 @@ function Checkpoint(x, y, checkpointId) {
 
         if (!used) {
             if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
+                if (!engagedLastFrame) {
+                    bus.emit('focus');
+                    engagedLastFrame = true;
+                }
                 engaging += dT;
                 const cam = getObjectsByTag('camera')[0];
                 const alpha = engaging / 3;
@@ -52,6 +57,10 @@ function Checkpoint(x, y, checkpointId) {
                     bus.emit('player:cpt', [checkpointId]);
                 }
             } else {
+                if (engagedLastFrame) {
+                    bus.emit('focus:stop');
+                    engagedLastFrame = false;
+                }
                 engaging -= engaging * 3 * dT;
             }
         } else {

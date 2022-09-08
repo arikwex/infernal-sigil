@@ -217,6 +217,7 @@ function Audio() {
         bus.on('focus', () => { focusNode = audioCtx.createBufferSource(); focusNode.buffer = musicFocusBuffer; focusNode.connect(audioCtx.destination); focusNode.start(); });
         bus.on('focus:stop', () => focusNode.stop());
         bus.on('player:grant', play(grantSound));
+        bus.on('player:cpt', play(grantSound));
         
         gainNodeA = new GainNode(audioCtx);
         gainNodeA.connect(audioCtx.destination);
