@@ -1,7 +1,7 @@
 import * as bus from './bus';
 import { canvas } from "./canvas";
 import { getObjectsByTag } from "./engine"
-import { getCurrentGameState } from './gamestate';
+import { getHp } from './gamestate';
 
 function Camera(x, y) {
     const player = getObjectsByTag('player')[0];
@@ -25,7 +25,7 @@ function Camera(x, y) {
         z += (tz - z) * 3 * dT;
         tz += (canvas.width / 1500 - tz) * 4 * dT;
 
-        if (player && getCurrentGameState().getHp() > 0) {
+        if (player && getHp() > 0) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
             const { width, height } = canvas;

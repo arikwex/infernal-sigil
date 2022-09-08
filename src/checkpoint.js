@@ -5,7 +5,7 @@ import * as bus from './bus';
 import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
-import { getCurrentGameState } from "./gamestate";
+import { getCheckpointId } from "./gamestate";
 
 function Checkpoint(x, y, checkpointId) {
     let anim = 0;
@@ -39,7 +39,7 @@ function Checkpoint(x, y, checkpointId) {
     const touchbox = new BoundingBox(x-75,y-10,0,0,150,10);
 
     function update(dT) {
-        used = getCurrentGameState().getCheckpointId() == checkpointId;
+        used = getCheckpointId() == checkpointId;
         anim += dT;
 
         if (!used) {
@@ -86,7 +86,7 @@ function Checkpoint(x, y, checkpointId) {
     }
 
     function onReset() {
-        if (checkpointId == getCurrentGameState().getCheckpointId()) {
+        if (checkpointId == getCheckpointId()) {
             getObjectsByTag('player')[0].reset(x, y - 150);
         }
     }

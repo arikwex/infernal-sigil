@@ -1,4 +1,5 @@
 On Deck
+- BUG: checkpoint respawn location?!?
 - Text explaining recent upgrade
 - "Loading" initial screen
 - Game name (title screen + title of window)

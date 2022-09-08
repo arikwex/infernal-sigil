@@ -1,7 +1,7 @@
 import * as bus from './bus';
 import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
 import { canvas, color, renderMesh, renderText } from "./canvas";
-import { getCurrentGameState } from "./gamestate";
+import { getBones, getHp, getMaxHp } from "./gamestate";
 import { clamp, copy } from "./utils";
 
 function HUD() {
@@ -19,15 +19,14 @@ function HUD() {
     }
 
     function render(ctx) {
-        const gamestate = getCurrentGameState();
         const xfm = ctx.getTransform();
         ctx.setTransform(1,0,0,1,0,0);
         ctx.scale(0.8, 0.8);
 
         // Render HP
-        let maxHp = gamestate.getMaxHp();
-        let hp = gamestate.getHp();
-        for (let i = 0 ; i < gamestate.getMaxHp(); i++) {
+        let maxHp = getMaxHp();
+        let hp = getHp();
+        for (let i = 0 ; i < getMaxHp(); i++) {
             if (i >= hp) {
                 headMesh[0][0] = '#555';
                 headMesh[3][0] = '#555';
@@ -40,7 +39,7 @@ function HUD() {
 
         // Render Bone count
         renderMesh(boneMesh, 50, 103, 0, anim, 0);
-        renderText(gamestate.getBones(), 70, 105, '#fff', 30);
+        renderText(getBones(), 70, 105, '#fff', 30);
 
         // Region Title
         if (regionTitleTimer > 0) {

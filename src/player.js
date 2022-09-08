@@ -4,7 +4,7 @@ import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
 import { copy, physicsCheck } from './utils';
-import { getCurrentGameState } from './gamestate';
+import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
 
 function Player(x, y) {
@@ -349,7 +349,7 @@ function Player(x, y) {
                     vx = -targetFacing * 300;
                 }
                 bus.emit('player:hit', 1);
-                if (getCurrentGameState().getHp() <= 0) {
+                if (getHp() <= 0) {
                     playerHitbox.ox = -1000;
                     bus.emit('bone:spawn', [x, y - 30, 1, 2]);
                     bus.emit('bone:spawn', [x, y - 30, 8, 1]);

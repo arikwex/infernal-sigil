@@ -1,6 +1,6 @@
 import * as bus from './bus';
 import { start, add, getObjectsByTag } from './engine';
-import { getCurrentGameState } from './gamestate';
+import { addBones, addHp, respawn, setCheckpointId } from './gamestate';
 import HUD from './hud';
 import Map from './map';
 import Camera from './camera';
@@ -28,10 +28,10 @@ async function initialize() {
 
     // Game events
     bus.on('bone:spawn', ([x,y,N,t]) => { while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });
-    bus.on('bone:collect', (v) => getCurrentGameState().addBones(v));
-    bus.on('player:hit', (v) => getCurrentGameState().addHp(-v));
-    bus.on('player:cpt', (v) => getCurrentGameState().setCheckpointId(v));
-    bus.on('player:rst', (v) => getCurrentGameState().respawn());
+    bus.on('bone:collect', (v) => addBones(v));
+    bus.on('player:hit', (v) => addHp(-v));
+    bus.on('player:cpt', (v) => setCheckpointId(v));
+    bus.on('player:rst', (v) => respawn());
     bus.on('fireball', ([x, y, dir]) => add(new Fireball(x, y, dir)));
     bus.on('sfx:flame', ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 
