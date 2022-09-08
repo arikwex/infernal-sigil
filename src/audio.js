@@ -8,6 +8,7 @@ function Audio() {
     // Sounds to be loaded on init
     let attackSound;
     let attackHitSound;
+    let injuredSound;
     let walkSound;
     let jumpSound;
     let dashSound;
@@ -76,6 +77,11 @@ function Audio() {
         // Player HIT ENEMY sound
         attackHitSound = generate(0.2, (i) => {
             return 0.05 * (sin(i/(20+i/150))*0.3 + Math.random());
+        });
+
+        // Player TOOK DAMAGE sound
+        injuredSound = generate(0.5, (i) => {
+            return 0.05 * (sqr(i/(120+i/250))*0.3 + Math.random())*(sqr(i/600)*0.5+0.5);
         });
 
         // Player walk sound
@@ -205,6 +211,7 @@ function Audio() {
         init();
         bus.on('attack', ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on('attack:hit', play(attackHitSound));
+        bus.on('player:hit', play(injuredSound));
         bus.on('walk', play(walkSound));
         bus.on('jump', play(jumpSound));
         bus.on('dash', play(dashSound));
