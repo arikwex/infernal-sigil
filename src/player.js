@@ -24,6 +24,7 @@ function Player(x, y) {
     let injured = 0;
     let hasClaws = false;
     let isDead = false;
+    let walkTick = 0;
 
     // Climbing
     let unstick = 0; // Disallow sticking while positive
@@ -185,6 +186,13 @@ function Player(x, y) {
                         targetRunning += (1 - targetRunning) * 4 * dT;
                     }
                     targetFacing = Math.sign(h);
+                    if (onGround) {
+                        walkTick += dT;
+                        if (walkTick > 0.13) {
+                            bus.emit('walk');
+                            walkTick = -Math.random()/40;
+                        }
+                    }
                 } else {
                     targetRunning += (0 - targetRunning) * 4 * dT;
                 }
@@ -228,6 +236,11 @@ function Player(x, y) {
                 const inf = Math.min(stick * 6, 1);
                 y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
                 climbAnim += 18 * dT * v * inf;
+                walkTick += dT;
+                if (walkTick > 0.13) {
+                    bus.emit('walk');
+                    walkTick = -Math.random()/40;
+                }
             } else {
                 anim += dT;
                 climbAnim -= Math.sin(climbAnim) * 15 * dT;

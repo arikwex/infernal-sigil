@@ -8,6 +8,7 @@ function Audio() {
     // Sounds to be loaded on init
     let attackSound;
     let attackHitSound;
+    let walkSound;
 
     // Musics
     let musicStyxBuffer;
@@ -68,6 +69,11 @@ function Audio() {
             return 0.04 * sqr(i/(10+i/160));
         });
 
+        // Player HIT sound
+        walkSound = generate(0.04, (i) => {
+            return 0.01 * sin(i/(14+i/100));
+        });
+
         // MUSIC GENERATION
         musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
         drumBuffer = musicDrumBuffer.getChannelData(0);
@@ -114,12 +120,12 @@ function Audio() {
     function compileSong(song, drums, beat) {
         const targetBuffer = audioCtx.createBuffer(1, sampleRate * 44 * beat, sampleRate);
         const buffer = targetBuffer.getChannelData(0);
-        for (let i = 0; i < song.length; i++) {
+        for (let i = 0; i < song.length*0; i++) {
             let note, start, duration, amp;
             [note, start, duration, amp] = song[i];
             writeNote(buffer, note, start * beat, duration * beat, amp);
         }
-        for (let q = 0; q < 44; q+=2) {
+        for (let q = 0; q < 44 * 0; q+=2) {
             for (let j = 0; j < drums.length; j++) {
                 let type, drumStart;
                 [drumStart, type] = drums[j];
@@ -148,6 +154,7 @@ function Audio() {
         init();
         bus.on('attack', ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on('attack:hit', play(attackHitSound));
+        bus.on('walk', play(walkSound));
         bus.on('region', onRegion);
         
         gainNodeA = new GainNode(audioCtx);
@@ -175,10 +182,10 @@ function Audio() {
         activeMusicSource.buffer = musicBuffer;
         activeMusicSource.loop = true;
         activeMusicSource.connect(usingA ? gainNodeA : gainNodeB);
-        activeMusicSource.start(1);
+        activeMusicSource.start();
 
         setTimeout(() => { audioToStop?.stop() }, 700);
-        gainNodeA.gain.setTargetAtTime(usingA ? 1 : 0, audioCtx.currentTime, 0.7);
+        gainNodeA.gain.setTargetAtTime(usingA ? 1 : 0, audioCtx.currentTime, 0.3);
         gainNodeB.gain.setTargetAtTime(usingA ? 0 : 1, audioCtx.currentTime, 1.0);
         usingA = !usingA;
     }
