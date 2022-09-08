@@ -1,6 +1,4 @@
 On Deck
-- Favicon
-- Web boing sound
 - Rename regions
 - Text explaining recent upgrade
 - "Loading" initial screen

@@ -242,16 +242,14 @@ function Audio() {
     };
     bus.on('any', enable);
 
-    function onRegion(region) {
-        const musicMap = {
-            'The Styx': musicStyxBuffer,
-            'Asphodel Meadows': musicAsphodelBuffer,
-            'Elysian Boneyard': musicElysianBuffer,
-            'Fields of Mourning': musicMourningBuffer,
-            'Throne Room': musicThroneBuffer,
-        };
-        
-        music(musicMap[region]);
+    function onRegion(regionId) {
+        music([
+            musicStyxBuffer,
+            musicAsphodelBuffer,
+            musicElysianBuffer,
+            musicMourningBuffer,
+            musicThroneBuffer,
+        ][regionId]);
     }
 
     function music(musicBuffer) {

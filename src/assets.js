@@ -21,8 +21,17 @@ const symbolMeshAssets = [
     [['#4af', 2, 0], [0, -15, 10, 0, 0, 15, -10, 0, 0, -15]], // Diamond --> End game?
 ];
 
+const regionTitles = [
+    'The Crossroads',
+    'Undergrowth',
+    'Boneyard Caverns',
+    'Fields of Mourning',
+    'Throne Room',
+];
+
 export {
     headMeshAsset,
     boneMeshAsset,
     symbolMeshAssets,
+    regionTitles,
 };

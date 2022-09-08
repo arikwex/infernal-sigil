@@ -1,5 +1,5 @@
 import * as bus from './bus';
-import { boneMeshAsset, headMeshAsset } from "./assets";
+import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
 import { canvas, color, renderMesh, renderText } from "./canvas";
 import { getCurrentGameState } from "./gamestate";
 import { clamp, copy } from "./utils";
@@ -55,8 +55,8 @@ function HUD() {
         ctx.setTransform(xfm);
     }
 
-    function onRegionChange(title) {
-        regionTitle = title;
+    function onRegionChange(regionId) {
+        regionTitle = regionTitles[regionId];
         regionTitleTimer = 4;
     }
 
