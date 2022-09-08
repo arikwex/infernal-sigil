@@ -77,7 +77,7 @@ function Bone(x, y, vx, vy, t=1) {
         const t = anim * 3;
         const p = Math.cos(anim + phase) * 0.2 + phase;
         if (collected) {
-            color(`rgba(255, 255, 180, ${1 - popOut * 2})`);
+            color(`rgba(255,255,180,${1 - popOut * 2})`);
             ctx.beginPath();
             ctx.arc(x,y + offset,popOut*40+10,0,6.28);
             ctx.fill();
