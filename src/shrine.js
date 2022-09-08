@@ -4,7 +4,7 @@ import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
-import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_ABILITY_GRANT } from "./events";
+import { EVENT_BONE_SPAWN, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_ABILITY_GRANT } from "./events";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -82,7 +82,7 @@ function Shrine(x, y, grantType) {
         pentagramMesh[0][0] = '#ee2';
         symbolMeshes.map((m) => { m[0][0] = '#ee2'; });
         for (let i = 0; i < 20; i++) {
-            bus.emit('bone:spawn', [x+(Math.random() - 0.5) * 150,y-100,1,1]);
+            bus.emit(EVENT_BONE_SPAWN, [x+(Math.random() - 0.5) * 150,y-100,1,1]);
         }
         bus.emit(EVENT_PLAYER_ABILITY_GRANT, grantType);
         timeSinceUpgrade = 0;

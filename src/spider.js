@@ -3,7 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
 
@@ -186,7 +186,7 @@ function Spider(x, y, type) {
             injured = 1;
             hp -= isFlame ? 2 : 1;
             if (hp <= 0) {
-                bus.emit('bone:spawn', [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
+                bus.emit(EVENT_BONE_SPAWN, [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
             }
             bus.emit(EVENT_ATTACK_HIT, [owner, isFlame ? 0 : dir]);
         }

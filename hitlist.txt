@@ -1,5 +1,6 @@
 On Deck
 - BUG: checkpoint respawn location?!?
+- tags as enums
 - Text explaining recent upgrade
 - "Loading" initial screen
 - Game name (title screen + title of window)

@@ -6,7 +6,7 @@ import * as bus from './bus';
 import { copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_WALK } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_WALK } from './events';
 
 function Player(x, y) {
     const thickness = 9;
@@ -352,10 +352,10 @@ function Player(x, y) {
                 bus.emit(EVENT_PLAYER_HIT, 1);
                 if (getHp() <= 0) {
                     playerHitbox.ox = -1000;
-                    bus.emit('bone:spawn', [x, y - 30, 1, 2]);
-                    bus.emit('bone:spawn', [x, y - 30, 8, 1]);
+                    bus.emit(EVENT_BONE_SPAWN, [x, y - 30, 1, 2]);
+                    bus.emit(EVENT_BONE_SPAWN, [x, y - 30, 8, 1]);
                     isDead = true;
-                    setTimeout((() => bus.emit('player:rst')), 1500);
+                    setTimeout((() => bus.emit(EVENT_PLAYER_RESET)), 1500);
                 }
             }
         });

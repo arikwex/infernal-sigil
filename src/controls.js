@@ -1,4 +1,5 @@
 import * as bus from './bus';
+import { EVENT_ANY_KEY } from './events';
 
 const pressed = {};
 
@@ -6,7 +7,7 @@ window.onkeydown = (evt) => {
     if (!pressed[evt.code]) {
         pressed[evt.code] = Date.now();
     }
-    bus.emit('any');
+    bus.emit(EVENT_ANY_KEY);
 }
 
 window.onkeyup = (evt) => {

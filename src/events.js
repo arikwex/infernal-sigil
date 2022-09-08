@@ -15,3 +15,7 @@ export const EVENT_FOCUS_STOP = 13;
 export const EVENT_PLAYER_ABILITY_GRANT = 14;
 export const EVENT_PLAYER_CHECKPOINT = 15;
 export const EVENT_WEB_BOING = 16;
+export const EVENT_ANY_KEY = 17;
+export const EVENT_SFX_FLAME = 18;
+export const EVENT_BONE_SPAWN = 19;
+export const EVENT_PLAYER_RESET = 20;

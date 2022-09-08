@@ -3,7 +3,7 @@ import { BoundingBox } from "./bbox";
 import { color, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { clamp, physicsCheck } from "./utils";
-import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_SFX_FLAME } from './events';
 
 function Fireball(x, y, dir) {
     let vx = 300 * dir;
@@ -29,7 +29,7 @@ function Fireball(x, y, dir) {
         let _, onGround, onRight, onLeft, onRoof;
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag('physics'), myHitbox);
         if (onGround || onRight || onLeft || onRoof) {
-            bus.emit('sfx:flame', [x, y, 2, 0.5]);
+            bus.emit(EVENT_SFX_FLAME, [x, y, 2, 0.5]);
             return true;
         }
         vx = clamp(vx + 1000 * dT * dir, -750, 750);

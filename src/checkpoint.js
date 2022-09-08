@@ -6,7 +6,7 @@ import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { getCheckpointId } from "./gamestate";
-import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_CHECKPOINT } from "./events";
+import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_RESET } from "./events";
 
 function Checkpoint(x, y, checkpointId) {
     let anim = 0;
@@ -93,11 +93,11 @@ function Checkpoint(x, y, checkpointId) {
     }
 
     function enable() {
-        bus.on('player:rst', onReset);
+        bus.on(EVENT_PLAYER_RESET, onReset);
     }
 
     function disable() {
-        bus.off('player:rst', onReset);
+        bus.off(EVENT_PLAYER_RESET, onReset);
     }
 
     return {

@@ -2,7 +2,7 @@ import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_WEB_BOING } from "./events";
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_SFX_FLAME, EVENT_WEB_BOING } from "./events";
 
 function Web(x, y) {
     y -= 50;
@@ -81,7 +81,7 @@ function Web(x, y) {
                 // Flames
                 for (let i = 0; i < 18; i++) {
                     setTimeout(() => {
-                        bus.emit('sfx:flame', [
+                        bus.emit(EVENT_SFX_FLAME, [
                             x + (Math.random() - 0.5) * 170,
                             y + (Math.random() - 0.5) * 190 + 20,
                             Math.random() * 1 + 1,

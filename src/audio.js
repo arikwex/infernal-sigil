@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
+import { EVENT_ANY_KEY, EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -212,7 +212,7 @@ function Audio() {
 
     function enable() {
         if (audioCtx) { return; }
-        bus.off('any', enable);
+        bus.off(EVENT_ANY_KEY, enable);
         init();
         bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
         bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
@@ -244,7 +244,7 @@ function Audio() {
 
         music(musicStyxBuffer);
     };
-    bus.on('any', enable);
+    bus.on(EVENT_ANY_KEY, enable);
 
     function onRegion(regionId) {
         music([

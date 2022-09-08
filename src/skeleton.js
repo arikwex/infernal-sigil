@@ -3,7 +3,7 @@ import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -52,7 +52,7 @@ function Skeleton(x, y, type) {
         let onGround, onRightWall, onLeftWall, onRoof;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
         [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox, 0.5);
-        if (onGround && vy > 500) { hp = 0; bus.emit('bone:spawn', [x,y-55,4,1]); }
+        if (onGround && vy > 500) { hp = 0; bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]); }
         if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
         if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
         if (onGround || onRoof) { vy = 0; }
@@ -119,7 +119,7 @@ function Skeleton(x, y, type) {
             injured = 1;
             hp -= isFlame ? 2 : 1;
             if (hp <= 0) {
-                bus.emit('bone:spawn', [x,y-55,4,1]);
+                bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]);
             }
             bus.emit(EVENT_ATTACK_HIT, [owner]);
         }
