@@ -111,18 +111,18 @@ function Spider(x, y, type) {
         }
         if (jumping > 0) {
             if (walkPattern % 2 == 0) { vx = (800 * jumping + 100) * facing * wx; }
-            if (walkPattern % 2 == 1) { vy = (800 * jumping + 100) * facing * wy; }
+            else { vy = (800 * jumping + 100) * facing * wy; }
         }
 
         if (charging <= 0) {
             if (injured <= 0) {
                 if (jumping <= 0) {
                     if (walkPattern % 2 == 0) { vx = 50 * facing * wx; }
-                    if (walkPattern % 2 == 1) { vy = 50 * facing * wy; }
+                    else { vy = 50 * facing * wy; }
                 }
             } else {
                 if (walkPattern % 2 == 0) { vx -= vx * 12 * dT; }
-                if (walkPattern % 2 == 1) { vy -= vy * 12 * dT; }
+                else { vy -= vy * 12 * dT; }
             }
         }
 

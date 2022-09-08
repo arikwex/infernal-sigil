@@ -1,9 +1,10 @@
 On Deck
-- Rename regions
 - Text explaining recent upgrade
 - "Loading" initial screen
+- Game name (title screen + title of window)
 - Main menu => New Game vs Continue
 - Game over (stats: deaths, time, final bone count)
+- Optimize! (map as bytes instead of base64?)
 
 - Talk to spirits / read signs?
 - Collectables...
