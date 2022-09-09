@@ -30,6 +30,7 @@ function Spider(x, y, type) {
     const bboxMapW = [100, 60, 100, 60].map((a) => a*size/1.3);
     const bboxMapH = [60, 100, 60, 100].map((a) => a*size/1.3);
     let wa = walkPattern * 6.28 / 4;
+    let modalityX = walkPattern % 2 == 0;
     let wx = Math.cos(wa);
     let wy = Math.sin(wa);
     x -= wy * 50;
@@ -111,18 +112,18 @@ function Spider(x, y, type) {
             needJump = false;
         }
         if (jumping > 0) {
-            if (walkPattern % 2 == 0) { vx = (800 * jumping + 100) * facing * wx; }
+            if (modalityX) { vx = (800 * jumping + 100) * facing * wx; }
             else { vy = (800 * jumping + 100) * facing * wy; }
         }
 
         if (charging <= 0) {
             if (injured <= 0) {
                 if (jumping <= 0) {
-                    if (walkPattern % 2 == 0) { vx = 50 * facing * wx; }
+                    if (modalityX) { vx = 50 * facing * wx; }
                     else { vy = 50 * facing * wy; }
                 }
             } else {
-                if (walkPattern % 2 == 0) { vx -= vx * 12 * dT; }
+                if (modalityX) { vx -= vx * 12 * dT; }
                 else { vy -= vy * 12 * dT; }
             }
         }
