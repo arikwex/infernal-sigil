@@ -2,7 +2,7 @@ import { BoundingBox, isTouching } from "./bbox";
 import { ctx, renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import * as bus from './bus';
-import { headMeshAsset, symbolMeshAssets } from "./assets";
+import { headMeshAsset, makeGradient, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { getCheckpointId } from "./gamestate";
 import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_RESET } from "./events";
@@ -31,11 +31,7 @@ function Checkpoint(x, y, checkpointId) {
 
     const symbolMeshes = copy(symbolMeshAssets);
 
-    const gradient = ctx.createLinearGradient(x, y, x, y-200);
-    gradient.addColorStop(0, 'rgba(255,255,110,0.3)');
-    // gradient.addColorStop(0.3, 'rgba(255,255,110,0.1)');
-    gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
-
+    const gradient = makeGradient(x, y);
     const physics = new BoundingBox(x-100,y,0,0,200,50);
     const touchbox = new BoundingBox(x-75,y-10,0,0,150,10);
 

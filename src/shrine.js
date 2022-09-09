@@ -2,7 +2,7 @@ import { BoundingBox, isTouching } from "./bbox";
 import { ctx, renderMesh } from "./canvas";
 import { add, getObjectsByTag } from "./engine";
 import * as bus from './bus';
-import { symbolMeshAssets } from "./assets";
+import { makeGradient, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { EVENT_BONE_SPAWN, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_ABILITY_GRANT } from "./events";
 import { TAG_CAMERA, TAG_PHYSICS, TAG_PLAYER } from "./tags";
@@ -38,11 +38,7 @@ function Shrine(x, y, grantType) {
     pentagramMesh.push(a1, a2);
     const symbolMeshes = copy(symbolMeshAssets);
 
-    const gradient = ctx.createLinearGradient(x, y-50, x, y-250);
-    gradient.addColorStop(0, 'rgba(255,255,110,0.5)');
-    // gradient.addColorStop(0.3, 'rgba(255,255,110,0.2)');
-    gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
-
+    const gradient = makeGradient(x, y);
     const physics = new BoundingBox(x-200,y,0,0,400,50);
     const physics2 = new BoundingBox(x-100,y-50,0,0,200,50);
     const touchbox = new BoundingBox(x-75,y-60,0,0,150,10);

@@ -1,3 +1,5 @@
+import { ctx } from "./canvas";
+
 const headMeshAsset = [
     ['#e22', 9, 0],
     [14, -40, 18, -26, 1, 0, -1, 0, -18, -26, -14, -40],
@@ -29,9 +31,17 @@ const regionTitles = [
     'Throne Room',
 ];
 
+const makeGradient = (x, y) => {
+    let gradient = ctx.createLinearGradient(x, y, x, y-200);
+    gradient.addColorStop(0, 'rgba(255,255,110,0.3)');
+    gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
+    return gradient;
+}
+
 export {
     headMeshAsset,
     boneMeshAsset,
     symbolMeshAssets,
     regionTitles,
+    makeGradient,
 };
