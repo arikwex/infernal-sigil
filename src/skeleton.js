@@ -1,10 +1,10 @@
 import { renderMesh, scaleInPlace } from './canvas';
-import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
-import { TAG_ENEMY, TAG_PHYSICS } from './tags';
+import { EVENT_BONE_SPAWN } from './events';
+import { TAG_ENEMY } from './tags';
+import HealthSystem from './hp';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -15,8 +15,6 @@ function Skeleton(x, y, type) {
     let targetFacing = (type > 127) ? -1 : 1;
     let facing = targetFacing;
     let injured = 0;
-    let maxHp = 3;
-    let hp = maxHp;
     const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
 
     const bodyMesh = [
@@ -44,16 +42,12 @@ function Skeleton(x, y, type) {
     ];
 
     function update(dT) {
-        if (hp <= 0) {
-            return true;
-        }
-
         vy += 1400 * dT;
 
-        let onGround, onRightWall, onLeftWall, onRoof;
+        let onGround, onRightWall, onLeftWall, onRoof, z;
         [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(enemyHitbox);
         [hasRight, hasLeft] = groundCheck(enemyHitbox, 0.5);
-        if (onGround && vy > 500) { hp = 0; bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]); }
+        if (onGround && vy > 500) { bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]); z=true; }
         if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
         if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
         if (onGround || onRoof) { vy = 0; }
@@ -73,6 +67,7 @@ function Skeleton(x, y, type) {
         injured = Math.max(0, injured - dT * 2);
 
         enemyHitbox.set(x, y, -20, -59, 40, 60);
+        return hp.g() <= 0 || z;
     }
 
     function render(ctx) {
@@ -110,32 +105,22 @@ function Skeleton(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function hitCheck([attackHitbox, dir, owner, isFlame]) {
-        if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
-            vx = dir * 600;
-            targetFacing = -Math.sign(dir);
-            injured = 1;
-            hp -= isFlame ? 2 : 1;
-            if (hp <= 0) {
-                bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]);
-            }
-            bus.emit(EVENT_ATTACK_HIT, [owner]);
+    function onHitCallback([,dir]) {
+        vx = dir * 600;
+        targetFacing = -Math.sign(dir);
+        injured = 1;
+        if (hp.g() <= 0) {
+            bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]);
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK, hitCheck);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK, hitCheck);
-    }
+    const hp = new HealthSystem(3, enemyHitbox, onHitCallback);
 
     return {
         update,
         render,
-        enable,
-        disable,
+        enable: hp.e,
+        disable: hp.d,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
         tags: [TAG_ENEMY],
