@@ -9,7 +9,7 @@ function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     x = (x - 0.5) * BLOCK_SIZE;
     y = (y - 0.5) * BLOCK_SIZE;
 
-    const physics = new BoundingBox(x, y, 0, 0, w, h);
+    const physics = BoundingBox(x, y, 0, 0, w, h);
     const wallMesh = [
         [palette[0], 5, 0]
     ];

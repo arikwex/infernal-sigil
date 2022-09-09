@@ -18,7 +18,7 @@ function Fireball(x, y, dir) {
         ['#f82', 10, 0],
         [2, 0, -4, 0],
     ];
-    const myHitbox = new BoundingBox(x, y, -20, -15, 30, 30);
+    const myHitbox = BoundingBox(x, y, -20, -15, 30, 30);
 
     function update(dT) {
         lifetime += dT;

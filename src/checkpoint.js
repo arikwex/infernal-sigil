@@ -32,8 +32,8 @@ function Checkpoint(x, y, checkpointId) {
     const symbolMeshes = copy(symbolMeshAssets);
 
     const gradient = makeGradient(x, y);
-    const physics = new BoundingBox(x-100,y,0,0,200,50);
-    const touchbox = new BoundingBox(x-75,y-10,0,0,150,10);
+    const physics = BoundingBox(x-100,y,0,0,200,50);
+    const touchbox = BoundingBox(x-75,y-10,0,0,150,10);
 
     function update(dT) {
         used = getCheckpointId() == checkpointId;

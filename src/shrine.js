@@ -39,9 +39,9 @@ function Shrine(x, y, grantType) {
     const symbolMeshes = copy(symbolMeshAssets);
 
     const gradient = makeGradient(x, y);
-    const physics = new BoundingBox(x-200,y,0,0,400,50);
-    const physics2 = new BoundingBox(x-100,y-50,0,0,200,50);
-    const touchbox = new BoundingBox(x-75,y-60,0,0,150,10);
+    const physics = BoundingBox(x-200,y,0,0,400,50);
+    const physics2 = BoundingBox(x-100,y-50,0,0,200,50);
+    const touchbox = BoundingBox(x-75,y-60,0,0,150,10);
     const secondPhysics = { tags: [TAG_PHYSICS], physics: physics2 };
 
     function update(dT) {

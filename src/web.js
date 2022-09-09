@@ -29,7 +29,7 @@ function Web(x, y) {
     }
     const webbing = [];
     webMesh.push(webbing);
-    const physics = new BoundingBox(x-50, y-100, 0, 0, 100, 200);
+    const physics = BoundingBox(x-50, y-100, 0, 0, 100, 200);
 
     function update(dT) {
         anim += dT * 56;

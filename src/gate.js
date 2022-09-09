@@ -22,7 +22,7 @@ function Gate(x, y, switchNum) {
         );
     });
 
-    const physics = new BoundingBox(x-50,y-220,0,0,100,220);
+    const physics = BoundingBox(x-50,y-220,0,0,100,220);
 
     function update(dT) {
         pos += ((open ? -150 : 50) - pos) * dT;

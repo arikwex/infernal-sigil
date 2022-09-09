@@ -22,7 +22,7 @@ function Player(x, y) {
     let tailWhip = 0;
     let groundTime = 0;
     let smoothGrounded = 0;
-    let playerHitbox = new BoundingBox(x, y, -14, -55, 28, 50);
+    let playerHitbox = BoundingBox(x, y, -14, -55, 28, 50);
     let injured = 0;
     let hasClaws = false;
     let isDead = false;
@@ -218,7 +218,7 @@ function Player(x, y) {
                 smoothAttacking = 1;
                 vx = targetFacing * 850;
                 vy = vy * 0.25 - 100;
-                bus.emit(EVENT_ATTACK, [new BoundingBox(x, y, -50 + 50 * targetFacing, -50, 100, 50), targetFacing]);
+                bus.emit(EVENT_ATTACK, [BoundingBox(x, y, -50 + 50 * targetFacing, -50, 100, 50), targetFacing]);
             }
             if (attackTime > 0.4) {
                 attackSeq = 0;

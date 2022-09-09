@@ -17,7 +17,7 @@ function Skeleton(x, y, type) {
     let injured = 0;
     let maxHp = 3;
     let hp = maxHp;
-    const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
+    const enemyHitbox = BoundingBox(x,y,0,0,0,0);
 
     const bodyMesh = [
         ['#fff', thickness, 0],

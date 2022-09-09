@@ -80,7 +80,7 @@ function Decoration(x, y, t) {
     let omega = [0, 0, 0, 0];
 
     let flameSfx = null;
-    let myHitbox = new BoundingBox(x,y,-10,-20,20,70);
+    let myHitbox = BoundingBox(x,y,-10,-20,20,70);
 
     function update(dT) {
         if (isHit) {

@@ -17,7 +17,7 @@ function Treasure(x, y, t) {
     let hitTimer = 0;
     let phase = 0;
     let hp = 3 * t;
-    const myHitbox = new BoundingBox(x-25,y-55,0,0,50,55);
+    const myHitbox = BoundingBox(x-25,y-55,0,0,50,55);
 
     const baseColor = colorMap[t-1];
     const bgColor = bgColorMap[t-1];

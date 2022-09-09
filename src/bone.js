@@ -18,7 +18,7 @@ function Bone(x, y, vx, vy, t=1) {
     let vanish = 10 + Math.random() * 3;
     let offset = -15 + 20 * Math.random();
 
-    const collectHitbox = new BoundingBox(x,y,1,1);
+    const collectHitbox = BoundingBox(x,y,1,1);
     let boneMesh;
     if (t == 1) {
         boneMesh = copy(boneMeshAsset);

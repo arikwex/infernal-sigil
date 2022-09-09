@@ -36,7 +36,7 @@ function Spider(x, y, type) {
     x -= wy * 50;
     y += wx * 50;
 
-    const enemyHitbox = new BoundingBox(x,y,0,0,0,0);
+    const enemyHitbox = BoundingBox(x,y,0,0,0,0);
 
     const face = [];
     for (let i = 0; i < 21; i++) {

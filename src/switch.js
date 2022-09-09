@@ -8,7 +8,7 @@ function Switch(x, y, switchNum, t = 0) {
     let active = false;
     const phase = t == 1;
     let angle = 0;
-    const myHitbox = new BoundingBox(x-40,y-15,0,0,80,65);
+    const myHitbox = BoundingBox(x-40,y-15,0,0,80,65);
 
     const switchRodMesh = [
         ['#a53', 8, 0],
