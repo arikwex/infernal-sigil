@@ -1,7 +1,7 @@
 import * as bus from './bus';
 import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
 import { canvas, color, renderMesh, renderText } from "./canvas";
-import { getBones, getDeathCount, getHp, getMaxHp } from "./gamestate";
+import { getBones, getDeathCount, getHp } from "./gamestate";
 import { clamp, copy } from "./utils";
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } from './events';
 import { getStartTime } from './engine';
@@ -27,7 +27,7 @@ function HUD() {
 
         // Render HP
         let hp = getHp();
-        for (let i = 0 ; i < getMaxHp(); i++) {
+        for (let i = 0 ; i < 3; i++) {
             if (i >= hp) {
                 headMesh[0][0] = '#555';
                 headMesh[3][0] = '#555';

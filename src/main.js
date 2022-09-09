@@ -19,12 +19,12 @@ async function initialize() {
     await new Promise((r)=>setTimeout(r));
 
     // Game
-    new Audio();
+    Audio();
 
-    const gameMap = new Map();
+    const gameMap = Map();
     await gameMap.generate();
 
-    [gameMap, new Camera(), new HUD()].map(add);
+    [gameMap, Camera(), HUD()].map(add);
 
     // FOR DEVELOPMENT
     // getObjectsByTag(TAG_PLAYER)[0].grant(0);
@@ -33,13 +33,13 @@ async function initialize() {
     // getObjectsByTag(TAG_PLAYER)[0].grant(3);
 
     // Game events
-    bus.on(EVENT_BONE_SPAWN, ([x,y,N,t]) => { while(N-->0){ add(new Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });
+    bus.on(EVENT_FIREBALL, ([x, y, dir]) => add(Fireball(x, y, dir)));
+    bus.on(EVENT_SFX_FLAME, ([x, y, s, t]) => add(FlameSFX(x, y, s, t)));
+    bus.on(EVENT_BONE_SPAWN, ([x,y,N,t]) => { while(N-->0){ add(Bone(x,y,(Math.random()-0.5)*400,(-Math.random())*300-200,t)); } });
     bus.on(EVENT_BONE_COLLECT, (v) => addBones(v));
     bus.on(EVENT_PLAYER_HIT, (v) => addHp(-v));
     bus.on(EVENT_PLAYER_CHECKPOINT, (v) => setCheckpointId(v));
     bus.on(EVENT_PLAYER_RESET, (v) => respawn());
-    bus.on(EVENT_FIREBALL, ([x, y, dir]) => add(new Fireball(x, y, dir)));
-    bus.on(EVENT_SFX_FLAME, ([x, y, s, t]) => add(new FlameSFX(x, y, s, t)));
 
     h1.remove();
     start();
