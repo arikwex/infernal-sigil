@@ -86,6 +86,8 @@ function Decoration(x, y, t) {
         if (isHit) {
             deathTimer += dT;
             if (deathTimer > 0.7) {
+                if (flameSfx) { remove([flameSfx]); }
+                bus.off(EVENT_ATTACK, hitCheck);
                 return true;
             }
         }
@@ -122,25 +124,16 @@ function Decoration(x, y, t) {
         }
     }
 
-    function enable() {
-        if (t == 0) {
-            flameSfx = new FlameSFX(x, y-7, 1, Infinity);
-            flameSfx.order = -6500;
-            add(flameSfx);
-        }
-        bus.on(EVENT_ATTACK, hitCheck);
+    if (t == 0) {
+        flameSfx = new FlameSFX(x, y-7, 1, Infinity);
+        flameSfx.order = -6500;
+        add(flameSfx);
     }
-
-    function disable() {
-        if (flameSfx) { remove([flameSfx]); }
-       bus.off(EVENT_ATTACK, hitCheck);
-    }
+    bus.on(EVENT_ATTACK, hitCheck);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000,
     }

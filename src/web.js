@@ -41,6 +41,7 @@ function Web(x, y) {
         if (burnup) {
             burntime += dT;
             if (burntime > 1) {
+                bus.off(EVENT_ATTACK, hitCheck);
                 return true;
             }
         }
@@ -96,21 +97,13 @@ function Web(x, y) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK, hitCheck);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK, hitCheck);
-    }
+    bus.on(EVENT_ATTACK, hitCheck);
 
     updateWebPos();
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -9000,
         tags: [TAG_PHYSICS],

@@ -35,7 +35,6 @@ function add(obj) {
         gameObjectsByTag[tag] = (gameObjectsByTag[tag] ?? []);
         gameObjectsByTag[tag].push(obj);
     });
-    obj.enable?.();
 }
 
 function arrayRemove(list, valuesToEvict) {
@@ -48,7 +47,6 @@ function remove(objList) {
         obj.tags?.map((tag) => {
             gameObjectsByTag[tag] = arrayRemove(gameObjectsByTag[tag], [obj]);
         });
-        obj.disable?.();
     });
 }
 

@@ -34,6 +34,7 @@ function Treasure(x, y, t) {
         if (hp <= 0) {
             bus.emit(EVENT_BONE_SPAWN, [x,y-20, boneMap[t-1], 1]);
             bus.emit(EVENT_BONE_SPAWN, [x,y-20, skullMap[t-1], 2]);
+            bus.off(EVENT_ATTACK, hitCheck);
             return true;
         }
         hitTimer = Math.max(hitTimer - dT, 0);
@@ -59,19 +60,11 @@ function Treasure(x, y, t) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK, hitCheck);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK, hitCheck);
-    }
+    bus.on(EVENT_ATTACK, hitCheck);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000,
     }

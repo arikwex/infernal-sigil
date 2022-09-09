@@ -23,6 +23,7 @@ function Fireball(x, y, dir) {
     function update(dT) {
         lifetime += dT;
         if (!self || lifetime > 9) {
+            bus.off(EVENT_ATTACK_HIT, onAttackHit);
             return true;
         }
         // TBD if this can be less aggressive
@@ -31,6 +32,7 @@ function Fireball(x, y, dir) {
         [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(myHitbox);
         if (onGround || onRight || onLeft || onRoof) {
             bus.emit(EVENT_SFX_FLAME, [x, y, 2, 0.5]);
+            bus.off(EVENT_ATTACK_HIT, onAttackHit);
             return true;
         }
         vx = clamp(vx + 1000 * dT * dir, -750, 750);
@@ -55,19 +57,11 @@ function Fireball(x, y, dir) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK_HIT, onAttackHit);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK_HIT, onAttackHit);
-    }
+    bus.on(EVENT_ATTACK_HIT, onAttackHit);
 
     return {
         update,
         render,
-        enable,
-        disable,
     }
 }
 

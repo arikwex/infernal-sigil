@@ -45,6 +45,7 @@ function Skeleton(x, y, type) {
 
     function update(dT) {
         if (hp <= 0) {
+            bus.off(EVENT_ATTACK, hitCheck);
             return true;
         }
 
@@ -123,19 +124,11 @@ function Skeleton(x, y, type) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK, hitCheck);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK, hitCheck);
-    }
+    bus.on(EVENT_ATTACK, hitCheck);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
         tags: [TAG_ENEMY],
