@@ -1,12 +1,12 @@
 import { BoundingBox, isTouching } from "./bbox";
 import { ctx, renderMesh } from "./canvas";
-import { add, getObjectsByTag } from "./engine";
+import { getObjectsByTag } from "./engine";
 import * as bus from './bus';
-import Decoration from "./decoration";
 import { headMeshAsset, symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { getCheckpointId } from "./gamestate";
 import { EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_RESET } from "./events";
+import { TAG_CAMERA, TAG_PHYSICS, TAG_PLAYER } from "./tags";
 
 function Checkpoint(x, y, checkpointId) {
     let anim = 0;
@@ -44,13 +44,13 @@ function Checkpoint(x, y, checkpointId) {
         anim += dT;
 
         if (!used) {
-            if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
+            if (isTouching(touchbox, getObjectsByTag(TAG_PLAYER)[0].playerHitbox)) {
                 if (!engagedLastFrame) {
                     bus.emit(EVENT_FOCUS);
                     engagedLastFrame = true;
                 }
                 engaging += dT;
-                const cam = getObjectsByTag('camera')[0];
+                const cam = getObjectsByTag(TAG_CAMERA)[0];
                 const alpha = engaging / 3;
                 const beta = 1 - alpha;
                 cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha, alpha);
@@ -88,7 +88,7 @@ function Checkpoint(x, y, checkpointId) {
 
     function onReset() {
         if (checkpointId == getCheckpointId()) {
-            getObjectsByTag('player')[0].reset(x, y - 150);
+            getObjectsByTag(TAG_PLAYER)[0].reset(x, y - 150);
         }
     }
 
@@ -106,7 +106,7 @@ function Checkpoint(x, y, checkpointId) {
         enable,
         disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
-        tags: ['physics'],
+        tags: [TAG_PHYSICS],
         physics,
         order: -8000
     };

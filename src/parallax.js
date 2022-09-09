@@ -1,5 +1,6 @@
 import { renderMesh, scaleInPlace } from "./canvas";
 import { getObjectsByTag } from "./engine";
+import { TAG_CAMERA } from "./tags";
 
 function Parallax(x, y) {
     const z = 1 + Math.random() * 3;
@@ -32,7 +33,7 @@ function Parallax(x, y) {
     
 
     function render(ctx) {
-        const camera = getObjectsByTag('camera')[0];
+        const camera = getObjectsByTag(TAG_CAMERA)[0];
         const cx = camera.getX();
         const cy = camera.getY();
         const k2 = (1 + z * 0.6);

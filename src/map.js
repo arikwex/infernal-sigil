@@ -6,6 +6,7 @@ import Decoration from './decoration';
 import * as bus from './bus';
 import LOOKUP from './GENERATED-map-lookup';
 import { EVENT_REGION } from './events';
+import { TAG_MAP } from './tags';
 
 function Map() {
     let img = new Image();
@@ -202,7 +203,7 @@ function Map() {
 
     return {
         generate,
-        tags: ['map'],
+        tags: [TAG_MAP],
         getTheme,
     }
 }

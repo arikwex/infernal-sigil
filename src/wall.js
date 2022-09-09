@@ -1,6 +1,7 @@
 import { BoundingBox } from "./bbox";
 import { renderMesh } from "./canvas";
 import { getObjectsByTag } from "./engine";
+import { TAG_PHYSICS } from "./tags";
 
 function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     const w = (ex - x) * BLOCK_SIZE;
@@ -37,7 +38,7 @@ function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     return {
         render,
         inView,
-        tags: ['physics'],
+        tags: [TAG_PHYSICS],
         physics,
         order: -5000
     }

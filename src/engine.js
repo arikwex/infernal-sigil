@@ -1,4 +1,5 @@
 import { canvas, ctx } from './canvas';
+import { TAG_CAMERA } from './tags';
 
 let gameObjects = [];
 let gameObjectsByTag = {};
@@ -10,7 +11,7 @@ function tick(currentFrameMs) {
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     const originalXfm = ctx.getTransform();
-    const camera = getObjectsByTag('camera')[0];
+    const camera = getObjectsByTag(TAG_CAMERA)[0];
     const cx = camera.getX();
     const cy = camera.getY();
     camera.set(ctx);

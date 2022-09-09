@@ -3,6 +3,7 @@ import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_SFX_FLAME, EVENT_WEB_BOING } from "./events";
+import { TAG_PHYSICS } from "./tags";
 
 function Web(x, y) {
     y -= 50;
@@ -112,7 +113,7 @@ function Web(x, y) {
         disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -9000,
-        tags: ['physics'],
+        tags: [TAG_PHYSICS],
         physics,
     };
 }

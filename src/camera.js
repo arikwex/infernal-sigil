@@ -3,9 +3,10 @@ import { canvas } from "./canvas";
 import { getObjectsByTag } from "./engine"
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT } from './events';
 import { getHp } from './gamestate';
+import { TAG_CAMERA, TAG_MAP, TAG_PLAYER } from './tags';
 
 function Camera(x, y) {
-    const player = getObjectsByTag('player')[0];
+    const player = getObjectsByTag(TAG_PLAYER)[0];
     x = player.playerHitbox.x;
     y = player.playerHitbox.y;
     let anim = 0;
@@ -39,7 +40,7 @@ function Camera(x, y) {
         }
 
         // Should technically be in the render loop
-        const m = getObjectsByTag('map')[0];
+        const m = getObjectsByTag(TAG_MAP)[0];
         const themeData = m.getTheme(x/100, y/100);
         for (let i = 0; i < 3; i++) {
             bgTop[i] += (themeData[i] - bgTop[i]) * 3 * dT;
@@ -94,7 +95,7 @@ function Camera(x, y) {
         getY,
         getBgBot,
         order: -10000,
-        tags: ['camera']
+        tags: [TAG_CAMERA]
     }
 }
 

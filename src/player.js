@@ -7,6 +7,7 @@ import { copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_WALK } from './events';
+import { TAG_CAMERA, TAG_ENEMY, TAG_PHYSICS, TAG_PLAYER } from './tags';
 
 function Player(x, y) {
     const thickness = 9;
@@ -158,7 +159,7 @@ function Player(x, y) {
 
         // Wall physics
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), playerHitbox);
         let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
 
         // Disallow sticking to wall during timeout period
@@ -338,7 +339,7 @@ function Player(x, y) {
         }
 
         // Enemy collision checks
-        getObjectsByTag('enemy').map(({ enemyHitbox }) => {
+        getObjectsByTag(TAG_ENEMY).map(({ enemyHitbox }) => {
             if (isDead || dashTimer < 0.3) { return; }
             if (playerHitbox.isTouching(enemyHitbox) && injured <= 0 && attackTime > 0.15) {
                 injured = 1;
@@ -390,7 +391,7 @@ function Player(x, y) {
         for (let i = 0; i < N; i++) {
             playerHitbox.x += dT * vx / N;
             playerHitbox.y += dT * vy / N;
-            [x, y, _, _, _, onRoof] = physicsCheck(getObjectsByTag('physics'), playerHitbox);
+            [x, y, _, _, _, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), playerHitbox);
             if (onRoof) { vy = 0; }
             if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
         }
@@ -606,7 +607,7 @@ function Player(x, y) {
         playerHitbox.y = y_;
         vx = 0;
         vy = 0;
-        getObjectsByTag('camera')[0].aim(x_, y_, 1, true);
+        getObjectsByTag(TAG_CAMERA)[0].aim(x_, y_, 1, true);
     }
 
     function onAttackHit([attack, dir]) {
@@ -631,7 +632,7 @@ function Player(x, y) {
         enable,
         disable,
         order: 1000,
-        tags: ['player'],
+        tags: [TAG_PLAYER],
         playerHitbox,
         grant,
         reset,

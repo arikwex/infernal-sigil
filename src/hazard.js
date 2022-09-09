@@ -1,6 +1,7 @@
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
 import { inView } from './utils';
+import { TAG_ENEMY } from './tags';
 
 const spikeMesh = [
   ['#f52', 6, 0],
@@ -68,7 +69,7 @@ function Hazard(x, y, t) {
     render,
     inView: (cx, cy) => inView(x, y, cx, cy),
     order: -6000,
-    tags: ['enemy'],
+    tags: [TAG_ENEMY],
     enemyHitbox
   }
 }

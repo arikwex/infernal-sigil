@@ -5,6 +5,7 @@ import * as bus from './bus';
 import { symbolMeshAssets } from "./assets";
 import { copy, inView } from "./utils";
 import { EVENT_BONE_SPAWN, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_PLAYER_ABILITY_GRANT } from "./events";
+import { TAG_CAMERA, TAG_PHYSICS, TAG_PLAYER } from "./tags";
 
 function Shrine(x, y, grantType) {
     let anim = 0;
@@ -45,19 +46,19 @@ function Shrine(x, y, grantType) {
     const physics = new BoundingBox(x-200,y,0,0,400,50);
     const physics2 = new BoundingBox(x-100,y-50,0,0,200,50);
     const touchbox = new BoundingBox(x-75,y-60,0,0,150,10);
-    const secondPhysics = { tags: ['physics'], physics: physics2 };
+    const secondPhysics = { tags: [TAG_PHYSICS], physics: physics2 };
 
     function update(dT) {
         anim += dT;
 
         if (!used) {
-            if (isTouching(touchbox, getObjectsByTag('player')[0].playerHitbox)) {
+            if (isTouching(touchbox, getObjectsByTag(TAG_PLAYER)[0].playerHitbox)) {
                 if (!engagedLastFrame) {
                     bus.emit(EVENT_FOCUS);
                     engagedLastFrame = true;
                 }
                 engaging += dT;
-                const cam = getObjectsByTag('camera')[0];
+                const cam = getObjectsByTag(TAG_CAMERA)[0];
                 const alpha = engaging / 3;
                 const beta = 1 - alpha;
                 cam.aim(cam.getX() * beta + x * alpha, cam.getY() * beta + (y-100) * alpha, 1 + Math.sqrt(engaging) * 0.4 * alpha, alpha);
@@ -122,7 +123,7 @@ function Shrine(x, y, grantType) {
         enable,
         disable,
         inView: (cx, cy) => inView(x, y-100, cx, cy),
-        tags: ['physics'],
+        tags: [TAG_PHYSICS],
         physics,
         order: -8000
     };

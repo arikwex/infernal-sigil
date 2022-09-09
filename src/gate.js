@@ -3,6 +3,7 @@ import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
 import { EVENT_SWITCH } from "./events";
+import { TAG_PHYSICS } from "./tags";
 
 function Gate(x, y, switchNum) {
     let open = false;
@@ -52,7 +53,7 @@ function Gate(x, y, switchNum) {
         enable,
         disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
-        tags: ['physics'],
+        tags: [TAG_PHYSICS],
         physics,
         order: -7000
     };

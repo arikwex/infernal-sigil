@@ -4,6 +4,7 @@ import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
+import { TAG_ENEMY, TAG_PHYSICS } from './tags';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
 
@@ -73,9 +74,9 @@ function Spider(x, y, type) {
         vy += wx * 1300 * dT;
 
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag('physics'), enemyHitbox);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox);
 
-        [hasRight, hasLeft] = groundCheck(getObjectsByTag('physics'), enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
+        [hasRight, hasLeft] = groundCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
         // TODO: optimize
         if (walkPattern == 0) {
             if (onRightWall || !hasRight) { targetFacing = -1; }
@@ -207,7 +208,7 @@ function Spider(x, y, type) {
         disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
-        tags: ['enemy'],
+        tags: [TAG_ENEMY],
         enemyHitbox,
     };
 }
