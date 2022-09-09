@@ -76,7 +76,6 @@ function Skeleton(x, y, type) {
     }
 
     function render(ctx) {
-        const idle = 0;
         const walking = 1;
 
         const t = facing * 0.6;
@@ -85,21 +84,19 @@ function Skeleton(x, y, type) {
         scaleInPlace(size, x, y);
 
         const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
-        const pHand1X = 7 * t * (idle + walking) + pBodyP * 50;
+        const pHand1X = 7 * t * walking + pBodyP * 50;
         const pHand1Y =
-            (-33 - 2 * t + Math.cos(a)) * idle +
             (-33 - 2 * t + Math.cos(a-1)) * walking;
-        const pHand2X = 7 * t * (idle + walking) + pBodyP * 50;
+        const pHand2X = 7 * t * walking + pBodyP * 50;
         const pHand2Y =
-            (-33 + 2 * t + Math.cos(a)) * idle +
             (-33 + 2 * t + Math.cos(a+2)) * walking;
-        const pHeadY = (-40 + Math.cos(a+1)) * (idle + walking);
+        const pHeadY = (-40 + Math.cos(a+1)) * walking;
 
         // Leg animation
-        legMesh[1][0] = -8 * idle + (Math.cos(a) * 8 * facing) * walking;
-        legMesh[1][1] = (Math.min(0, Math.sin(a)) * 4) * walking;
-        legMesh[1][4] = -8 * idle + (Math.cos(a+3) * 8 * facing) * walking;
-        legMesh[1][5] = (Math.min(0, Math.sin(a+3)) * 4) * walking;
+        legMesh[1][0] = Math.cos(a) * 8 * facing * walking;
+        legMesh[1][1] = Math.min(0, Math.sin(a)) * 4 * walking;
+        legMesh[1][4] = Math.cos(a+3) * 8 * facing * walking;
+        legMesh[1][5] = Math.min(0, Math.sin(a+3)) * 4 * walking;
 
         if (injured > 0.2) {
             ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
