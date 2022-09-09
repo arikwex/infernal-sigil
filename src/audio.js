@@ -1,6 +1,6 @@
 import * as bus from './bus'
 import { clamp } from './utils';
-import { EVENT_ANY_KEY, EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
 
 function Audio() {
     let audioCtx = null;
@@ -156,8 +156,8 @@ function Audio() {
     function genericSongBuilder(seed, melodySignature) {
         const genericSong = [];
         const genericDrums = [];
-        const noteLength = [1,4,2,0.5,3,4][seed];
-        const noteSpace = [1,1,0.5,0.25,2,2][seed];
+        const noteLength = [4,2,0.5,3,4][seed-1];
+        const noteSpace = [1,0.5,0.25,2,2][seed-1];
         const bassNotes = [-15, -20, -19, -12];
         genericDrums.push(
             [((seed * seed * 3) * 0.5) % 2, (seed) % 2],
@@ -210,42 +210,6 @@ function Audio() {
         }
     };
 
-    function enable() {
-        if (audioCtx) { return; }
-        bus.off(EVENT_ANY_KEY, enable);
-        init();
-        bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
-        bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
-        bus.on(EVENT_PLAYER_HIT, play(injuredSound));
-        bus.on(EVENT_WALK, play(walkSound));
-        bus.on(EVENT_JUMP, play(jumpSound));
-        bus.on(EVENT_DASH, play(dashSound));
-        bus.on(EVENT_FLAP, play(flapSound));
-        bus.on(EVENT_FIREBALL, play(fireballSound));
-        bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
-        bus.on(EVENT_BONE_DINK, play(boneCollectSound));
-        bus.on(EVENT_SWITCH, play(switchSound));
-        bus.on(EVENT_REGION, onRegion);
-        bus.on(EVENT_FOCUS, () => {
-            focusNode = audioCtx.createBufferSource();
-            focusNode.buffer = musicFocusBuffer;
-            focusNode.connect(audioCtx.destination);
-            focusNode.start(); 
-        });
-        bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
-        bus.on(EVENT_PLAYER_ABILITY_GRANT, play(grantSound));
-        bus.on(EVENT_PLAYER_CHECKPOINT, play(grantSound));
-        bus.on(EVENT_WEB_BOING, play(boingSound));
-        
-        gainNodeA = new GainNode(audioCtx);
-        gainNodeA.connect(audioCtx.destination);
-        gainNodeB = new GainNode(audioCtx);
-        gainNodeB.connect(audioCtx.destination);
-
-        music(musicStyxBuffer);
-    };
-    bus.on(EVENT_ANY_KEY, enable);
-
     function onRegion(regionId) {
         music([
             musicStyxBuffer,
@@ -270,6 +234,38 @@ function Audio() {
         gainNodeB.gain.setTargetAtTime(usingA ? 0 : 1, audioCtx.currentTime, 1.0);
         usingA = !usingA;
     }
+
+    // Setup gogogo
+    init();
+    bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
+    bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
+    bus.on(EVENT_PLAYER_HIT, play(injuredSound));
+    bus.on(EVENT_WALK, play(walkSound));
+    bus.on(EVENT_JUMP, play(jumpSound));
+    bus.on(EVENT_DASH, play(dashSound));
+    bus.on(EVENT_FLAP, play(flapSound));
+    bus.on(EVENT_FIREBALL, play(fireballSound));
+    bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
+    bus.on(EVENT_BONE_DINK, play(boneCollectSound));
+    bus.on(EVENT_SWITCH, play(switchSound));
+    bus.on(EVENT_REGION, onRegion);
+    bus.on(EVENT_FOCUS, () => {
+        focusNode = audioCtx.createBufferSource();
+        focusNode.buffer = musicFocusBuffer;
+        focusNode.connect(audioCtx.destination);
+        focusNode.start(); 
+    });
+    bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
+    bus.on(EVENT_PLAYER_ABILITY_GRANT, play(grantSound));
+    bus.on(EVENT_PLAYER_CHECKPOINT, play(grantSound));
+    bus.on(EVENT_WEB_BOING, play(boingSound));
+    
+    gainNodeA = new GainNode(audioCtx);
+    gainNodeA.connect(audioCtx.destination);
+    gainNodeB = new GainNode(audioCtx);
+    gainNodeB.connect(audioCtx.destination);
+
+    music(musicStyxBuffer);
 }
 
 export default Audio;
