@@ -1,3 +1,6 @@
+import { getObjectsByTag } from "./engine";
+import { TAG_PHYSICS } from "./tags";
+
 function clamp(v, min, max) {
     return Math.max(Math.min(v, max), min);
 }
@@ -11,14 +14,14 @@ function inView(x, y, cx, cy) {
 }
 
 const physicsResult = [0, 0, false, false, false, false];
-function physicsCheck(physicsObjects, myHitbox) {
+function physicsCheck(myHitbox) {
     let x = myHitbox.x;
     let y = myHitbox.y;
     let onGround = false;
     let onRightWall = false;
     let onLeftWall = false;
     let onRoof = false;
-    physicsObjects.map(({ physics }) => {
+    getObjectsByTag(TAG_PHYSICS).map(({ physics }) => {
         if (myHitbox.isTouching(physics)) {
             // Sides
             let onThisWall = false;
@@ -60,12 +63,12 @@ function physicsCheck(physicsObjects, myHitbox) {
 }
 
 const groundResult = [false, false];
-function groundCheck(physicsObjects, myHitbox, wx = 1, wy = 0) {
+function groundCheck(myHitbox, wx = 1, wy = 0) {
     let hasRight = false;
     let hasLeft = false;
     let ox = myHitbox.x;
     let oy = myHitbox.y;
-    physicsObjects.map(({ physics }) => {
+    getObjectsByTag(TAG_PHYSICS).map(({ physics }) => {
         let sx = ox + 40 * wx - 4 * wy;
         let sy = oy + 4 * wx + 40 * wy;
         if (physics.containPt(sx, sy)) {

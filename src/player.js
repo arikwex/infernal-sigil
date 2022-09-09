@@ -159,7 +159,7 @@ function Player(x, y) {
 
         // Wall physics
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), playerHitbox);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(playerHitbox);
         let onWall = (onRightWall && facing > 0) || (onLeftWall && facing < 0);
 
         // Disallow sticking to wall during timeout period
@@ -391,7 +391,7 @@ function Player(x, y) {
         for (let i = 0; i < N; i++) {
             playerHitbox.x += dT * vx / N;
             playerHitbox.y += dT * vy / N;
-            [x, y, _, _, _, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), playerHitbox);
+            [x, y, _, _, _, onRoof] = physicsCheck(playerHitbox);
             if (onRoof) { vy = 0; }
             if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
         }

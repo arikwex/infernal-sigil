@@ -74,9 +74,9 @@ function Spider(x, y, type) {
         vy += wx * 1300 * dT;
 
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(enemyHitbox);
 
-        [hasRight, hasLeft] = groundCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
+        [hasRight, hasLeft] = groundCheck(enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
         // TODO: optimize
         if (walkPattern == 0) {
             if (onRightWall || !hasRight) { targetFacing = -1; }

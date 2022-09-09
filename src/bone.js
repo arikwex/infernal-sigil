@@ -41,7 +41,7 @@ function Bone(x, y, vx, vy, t=1) {
         }
 
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), collectHitbox);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(collectHitbox);
         if (onRightWall || onLeftWall) { vx = -vx; }
         if (onGround) {
             if (vy > 200) {

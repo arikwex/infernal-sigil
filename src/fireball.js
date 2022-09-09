@@ -28,7 +28,7 @@ function Fireball(x, y, dir) {
         // TBD if this can be less aggressive
         bus.emit(EVENT_ATTACK, [myHitbox, dir, self, true]);
         let _, onGround, onRight, onLeft, onRoof;
-        [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), myHitbox);
+        [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(myHitbox);
         if (onGround || onRight || onLeft || onRoof) {
             bus.emit(EVENT_SFX_FLAME, [x, y, 2, 0.5]);
             return true;

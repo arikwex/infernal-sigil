@@ -51,8 +51,8 @@ function Skeleton(x, y, type) {
         vy += 1400 * dT;
 
         let onGround, onRightWall, onLeftWall, onRoof;
-        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox);
-        [hasRight, hasLeft] = groundCheck(getObjectsByTag(TAG_PHYSICS), enemyHitbox, 0.5);
+        [x, y, onGround, onRightWall, onLeftWall, onRoof] = physicsCheck(enemyHitbox);
+        [hasRight, hasLeft] = groundCheck(enemyHitbox, 0.5);
         if (onGround && vy > 500) { hp = 0; bus.emit(EVENT_BONE_SPAWN, [x,y-55,4,1]); }
         if (onRightWall || (!hasRight && onGround)) { targetFacing = -1; }
         if (onLeftWall || (!hasLeft && onGround)) { targetFacing = 1; }
