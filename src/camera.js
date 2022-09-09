@@ -12,7 +12,7 @@ function Camera(x, y) {
     let shake = 0;
     let tx = x;
     let ty = y;
-    let tz = canvas.width / 1400;
+    let tz = 1;
     let z = tz;
 
     let bgBot = [0, 0, 0];
@@ -26,19 +26,19 @@ function Camera(x, y) {
         z += (tz - z) * 3 * dT;
         tz += (canvas.width / 1500 - tz) * 4 * dT;
 
-        if (player && getHp() > 0) {
+        if (getHp() > 0) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
             const { width, height } = canvas;
-            const W = width / 8;
-            const H = height / 6;
+            const W = width / 10;
+            const H = height / 8;
             if (px < x - W) { tx = px + W; }
             if (px > x + W) { tx = px - W; }
             if (py < y - H) { ty = py + H; }
             if (py > y + H*0.8) { ty = py - H*0.8; }
         }
 
-        // Chould technically be in the render loop
+        // Should technically be in the render loop
         const m = getObjectsByTag('map')[0];
         const themeData = m.getTheme(x/100, y/100);
         for (let i = 0; i < 3; i++) {
@@ -79,10 +79,12 @@ function Camera(x, y) {
             z = tz;
         }
     }
+    
+    function shakeIt() { shake=0.5; }
 
-    bus.on(EVENT_PLAYER_HIT, () => shake=0.5);
-    bus.on(EVENT_PLAYER_ABILITY_GRANT, () => shake=0.5);
-    bus.on(EVENT_PLAYER_CHECKPOINT, () => shake=0.5);
+    bus.on(EVENT_PLAYER_HIT, shakeIt);
+    bus.on(EVENT_PLAYER_ABILITY_GRANT, shakeIt);
+    bus.on(EVENT_PLAYER_CHECKPOINT, shakeIt);
 
     return {
         update,
