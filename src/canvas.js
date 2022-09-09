@@ -2,7 +2,7 @@ import { headMeshAsset } from "./assets";
 
 const canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight * canvas.width / window.innerWidth;
+canvas.height = window.innerHeight;
 const ctx = canvas.getContext('2d');
 
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
@@ -51,7 +51,7 @@ canvas.width = 64; canvas.height = 64;
 ctx.fillStyle = 'rgba(0,0,0,0)';
 ctx.fillRect(0, 0, 64, 64);
 renderMesh(headMeshAsset, 32, 48, 0, 0, 0);
-var link = document.querySelector("link[rel~='icon']");
+var link = document.querySelector("link"); // LINK ONLY?
 link.href = canvas.toDataURL();
 canvas.width = ow; canvas.height = oh;
 
