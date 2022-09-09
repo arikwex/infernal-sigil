@@ -109,19 +109,11 @@ function Shrine(x, y, grantType) {
         }
     }
 
-    function enable() {
-        add(secondPhysics);
-    }
-
-    function disable() {
-        remove(secondPhysics);
-    }
+    add(secondPhysics);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y-100, cx, cy),
         tags: [TAG_PHYSICS],
         physics,

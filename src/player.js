@@ -67,6 +67,7 @@ function Player(x, y) {
     const TERMINAL_VELOCITY = 800;
     const CLIMB_SPEED = 370;
 
+    // Head with no horns
     let headMesh = copy(headMeshAsset);
     headMesh[1].pop(); headMesh[1].pop();
     headMesh[1].shift(); headMesh[1].shift();
@@ -89,7 +90,7 @@ function Player(x, y) {
     ];
     const tailMesh = [
         ['#e22', thickness, 0],
-        [0, 20-37, -16, 31-37, -26, 31-37, -32, 22-37, -34, 15-37]
+        [0, 20-37, -16, 0, -26, 0, 0, 0, 0, 0]
     ];
     const flameMesh = [
         ['#ee2', 6, 0],
@@ -616,21 +617,12 @@ function Player(x, y) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_PLAYER_ABILITY_GRANT, grant);
-        bus.on(EVENT_ATTACK_HIT, onAttackHit);
-    }
-
-    function disable() {
-        bus.off(EVENT_PLAYER_ABILITY_GRANT, grant);
-        bus.off(EVENT_ATTACK_HIT, onAttackHit);
-    }
+    bus.on(EVENT_PLAYER_ABILITY_GRANT, grant);
+    bus.on(EVENT_ATTACK_HIT, onAttackHit);
 
     return {
         update,
         render,
-        enable,
-        disable,
         order: 1000,
         tags: [TAG_PLAYER],
         playerHitbox,

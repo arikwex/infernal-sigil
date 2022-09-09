@@ -40,19 +40,11 @@ function Switch(x, y, switchNum, t = 0) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_ATTACK, hitCheck);
-    }
-
-    function disable() {
-        bus.off(EVENT_ATTACK, hitCheck);
-    }
+    bus.on(EVENT_ATTACK, hitCheck);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000
     }

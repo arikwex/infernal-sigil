@@ -92,19 +92,11 @@ function Checkpoint(x, y, checkpointId) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_PLAYER_RESET, onReset);
-    }
-
-    function disable() {
-        bus.off(EVENT_PLAYER_RESET, onReset);
-    }
+    bus.on(EVENT_PLAYER_RESET, onReset);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         tags: [TAG_PHYSICS],
         physics,
