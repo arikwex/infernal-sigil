@@ -34,6 +34,7 @@ function Map() {
 
         // Character placements
         for (let x = 0; x < W; x++) {
+            themeLookup[x] = {};
             for (let y = 0; y < H; y++) {
                 const V = get(x, y);
                 const entityClass = LOOKUP[V*2];
@@ -43,7 +44,6 @@ function Map() {
                 }
 
                 // compute theme avg
-                themeLookup[x] = themeLookup[x] || {};
                 themeLookup[x][y] = computeTheme(x, y);
             }
         }
@@ -110,35 +110,36 @@ function Map() {
         const left = [];
         let drawing = [];
         let drawing2 = [];
+
         for (let i = y; i < ey; i++) {
             const sample = get(ex, i) << 1;
             if (!drawing.length && !WALL_MAP[sample]) {
-                drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
+                drawing.push((ex-x), (i-y));
             }
             if (drawing.length && WALL_MAP[sample]) {
-                drawing.push((ex-x) * BLOCK_SIZE, (i-y) * BLOCK_SIZE);
-                right.push(drawing);
+                drawing.push((ex-x), (i-y));
+                right.push(drawing.map((v) => v * BLOCK_SIZE));
                 drawing = [];
             }
 
             const sample2 = get(x-1, i) << 1;
             if (!drawing2.length && !WALL_MAP[sample2]) {
-                drawing2.push(0, (i-y) * BLOCK_SIZE);
+                drawing2.push(0, (i-y));
             }
             if (drawing2.length && WALL_MAP[sample2]) {
-                drawing2.push(0, (i-y) * BLOCK_SIZE);
-                left.push(drawing2);
+                drawing2.push(0, (i-y));
+                left.push(drawing2.map((v) => v * BLOCK_SIZE));
                 drawing2 = [];
             }
         }
 
         if (drawing.length) {
-            drawing.push((ex-x) * BLOCK_SIZE, (ey-y) * BLOCK_SIZE);
-            right.push(drawing);
+            drawing.push((ex-x), (ey-y));
+            right.push(drawing.map((v) => v * BLOCK_SIZE));
         }
         if (drawing2.length) {
-            drawing2.push(0, (ey-y) * BLOCK_SIZE);
-            left.push(drawing2);
+            drawing2.push(0, (ey-y));
+            left.push(drawing2.map((v) => v * BLOCK_SIZE));
         }
 
         return [right, left];
