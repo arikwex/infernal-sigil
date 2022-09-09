@@ -23,8 +23,7 @@ function HUD() {
 
     function render(ctx) {
         const xfm = ctx.getTransform();
-        ctx.setTransform(1,0,0,1,0,0);
-        ctx.scale(0.8, 0.8);
+        ctx.setTransform(0.8,0,0,0.8,0,0);
 
         // Render HP
         let hp = getHp();

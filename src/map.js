@@ -153,17 +153,15 @@ function Map() {
         let avgTheme = [0, 0, 0, 0, 0, 0, null];
         const foundThemes = {};
         let N = 0.001;
-        for (let dx = -4; dx <= 4; dx++) {
-            for (let dy = -4; dy <= 4; dy++) {
-                const V = get(x + dx, y + dy) << 1;
-                const wallData = WALL_MAP[V];
-                if (wallData) {
-                    foundThemes[V] = true;
-                    for (let i = 0; i < 6; i++) {
-                        avgTheme[i] += wallData[2 + i];
-                    }
-                    N++;
+        for (let q = 0; q < 25; q++) {
+            const V = get(x + parseInt(q / 5), y + q % 5) << 1;
+            const wallData = WALL_MAP[V];
+            if (wallData) {
+                foundThemes[V] = true;
+                for (let i = 0; i < 6; i++) {
+                    avgTheme[i] += wallData[2 + i];
                 }
+                N++;
             }
         }
         const keys = Object.keys(foundThemes);
