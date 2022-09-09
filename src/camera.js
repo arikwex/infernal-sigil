@@ -46,7 +46,7 @@ function Camera(x, y) {
             bgTop[i] += (themeData[i] - bgTop[i]) * 3 * dT;
             bgBot[i] += (themeData[i + 3] - bgBot[i]) * 3 * dT;
         }
-        document.body.style = `background:linear-gradient(0deg,rgb(${bgBot.join(',')}) 0%,rgb(${bgTop.join(',')}) 100%)`;
+        document.body.style = `background:linear-gradient(0deg,rgb(${bgBot}) 0%,rgb(${bgTop}) 100%)`;
     }
 
     function set(ctx) {
