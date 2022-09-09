@@ -40,7 +40,6 @@ function BoundingBox(x, y, ox, oy, w, h) {
     const self = {};
     self.set = (x_,y_,ox_,oy_,w_,h_) => { self.x=x_;self.y=y_;self.ox=ox_;self.oy=oy_;self.w=w_;self.h=h_; }
     self.isTouching = (other) => { return isTouching(self, other); }
-    self.containPt = (x_, y_) => { return containPt(self, x_, y_); }
     self.set(x,y,ox,oy,w,h);
     return self;
 }

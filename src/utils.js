@@ -1,3 +1,4 @@
+import { containPt } from "./bbox";
 import { getObjectsByTag } from "./engine";
 import { TAG_PHYSICS } from "./tags";
 
@@ -71,12 +72,12 @@ function groundCheck(myHitbox, wx = 1, wy = 0) {
     getObjectsByTag(TAG_PHYSICS).map(({ physics }) => {
         let sx = ox + 40 * wx - 4 * wy;
         let sy = oy + 4 * wx + 40 * wy;
-        if (physics.containPt(sx, sy)) {
+        if (containPt(physics, sx, sy)) {
             hasRight = true;
         }
         sx = ox - 40 * wx - 4 * wy;
         sy = oy + 4 * wx - 40 * wy;
-        if (physics.containPt(sx, sy)) {
+        if (containPt(physics, sx, sy)) {
             hasLeft = true;
         }
     });
