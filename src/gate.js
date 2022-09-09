@@ -39,19 +39,11 @@ function Gate(x, y, switchNum) {
         }
     }
 
-    function enable() {
-        bus.on(EVENT_SWITCH, onSwitch);
-    }
-
-    function disable() {
-        bus.off(EVENT_SWITCH, onSwitch);
-    }
+    bus.on(EVENT_SWITCH, onSwitch);
 
     return {
         update,
         render,
-        enable,
-        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         tags: [TAG_PHYSICS],
         physics,

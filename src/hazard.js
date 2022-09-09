@@ -53,8 +53,7 @@ function Hazard(x, y, t) {
     if (t == 8) {
       ctx.fillStyle = '#f82';
       ctx.beginPath();
-      const p = anim;
-      ctx.arc(x + placement, y + 50 - p * 40, (p - p * p) * 40, 0, 2 * Math.PI);
+      ctx.arc(x + placement, y + 50 - anim * 40, (anim - anim * anim) * 40, 0, 2 * Math.PI);
       ctx.fill();
       renderMesh(lavaMesh, x, y, 0, 0, 0);
     } else {
