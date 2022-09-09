@@ -12,7 +12,7 @@ let postBuildPlugin = {
     name: 'Post-Build',
     setup(build) {
         build.onStart(() => {
-            //buildMapIndex('./src/game-map.png');
+            buildMapIndex('./src/game-map.png');
         });
 
         build.onLoad({ filter: /\.png$/ }, (args) => {
