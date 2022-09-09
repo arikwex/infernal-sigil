@@ -66,7 +66,7 @@ function Audio() {
     }
 
     function init() {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioCtx = new AudioContext();
         sampleRate = audioCtx.sampleRate;
 
         // Player swipe attack sound
@@ -168,7 +168,7 @@ function Audio() {
             const o = i * 8;
             const q = [0,3,-5][i];
             for (let j = 0; j < 8; j++) {
-                genericSong.push([bassNotes[(seed*7+i*2+(j>>1)+j*j*3) % bassNotes.length]+q, j+o, 6, 1]);
+                genericSong.push([bassNotes[(seed*7+i*2+(j>>1)+j*j*3) % 4]+q, j+o, 6, 1]);
             }
             for (let j = 0; j < 8/noteSpace; j++) {
                 if ((j + j*j + i+seed*3) % 7 < 4) {

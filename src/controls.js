@@ -3,14 +3,14 @@ import { EVENT_ANY_KEY } from './events';
 
 const pressed = {};
 
-window.onkeydown = (evt) => {
+onkeydown = (evt) => {
     if (!pressed[evt.code]) {
         pressed[evt.code] = Date.now();
     }
     bus.emit(EVENT_ANY_KEY);
 }
 
-window.onkeyup = (evt) => {
+onkeyup = (evt) => {
     delete pressed[evt.code];
 }
 

@@ -1,8 +1,8 @@
 import { headMeshAsset } from "./assets";
 
 const canvas = document.getElementsByTagName('canvas')[0];
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 const ctx = canvas.getContext('2d');
 
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
