@@ -51,19 +51,9 @@ function Audio() {
         return audioBuffer;
     }
 
-    function writeNote(dest, tone, startTime, duration, a) {
-        const baseFreq = 6*(2**(-tone/12))*2;
-        const baseIdx = parseInt(startTime * sampleRate);
-        const dur = parseInt(duration * sampleRate);
-        for (let i = 0; i < dur && i < dest.length; i++) {
-            let v = 0; 
-            const envelope = i / dur; 
-            v+= (a == 1) ?
-                sqrp(i / (baseFreq * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2 :
-                saw(i / (4.03 * baseFreq)) * 7;
-            dest[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + a * 7)) * 100, 1) / 700;
-        }
-    }
+    // function writeNote(dest, tone, startTime, duration, a) {
+        
+    // }
 
     function init() {
         audioCtx = new AudioContext();
@@ -185,7 +175,18 @@ function Audio() {
         for (let i = 0; i < song.length; i++) {
             let note, start, duration, amp;
             [note, start, duration, amp] = song[i];
-            writeNote(buffer, note, start * beat, duration * beat, amp);
+
+            // Write note
+            const baseIdx = parseInt(start * beat * sampleRate);
+            const dur = duration * beat * sampleRate;
+            for (let i = 0; i < dur; i++) {
+                let v = 0; 
+                const envelope = i / dur; 
+                v+= (amp == 1) ?
+                    sqrp(i / (6*(2**(-note/12))*2 * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2 :
+                    saw(i / (4.03 * 6*(2**(-note/12))*2)) * 7;
+                buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 700;
+            }
         }
         for (let q = 0; q < 44; q+=2) {
             for (let j = 0; j < drums.length; j++) {

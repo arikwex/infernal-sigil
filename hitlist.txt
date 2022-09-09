@@ -1,6 +1,5 @@
 On Deck
-- hp system refactor?
-- other optimizations?
+- Optimize....
 
 - BUG: checkpoint respawn location?!?
 - Main menu => New Game vs Continue
