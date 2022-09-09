@@ -37,7 +37,7 @@ function Map() {
             const entityClass = LOOKUP[V*2];
             const entityData = LOOKUP[V*2+1];
             if (entityClass && !entityClass[0]) {
-                add(new entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
+                add(entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
             }
 
             // compute theme avg
@@ -82,7 +82,7 @@ function Map() {
                 }
                 // scan adjacent surface nodes and mark them for skipping
                 let o = outlineFinder(x, y, q, vm[1]);
-                add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
+                add(Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
             }
         });
 
@@ -91,7 +91,7 @@ function Map() {
             const V = WALL_MAP[get(x, y) << 1];
             const V2 = get(x, y-1);
             if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
-                add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
+                add(Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
             }
         });
     }

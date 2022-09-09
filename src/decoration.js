@@ -125,7 +125,7 @@ function Decoration(x, y, t) {
     }
 
     if (t == 0) {
-        flameSfx = new FlameSFX(x, y-7, 1, Infinity);
+        flameSfx = FlameSFX(x, y-7, 1, Infinity);
         flameSfx.order = -6500;
         add(flameSfx);
     }
