@@ -4,7 +4,6 @@ import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
 import { inView } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
-import HealthSystem from './hp';
 
 // Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
@@ -17,6 +16,7 @@ function Treasure(x, y, t) {
     y += 50;
     let hitTimer = 0;
     let phase = 0;
+    let hp = 3 * t;
     const myHitbox = new BoundingBox(x-25,y-55,0,0,50,55);
 
     const baseColor = colorMap[t-1];
@@ -31,8 +31,12 @@ function Treasure(x, y, t) {
     ];
 
     function update(dT) {
+        if (hp <= 0) {
+            bus.emit(EVENT_BONE_SPAWN, [x,y-20, boneMap[t-1], 1]);
+            bus.emit(EVENT_BONE_SPAWN, [x,y-20, skullMap[t-1], 2]);
+            return true;
+        }
         hitTimer = Math.max(hitTimer - dT, 0);
-        return hp.g() <= 0;
     }
 
     function render(ctx) {
@@ -45,23 +49,29 @@ function Treasure(x, y, t) {
         ctx.setTransform(xfm);
     }
 
-    function onHitCallback() {
-        hitTimer = 1;
-        phase = Math.random() * 7;
-        bus.emit(EVENT_BONE_SPAWN, [x,y-20,1,1]);
-        if (hp.g() <= 0) {
-            bus.emit(EVENT_BONE_SPAWN, [x,y-20, boneMap[t-1], 1]);
-            bus.emit(EVENT_BONE_SPAWN, [x,y-20, skullMap[t-1], 2]);
+    function hitCheck([attackHitbox, dir, owner]) {
+        if (myHitbox.isTouching(attackHitbox)) {
+            hitTimer = 1;
+            phase = Math.random() * 7;
+            hp -= 1;
+            bus.emit(EVENT_BONE_SPAWN, [x,y-20,1,1]);
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
         }
     }
 
-    const hp = new HealthSystem(3 * t, myHitbox, onHitCallback);
+    function enable() {
+        bus.on(EVENT_ATTACK, hitCheck);
+    }
+
+    function disable() {
+        bus.off(EVENT_ATTACK, hitCheck);
+    }
 
     return {
         update,
         render,
-        enable: hp.e,
-        disable: hp.d,
+        enable,
+        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: -6000,
     }

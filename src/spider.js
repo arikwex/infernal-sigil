@@ -1,10 +1,10 @@
 import { renderMesh, scaleInPlace } from './canvas';
+import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
-import { EVENT_BONE_SPAWN } from './events';
-import { TAG_ENEMY  } from './tags';
-import HealthSystem from './hp';
+import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
+import { TAG_ENEMY, TAG_PHYSICS } from './tags';
 
 const legPhase = [0, 3.1, 4.7, 1.5];
 
@@ -18,6 +18,8 @@ function Spider(x, y, type) {
     let walkPattern = type % 4;
     let facing = targetFacing;
     let injured = 0;
+    let maxHp = 4;
+    let hp = maxHp;
     let jumping = 0;
     let charging = 0;
     let needJump = false;
@@ -65,6 +67,10 @@ function Spider(x, y, type) {
     ];
 
     function update(dT) {
+        if (hp <= 0) {
+            return true;
+        }
+
         vx -= wy * 1300 * dT;
         vy += wx * 1300 * dT;
 
@@ -132,7 +138,6 @@ function Spider(x, y, type) {
         waiting -= dT;
 
         enemyHitbox.set(x, y, bboxMapOX[walkPattern], bboxMapOY[walkPattern], bboxMapW[walkPattern], bboxMapH[walkPattern]);
-        return hp.g() <= 0;
     }
 
     function render(ctx) {
@@ -171,27 +176,37 @@ function Spider(x, y, type) {
         ctx.setTransform(xfm);
     }
 
-    function onHitCallback([,dir]) {
-        if (injured <= 0) {
-            vx = dir * 300 * Math.abs(wx) + wy * 200;
-            vy -= wx * 200;
-        }
-        if (jumping <= 0 && charging <= 0) {
-            targetFacing = -dir;
-        }
-        injured = 1;
-        if (hp.g() <= 0) {
-            bus.emit(EVENT_BONE_SPAWN, [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
+    function hitCheck([attackHitbox, dir, owner, isFlame]) {
+        if (enemyHitbox.isTouching(attackHitbox) && hp > 0) {
+            if (injured <= 0) {
+                vx = dir * 300 * Math.abs(wx) + wy * 200;
+                vy -= wx * 200;
+            }
+            if (jumping <= 0 && charging <= 0) {
+                targetFacing = -dir;
+            }
+            injured = 1;
+            hp -= isFlame ? 2 : 1;
+            if (hp <= 0) {
+                bus.emit(EVENT_BONE_SPAWN, [x+enemyHitbox.ox+enemyHitbox.w/2,y+enemyHitbox.oy+enemyHitbox.h/2,7,1]);
+            }
+            bus.emit(EVENT_ATTACK_HIT, [owner, isFlame ? 0 : dir]);
         }
     }
 
-    const hp = new HealthSystem(4, enemyHitbox, onHitCallback, true, 1);
+    function enable() {
+        bus.on(EVENT_ATTACK, hitCheck);
+    }
+
+    function disable() {
+        bus.off(EVENT_ATTACK, hitCheck);
+    }
 
     return {
         update,
         render,
-        enable: hp.e,
-        disable: hp.d,
+        enable,
+        disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
         tags: [TAG_ENEMY],

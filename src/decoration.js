@@ -2,10 +2,12 @@ import { BoundingBox } from "./bbox";
 import { renderMesh, scaleInPlace } from "./canvas";
 import { add, remove } from "./engine";
 import FlameSFX from "./flame-sfx";
+import * as bus from "./bus";
 import { inView } from "./utils";
-import HealthSystem from "./hp";
+import { EVENT_ATTACK, EVENT_ATTACK_HIT } from "./events";
 
 function Decoration(x, y, t) {
+    let isHit = false;
     let deathTimer = 0;
 
     const leanAngle = Math.cos(x*x*18+y*291) * 0.1;
@@ -81,7 +83,7 @@ function Decoration(x, y, t) {
     let myHitbox = new BoundingBox(x,y,-10,-20,20,70);
 
     function update(dT) {
-        if (hp.g() <= 0) {
+        if (isHit) {
             deathTimer += dT;
             if (deathTimer > 0.7) {
                 return true;
@@ -106,16 +108,19 @@ function Decoration(x, y, t) {
         ctx.setTransform(xfm);
     }
 
-    function onHitCallback() {
-        shapeMeshes.map((m, idx) => {
-            vx[idx] = (Math.random() - 0.5) * 250;
-            vy[idx] = -Math.random() * 200 - 500;
-            omega[idx] = (Math.random() * 4 + 2) * (Math.random() > 0.5 ? 1 : -1);
-        });
-        if (flameSfx) { remove([flameSfx]); }
+    function hitCheck([attackHitbox, dir, owner, projectile]) {
+        // Decorations do not stop projectiles
+        if (!projectile && !isHit && myHitbox.isTouching(attackHitbox)) {
+            bus.emit(EVENT_ATTACK_HIT, [owner]);
+            isHit = true;
+            shapeMeshes.map((m, idx) => {
+                vx[idx] = (Math.random() - 0.5) * 250;
+                vy[idx] = -Math.random() * 200 - 500;
+                omega[idx] = (Math.random() * 4 + 2) * (Math.random() > 0.5 ? 1 : -1);
+            });
+            if (flameSfx) { remove([flameSfx]); }
+        }
     }
-
-    const hp = new HealthSystem(1, myHitbox, onHitCallback, false);
 
     function enable() {
         if (t == 0) {
@@ -123,12 +128,12 @@ function Decoration(x, y, t) {
             flameSfx.order = -6500;
             add(flameSfx);
         }
-        hp.e();
+        bus.on(EVENT_ATTACK, hitCheck);
     }
 
     function disable() {
         if (flameSfx) { remove([flameSfx]); }
-        hp.d();
+       bus.off(EVENT_ATTACK, hitCheck);
     }
 
     return {
