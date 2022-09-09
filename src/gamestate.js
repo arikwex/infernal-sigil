@@ -5,7 +5,7 @@ let hp = 3;
 let checkpointId = 0;
 let deathCount = 0;
 
-function addHp(h) { hp = clamp(hp + h, 0, 3); }
+function addHp(h) { hp += h; }
 function getHp() { return hp; }
 function addBones(b) { bones = Math.max(bones + b, 0); }
 function getBones() { return bones; }
