@@ -10,37 +10,16 @@ onkeydown = (evt) => {
     bus.emit(EVENT_ANY_KEY);
 }
 
-onkeyup = (evt) => {
-    delete pressed[evt.code];
-}
+onkeyup = (evt) => delete pressed[evt.code];
 
-function horizontal() {
-    return (pressed['ArrowLeft'] ? -1 : 0) + (pressed['ArrowRight'] ? 1 : 0);
-}
-
-function vertical() {
-    return (pressed['ArrowUp'] ? 1 : 0) + (pressed['ArrowDown'] ? -1 : 0);
-}
-
-function jump() {
-    return (Date.now() - pressed['KeyZ']) < 100;
-}
-
-function attack() {
-    return (Date.now() - pressed['KeyX']) < 100;
-}
-
-function dash() {
-    return (Date.now() - pressed['KeyC']) < 100;
-}
-
-function ignite() {
-    return (Date.now() - pressed['KeyV']) < 100;
-}
-
-function holdingJump() {
-    return pressed['KeyZ'];
-}
+let horizontal = () => (pressed['ArrowLeft'] ? -1 : 0) + (pressed['ArrowRight'] ? 1 : 0);
+let vertical = () => (pressed['ArrowUp'] ? 1 : 0) + (pressed['ArrowDown'] ? -1 : 0);
+let recent = (f) => (Date.now() - pressed[f]) < 100;
+let jump = () => recent('KeyZ');
+let attack = () => recent('KeyX');
+let dash = () => recent('KeyC');
+let ignite = () => recent('KeyV');
+let holdingJump = () => pressed['KeyZ'];
 
 export {
     horizontal,
