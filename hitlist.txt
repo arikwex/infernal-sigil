@@ -1,5 +1,6 @@
 On Deck
 - BUG: checkpoint respawn location?!?
+- hp system refactor?
 - tags as enums
 - Text explaining recent upgrade
 - "Loading" initial screen
