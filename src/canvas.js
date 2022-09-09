@@ -8,7 +8,7 @@ const ctx = canvas.getContext('2d');
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
 function scaleInPlace(s, x, y, s2) { ctx.translate(x, y); ctx.scale(s, s2 || s); ctx.translate(-x, -y); }
 
-function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor = null) {
+function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor) {
     const xfm = ctx.getTransform();
     ctx.translate(x, y);
     ctx.rotate(phi);
@@ -38,9 +38,9 @@ function renderMesh(mesh, x, y, baseZ, theta, phi, fillColor = null) {
     ctx.setTransform(xfm);
 }
 
-function renderText(txt, x, y, color = '#fff', size = 30, align = 'left') {
-    ctx.fillStyle = color;
-    ctx.textAlign = align;
+function renderText(txt, x, y, size) {
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'left';
     ctx.font = `bold ${size}px arial`;
     ctx.fillText(txt, x, y);
 }

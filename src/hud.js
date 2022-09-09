@@ -7,8 +7,6 @@ import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } fro
 import { getStartTime } from './engine';
 
 function HUD() {
-    let anim = 0;
-    
     let regionTitle = 'The Styx';
     let regionTitleTimer = 4;
     let totalTime = 4;
@@ -17,7 +15,6 @@ function HUD() {
     const boneMesh = copy(boneMeshAsset);
 
     function update(dT) {
-        anim += dT;
         regionTitleTimer -= dT;
     }
 
@@ -26,9 +23,8 @@ function HUD() {
         ctx.setTransform(0.8,0,0,0.8,0,0);
 
         // Render HP
-        let hp = getHp();
         for (let i = 0 ; i < 3; i++) {
-            if (i >= hp) {
+            if (i >= getHp()) {
                 headMesh[0][0] = '#555';
                 headMesh[3][0] = '#555';
             } else {
@@ -39,17 +35,17 @@ function HUD() {
         }
 
         // Render Bone count
-        renderMesh(boneMesh, 50, 103, 0, anim, 0);
-        renderText(getBones(), 70, 105, '#fff', 30);
+        renderMesh(boneMesh, 50, 103, 0, -regionTitleTimer, 0);
+        renderText(getBones(), 70, 105, 30);
 
         // Region Title
         if (regionTitleTimer > 0) {
             ctx.globalAlpha = clamp(regionTitleTimer, 0, 1) * clamp(-regionTitleTimer + totalTime, 0, 1);
             ctx.lineWidth = 18;
-            color('#000', '#fff');
-            renderText(regionTitle, 36, canvas.height * 1.15, '#fff', 100);
+            renderText(regionTitle, 36, canvas.height * 1.15, 100);
+            ctx.strokeStyle = '#000';
             ctx.strokeText(regionTitle, 36, canvas.height * 1.15);
-            renderText(regionTitle, 36, canvas.height * 1.15, '#fff', 100);
+            renderText(regionTitle, 36, canvas.height * 1.15, 100);
             ctx.globalAlpha = 1; 
         }
 
