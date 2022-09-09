@@ -21,12 +21,10 @@ async function initialize() {
     // Game
     new Audio();
 
-    const m = new Map();
-    await m.generate();
-    add(m);
+    const gameMap = new Map();
+    await gameMap.generate();
 
-    add(new Camera());
-    add(new HUD());
+    [gameMap, new Camera(), new HUD()].map(add);
 
     // FOR DEVELOPMENT
     // getObjectsByTag(TAG_PLAYER)[0].grant(0);

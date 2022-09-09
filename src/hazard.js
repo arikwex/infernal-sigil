@@ -14,6 +14,9 @@ const lavaMesh = [
   [-47, 50, 47, 50]
 ];
 
+const boundOX = [-45, -125, -45, 35];
+const boundOY = [35, -45, -125, -45];
+
 function Hazard(x, y, t) {
   let enemyHitbox;
   let extended = 0;
@@ -22,10 +25,8 @@ function Hazard(x, y, t) {
   let placement = (Math.random() - 0.5) * 80;
   let targetExtended = 0;
   let phase = t < 4 ? 1 : 0;
-  if (t%4 == 0) { enemyHitbox = new BoundingBox(x,y,-45,35,90,90); }
-  if (t%4 == 1) { enemyHitbox = new BoundingBox(x,y,-125,-45,90,90); }
-  if (t%4 == 2) { enemyHitbox = new BoundingBox(x,y,-45,-125,90,90); }
-  if (t%4 == 3) { enemyHitbox = new BoundingBox(x,y,35,-45,90,90); }
+  let rotatedFace = t % 4;
+  enemyHitbox = new BoundingBox(x,y,boundOX[rotatedFace],boundOY[rotatedFace],90,90);
 
   function update(dT) {
     anim += dT * rate;
