@@ -264,8 +264,6 @@ function Audio() {
     gainNodeA.connect(audioCtx.destination);
     gainNodeB = new GainNode(audioCtx);
     gainNodeB.connect(audioCtx.destination);
-
-    music(musicStyxBuffer);
 }
 
 export default Audio;

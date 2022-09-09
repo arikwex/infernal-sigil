@@ -16,14 +16,10 @@ function Wall(x, y, ex, ey, outlineData, BLOCK_SIZE, palette) {
     let outlineTop = [];
     let dx = Math.random() * 6 + 6;
     for (let i = 0; i < w; i += dx) {
-        outlineTop.push(i, Math.random() * 6);
-        outlineTop.push(Math.min(w, i + dx), -Math.random() * 2);
+        outlineTop.push(i, Math.random() * 6, Math.min(w, i + dx), -Math.random() * 2);
         dx = Math.random() * 6 + 6;
     }
-    wallMesh.push(outlineTop);
-    wallMesh.push(...outlineData[0]);
-    wallMesh.push([w, h, 0, h]);
-    wallMesh.push(...outlineData[1]);
+    wallMesh.push(outlineTop, ...outlineData[0], [w, h, 0, h], ...outlineData[1]);
 
     function render(ctx) {
         ctx.fillStyle = palette[1];
