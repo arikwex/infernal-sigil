@@ -5,6 +5,7 @@ let gameObjects = [];
 let gameObjectsByTag = {};
 const objectsToRemove = [];
 let lastFrameMs = 0;
+let startTime = 0;
 
 function tick(currentFrameMs) {
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.018);
@@ -57,6 +58,7 @@ function clear() {
 
 function start() {
     requestAnimationFrame(tick);
+    startTime = Date.now();
 }
 
 function getGameObjects() {
@@ -67,12 +69,17 @@ function getObjectsByTag(tag) {
     return gameObjectsByTag[tag] || [];
 }
 
+function getStartTime() {
+    return startTime;
+}
+
 export {
     start,
 
     add,
     remove,
     clear,
+    getStartTime,
 
     getGameObjects,
     getObjectsByTag,
