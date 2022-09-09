@@ -4,7 +4,7 @@ import * as bus from './bus';
 import { BoundingBox } from './bbox';
 import { physicsCheck, groundCheck, inView } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
-import { TAG_PHYSICS } from './tags';
+import { TAG_ENEMY, TAG_PHYSICS } from './tags';
 
 function Skeleton(x, y, type) {
     const thickness = 5;
@@ -141,7 +141,7 @@ function Skeleton(x, y, type) {
         disable,
         inView: (cx, cy) => inView(x, y, cx, cy),
         order: 500,
-        tags: ['enemy'],
+        tags: [TAG_ENEMY],
         enemyHitbox,
     };
 }
