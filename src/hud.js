@@ -25,7 +25,6 @@ function HUD() {
         ctx.scale(0.8, 0.8);
 
         // Render HP
-        let maxHp = getMaxHp();
         let hp = getHp();
         for (let i = 0 ; i < getMaxHp(); i++) {
             if (i >= hp) {
