@@ -51,7 +51,7 @@ canvas.width = 64; canvas.height = 64;
 ctx.fillStyle = 'rgba(0,0,0,0)';
 ctx.fillRect(0, 0, 64, 64);
 renderMesh(headMeshAsset, 32, 48, 0, 0, 0);
-var link = document.querySelector("link"); // LINK ONLY?
+let link = document.querySelector("link");
 link.href = canvas.toDataURL();
 canvas.width = ow; canvas.height = oh;
 

@@ -18,7 +18,7 @@ function Map() {
         if (entry[0]) { WALL_MAP[index] = entry; }
     });
 
-    let exactTheme = 0x000000;
+    let exactTheme = 0;
     const themeLookup = {};
 
     async function generate() {
@@ -30,77 +30,76 @@ function Map() {
         ctx.drawImage(img, 0, 0);
         W = img.width; H = img.height;
         data = ctx.getImageData(0, 0, W, H).data;
-        ctx.clearRect(0, 0, W, H);
 
-        // Character placements
-        for (let x = 0; x < W; x++) {
-            themeLookup[x] = {};
-            for (let y = 0; y < H; y++) {
-                const V = get(x, y);
-                const entityClass = LOOKUP[V*2];
-                const entityData = LOOKUP[V*2+1];
-                if (entityClass && !entityClass[0]) {
-                    add(new entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
-                }
-
-                // compute theme avg
-                themeLookup[x][y] = computeTheme(x, y);
+        // Entity placements
+        forXY((x, y) => {
+            const V = get(x, y);
+            const entityClass = LOOKUP[V*2];
+            const entityData = LOOKUP[V*2+1];
+            if (entityClass && !entityClass[0]) {
+                add(new entityClass(x * BLOCK_SIZE, y * BLOCK_SIZE, entityData));
             }
-        }
+
+            // compute theme avg
+            themeLookup[x] = themeLookup[x] || {};
+            themeLookup[x][y] = computeTheme(x, y);
+        });
 
         // Merge walls vertically
         const vertMap = {};
-        for (let x = 0; x < W; x++) {
-            for (let y = 0; y < H; y++) {
-                const V = get(x, y) << 1;
-                if (WALL_MAP[V] && !vertMap[x+','+y]) {
-                    let q = y;
-                    while (q < H) {
-                        const V2 = get(x, q) << 1;
-                        if (V != V2) {
-                            break;
-                        }
-                        vertMap[x+','+q] = true;
-                        q++;
+        forXY((x, y) => {
+            const V = get(x, y) << 1;
+            if (WALL_MAP[V] && !vertMap[x+','+y]) {
+                let q = y;
+                while (q < H) {
+                    const V2 = get(x, q) << 1;
+                    if (V != V2) {
+                        break;
                     }
-                    vertMap[x+','+y] = [y, q, V];
+                    vertMap[x+','+q] = true;
+                    q++;
                 }
+                vertMap[x+','+y] = [y, q, V];
             }
-        }
+        });
 
         // Merge walls horizontally
         const horizMap = {};
-        for (let x = 0; x < W; x++) {
-            for (let y = 0; y < H; y++) {
-                const vm = vertMap[x+','+y];
-                if (vm?.length && !horizMap[x+','+y]) {
-                    let q = x;
-                    while (q < W) {
-                        const vm2 = vertMap[q+','+y];
-                        if (!vm2?.length) {
-                            break;
-                        }
-                        if (vm2[1] != vm[1] || vm2[2] != vm[2]) {
-                            break;
-                        }
-                        horizMap[q+','+y] = true;
-                        q++;
+        forXY((x, y) => {
+            const vm = vertMap[x+','+y];
+            if (vm?.length && !horizMap[x+','+y]) {
+                let q = x;
+                while (q < W) {
+                    const vm2 = vertMap[q+','+y];
+                    if (!vm2?.length) {
+                        break;
                     }
-                    // scan adjacent surface nodes and mark them for skipping
-                    let o = outlineFinder(x, y, q, vm[1]);
-                    add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
+                    if (vm2[1] != vm[1] || vm2[2] != vm[2]) {
+                        break;
+                    }
+                    horizMap[q+','+y] = true;
+                    q++;
                 }
+                // scan adjacent surface nodes and mark them for skipping
+                let o = outlineFinder(x, y, q, vm[1]);
+                add(new Wall(x, y, q, vm[1], o, BLOCK_SIZE, WALL_MAP[vm[2]]));
             }
-        }
+        });
 
         // Place decorations
+        forXY((x, y) => {
+            const V = WALL_MAP[get(x, y) << 1];
+            const V2 = get(x, y-1);
+            if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
+                add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
+            }
+        });
+    }
+
+    function forXY(fn) {
         for (let x = 0; x < W; x++) {
-            for (let y = 1; y < H; y++) {
-                const V = WALL_MAP[get(x, y) << 1];
-                const V2 = get(x, y-1);
-                if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
-                    add(new Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
-                }
+            for (let y = 0; y < H; y++) {
+                fn(x, y);
             }
         }
     }
@@ -167,9 +166,9 @@ function Map() {
                 }
             }
         }
-        const keys = Object.keys(foundThemes);
+        
         avgTheme = avgTheme.map((v) => v * 10 / N);
-        if (keys.length == 1) {
+        if (Object.keys(foundThemes).length == 1) {
             avgTheme[6] = keys[0];
         }
         return avgTheme;
