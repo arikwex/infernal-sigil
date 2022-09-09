@@ -47,9 +47,8 @@ function renderText(txt, x, y, color = '#fff', size = 30, align = 'left') {
 
 // Favicon
 const ow = canvas.width, oh = canvas.height;
-canvas.width = 64; canvas.height = 64;
-ctx.fillStyle = 'rgba(0,0,0,0)';
-ctx.fillRect(0, 0, 64, 64);
+canvas.width = canvas.height = 64;
+ctx.clearRect(0, 0, 64, 64);
 renderMesh(headMeshAsset, 32, 48, 0, 0, 0);
 let link = document.querySelector("link");
 link.href = canvas.toDataURL();

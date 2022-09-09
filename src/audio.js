@@ -230,8 +230,8 @@ function Audio() {
         activeMusicSource.start();
 
         setTimeout(() => { audioToStop?.stop() }, 700);
-        gainNodeA.gain.setTargetAtTime(usingA ? 1 : 0, audioCtx.currentTime, 0.3);
-        gainNodeB.gain.setTargetAtTime(usingA ? 0 : 1, audioCtx.currentTime, 1.0);
+        gainNodeA.gain.setTargetAtTime(usingA ? 1 : 0, audioCtx.currentTime, 0.5);
+        gainNodeB.gain.setTargetAtTime(usingA ? 0 : 1, audioCtx.currentTime, 0.5);
         usingA = !usingA;
     }
 

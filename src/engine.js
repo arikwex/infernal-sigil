@@ -61,10 +61,6 @@ function start() {
     startTime = Date.now();
 }
 
-function getGameObjects() {
-    return gameObjects;
-}
-
 function getObjectsByTag(tag) {
     return gameObjectsByTag[tag] || [];
 }
@@ -81,6 +77,5 @@ export {
     clear,
     getStartTime,
 
-    getGameObjects,
     getObjectsByTag,
 };
