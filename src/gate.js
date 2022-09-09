@@ -44,7 +44,7 @@ function Gate(x, y, switchNum) {
     return {
         update,
         render,
-        inView: (cx, cy) => inView(x, y, cx, cy),
+        inView: (cx, cy) => inView(x, y-100, cx, cy),
         tags: [TAG_PHYSICS],
         physics,
         order: -7000
