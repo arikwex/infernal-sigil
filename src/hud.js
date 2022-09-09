@@ -3,7 +3,7 @@ import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
 import { canvas, color, renderMesh, renderText } from "./canvas";
 import { getBones, getHp, getMaxHp } from "./gamestate";
 import { clamp, copy } from "./utils";
-import { EVENT_REGION } from './events';
+import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } from './events';
 
 function HUD() {
     let anim = 0;
@@ -44,10 +44,11 @@ function HUD() {
         // Region Title
         if (regionTitleTimer > 0) {
             ctx.globalAlpha = clamp(regionTitleTimer, 0, 1) * clamp(-regionTitleTimer + 4, 0, 1);
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 18;
             color('#000', '#fff');
             renderText(regionTitle, 40, canvas.height * 1.15, '#fff', 100);
             ctx.strokeText(regionTitle, 40, canvas.height * 1.15);
+            renderText(regionTitle, 40, canvas.height * 1.15, '#fff', 100);
             ctx.globalAlpha = 1; 
         }
 
@@ -59,19 +60,29 @@ function HUD() {
         regionTitleTimer = 4;
     }
 
-    function enable() {
-        bus.on(EVENT_REGION, onRegionChange);
+    function onCheckpoint() {
+        regionTitle = 'Checkpoint';
+        regionTitleTimer = 4;
     }
 
-    function disable() {
-        bus.off(EVENT_REGION, onRegionChange);
+    function onGrant(a) {
+        regionTitle = [
+            'Twisted Horns - [C] to dash',
+            'Iron Claws - Climb walls',
+            'Fireball - [V] to cast',
+            'Wingspan - [Z] to use',
+            'VICTORY!'
+        ][a];
+        regionTitleTimer = 4;
     }
+
+    bus.on(EVENT_REGION, onRegionChange);
+    bus.on(EVENT_PLAYER_CHECKPOINT, onCheckpoint);
+    bus.on(EVENT_PLAYER_ABILITY_GRANT, onGrant);
 
     return {
         update,
         render,
-        enable,
-        disable,
         order: 10000
     }
 }
