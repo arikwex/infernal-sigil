@@ -1,5 +1,5 @@
 import terrain from './game-map.png';
-import { canvas } from './canvas';
+import { ctx } from './canvas';
 import { add } from './engine';
 import Wall from './wall';
 import Decoration from './decoration';
@@ -27,13 +27,10 @@ function Map() {
             img.src = terrain;
         });
 
-        let context = canvas.getContext('2d');
-        context.drawImage(img, 0, 0);
-
-        W = img.width;
-        H = img.height;
-        data = context.getImageData(0, 0, W, H).data;
-        context.clearRect(0, 0, W, H);
+        ctx.drawImage(img, 0, 0);
+        W = img.width; H = img.height;
+        data = ctx.getImageData(0, 0, W, H).data;
+        ctx.clearRect(0, 0, W, H);
 
         // Character placements
         for (let x = 0; x < W; x++) {
