@@ -33,7 +33,7 @@ function Checkpoint(x, y, checkpointId) {
 
     const gradient = ctx.createLinearGradient(x, y, x, y-200);
     gradient.addColorStop(0, 'rgba(255,255,110,0.3)');
-    gradient.addColorStop(0.3, 'rgba(255,255,110,0.1)');
+    // gradient.addColorStop(0.3, 'rgba(255,255,110,0.1)');
     gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
 
     const physics = new BoundingBox(x-100,y,0,0,200,50);

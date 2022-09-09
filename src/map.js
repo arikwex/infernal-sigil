@@ -166,9 +166,9 @@ function Map() {
                 }
             }
         }
-        
+        const keys = Object.keys(foundThemes);
         avgTheme = avgTheme.map((v) => v * 10 / N);
-        if (Object.keys(foundThemes).length == 1) {
+        if (keys.length == 1) {
             avgTheme[6] = keys[0];
         }
         return avgTheme;

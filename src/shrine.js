@@ -40,7 +40,7 @@ function Shrine(x, y, grantType) {
 
     const gradient = ctx.createLinearGradient(x, y-50, x, y-250);
     gradient.addColorStop(0, 'rgba(255,255,110,0.5)');
-    gradient.addColorStop(0.3, 'rgba(255,255,110,0.2)');
+    // gradient.addColorStop(0.3, 'rgba(255,255,110,0.2)');
     gradient.addColorStop(1, 'rgba(255,255,110,0.0)');
 
     const physics = new BoundingBox(x-200,y,0,0,400,50);
