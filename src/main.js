@@ -16,7 +16,7 @@ async function initialize() {
     bus.off(EVENT_ANY_KEY, initialize);
     const h1 = document.getElementsByTagName('h1')[0];
     h1.innerText='Loading...';
-    await new Promise((r)=>setTimeout(r));
+    await new Promise(setTimeout);
 
     // Game
     Audio();
@@ -41,8 +41,8 @@ async function initialize() {
     bus.on(EVENT_PLAYER_CHECKPOINT, (v) => setCheckpointId(v));
     bus.on(EVENT_PLAYER_RESET, (v) => respawn());
 
-    h1.remove();
     start();
+    h1.remove();
 }
 
 bus.on(EVENT_ANY_KEY, initialize);
