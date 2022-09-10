@@ -71,8 +71,9 @@ function Player(x, y) {
     let headMesh = copy(headMeshAsset);
     headMesh[1].pop(); headMesh[1].pop();
     headMesh[1].shift(); headMesh[1].shift();
-    headMesh[1][0] = 10; headMesh[1][1] = -16;
-    headMesh[1][6] = -10; headMesh[1][7] = -16;
+    headMesh[1][0] = 10;
+    headMesh[1][6] = -10;
+    headMesh[1][1] = headMesh[1][7] = -16;
     headMesh.unshift([10, -16, 11, -27]);
     headMesh.unshift([-10, -16, -11, -27]);
     headMesh.unshift(['#caa', 6, 0]);
@@ -86,7 +87,7 @@ function Player(x, y) {
     const handMesh = [
         ['#e22', thickness, 0],
         [4, 0, 14, 6],
-        ['#e66', 2, 0], [18, 5, 22, 8], [15, 9, 19, 13]
+        ['#e66', 2, 0], [18, 5, 20, 6], [15, 9, 17, 11]
     ];
     const tailMesh = [
         ['#e22', thickness, 0],

@@ -66,8 +66,8 @@ function Audio() {
         });
 
         // Player walk sound
-        walkSound = generate(0.04, (i) => {
-            return 0.03 * sin(i/(14+i/100));
+        walkSound = generate(0.02, (i) => {
+            return 0.07 * sin(i/40) * Math.exp(-i/100);
         });
 
         // Player jump sound
@@ -96,8 +96,8 @@ function Audio() {
         });
 
         // Switch sound
-        switchSound = generate(2, (i) => {
-            return 0.1 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(130));
+        switchSound = generate(1.5, (i) => {
+            return 0.1 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(110));
         });
 
         // Grant ability sound AND Checkpoint sound
