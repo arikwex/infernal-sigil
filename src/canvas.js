@@ -58,6 +58,11 @@ ctx.textBaseline = 'middle';
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
 
+// Render "main menu"
+scaleInPlace(3,ow/2,160);
+renderMesh(headMeshAsset, ow/2, 160, 0, 0, 0);
+ctx.setTransform(1,0,0,1,0,0);
+
 export {
     canvas,
     ctx,
