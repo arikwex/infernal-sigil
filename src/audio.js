@@ -35,7 +35,6 @@ function Audio() {
     const sin = (i) => Math.sin(i);
     const saw = (i) => ((i % 6.28) - 3.14) / 6.28;
     const sqr = (i) => clamp(Math.sin(i) * 1000, -1, 1);
-    const sqrp = (i, p) => clamp(Math.sin(i) * p, -1, 1);
 
     function generate(duration, fn) {
         var audioBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
@@ -124,7 +123,7 @@ function Audio() {
         const focusBuffer = musicFocusBuffer.getChannelData(0);
         for (let j = 0; j < sampleRate*3; j++) {
             const p = j / sampleRate;
-            focusBuffer[j] = sqrp(j/120, 10 + sin(j/10000+p*p*p*4) * 10) * p / 50;
+            focusBuffer[j] = clamp(Math.sin(j/120) * (10 + sin(j/10000+p*p*p*4) * 10), -1, 1) * p / 50;
         }
 
         // Generate 5 procedural songs
@@ -176,7 +175,7 @@ function Audio() {
                 let v = 0; 
                 const envelope = i / dur; 
                 v+= (amp == 1) ?
-                    sqrp(i / (6*(2**(-note/12))*2 * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2 :
+                    clamp(sin(i / (6*(2**(-note/12))*2 * 2) + sin(i/8000))*(Math.exp(-envelope*23) * 44 + 1),-1,1) * 2 :
                     saw(i / (4.03 * 6*(2**(-note/12))*2)) * 7;
                 buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 500;
             }
