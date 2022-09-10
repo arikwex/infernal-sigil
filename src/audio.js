@@ -51,72 +51,68 @@ function Audio() {
         return audioBuffer;
     }
 
-    // function writeNote(dest, tone, startTime, duration, a) {
-        
-    // }
-
     function init() {
         audioCtx = new AudioContext();
         sampleRate = audioCtx.sampleRate;
 
         // Player swipe attack sound
         attackSound = generate(0.2, (i) => {
-            return 0.03 * saw(i/(0.3-220*Math.exp(-i/500)));
+            return 0.05 * saw(i/(0.3-220*Math.exp(-i/500)));
         });
         
         // Player HIT ENEMY sound
         attackHitSound = generate(0.2, (i) => {
-            return 0.05 * (sin(i/(20+i/150))*0.3 + Math.random());
+            return 0.1 * (sin(i/(20+i/150))*0.3 + Math.random());
         });
 
         // Player TOOK DAMAGE sound
         injuredSound = generate(0.5, (i) => {
-            return 0.05 * (sqr(i/(120+i/250))*0.3 + Math.random())*(sqr(i/600)*0.5+0.5);
+            return 0.1 * (sqr(i/(120+i/250))*0.3 + Math.random())*(sqr(i/600)*0.5+0.5);
         });
 
         // Player walk sound
         walkSound = generate(0.04, (i) => {
-            return 0.015 * sin(i/(14+i/100));
+            return 0.03 * sin(i/(14+i/100));
         });
 
         // Player jump sound
         jumpSound = generate(0.1, (i) => {
-            return 0.008 * sqr(i/(20+150*Math.exp(-i/1600)));
+            return 0.02 * sqr(i/(20+150*Math.exp(-i/1600)));
         });
 
         // Player dash sound
         dashSound = generate(0.3, (i) => {
-            return 0.03 * (sin(i/(14+i*i/1e6)) + Math.random()/2);
+            return 0.06 * (sin(i/(14+i*i/1e6)) + Math.random()/2);
         });
 
         // Player flap sound
         flapSound = generate(0.3, (i) => {
-            return 0.02 * sin(i/(200 - i / 30));
+            return 0.05 * sin(i/(200 - i / 30));
         });
 
         // Player fireball sound
         fireballSound = generate(0.4, (i) => {
-            return 0.01 * (sqr(i/(20 + i / 100) + Math.random()));
+            return 0.03 * (sqr(i/(20 + i / 100) + Math.random()));
         });
 
         // Bone collect sound
-        boneCollectSound = generate(0.04, (i) => {
-            return 0.02 * saw(i/3);
+        boneCollectSound = generate(0.06, (i) => {
+            return 0.03 * saw(i/3);
         });
 
         // Switch sound
         switchSound = generate(2, (i) => {
-            return 0.04 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(130));
+            return 0.1 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(130));
         });
 
         // Grant ability sound AND Checkpoint sound
         grantSound = generate(2, (i) => {
-            return 0.02 * sqr(i/(1+i/900));
+            return 0.04 * sqr(i/(1+i/900));
         });
 
         // Boing when hitting web sound
         boingSound = generate(0.6, (i) => {
-            return 0.03 * sin(i/(30+sin(i/900)+i/1300));
+            return 0.06 * sin(i/(20+sin(i/900)+i/1300));
         });
 
         // MUSIC GENERATION
@@ -125,14 +121,14 @@ function Audio() {
         const W = 0.1 * sampleRate;
         for (let j = 0; j < W; j++) {
             drumBuffer[j] += 0.01 * (sin(j/(70 + j/300)) + Math.random() / 3) * (1 - j / W);
-            drumBuffer[parseInt(0.5 * sampleRate) + j] += 0.005 * Math.random() * (1 - j / W);
+            drumBuffer[parseInt(0.5 * sampleRate) + j] += 0.01 * Math.random() * (1 - j / W);
         }
 
         musicFocusBuffer = audioCtx.createBuffer(1, sampleRate*3, sampleRate);
         const focusBuffer = musicFocusBuffer.getChannelData(0);
         for (let j = 0; j < sampleRate*3; j++) {
             const p = j / sampleRate;
-            focusBuffer[j] = sqrp(j/120, 10 + sin(j/10000+p*p*p*4) * 10) * p / 100;
+            focusBuffer[j] = sqrp(j/120, 10 + sin(j/10000+p*p*p*4) * 10) * p / 50;
         }
 
         // Generate 5 procedural songs
@@ -184,7 +180,7 @@ function Audio() {
                 v+= (amp == 1) ?
                     sqrp(i / (6*(2**(-note/12))*2 * 2) + sin(i/8000), Math.exp(-envelope*23) * 44 + 1) * 2 :
                     saw(i / (4.03 * 6*(2**(-note/12))*2)) * 7;
-                buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 700;
+                buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 500;
             }
         }
         for (let q = 0; q < 44; q+=2) {
