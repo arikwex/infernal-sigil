@@ -310,7 +310,6 @@ function Player(x, y) {
         else if (onWall && onGround && v > 0.3 && hasClaws) {
             // Trying to moving up on wall from ground should engage climbing
             state = 3;
-            dashTimer = 1;
             dashing = false;
             attackTime = 1;
             vx = 0;
