@@ -196,8 +196,8 @@ function Map() {
     function update() {
         const cam = getObjectsByTag(TAG_CAMERA)[0];
         for (let q = 0; q < 13*8; q++) {
-            const x = parseInt(cam.getX()/100 + q % 13 - 6);
-            const y = parseInt(cam.getY()/100 + q / 13 - 3);
+            const x = parseInt(cam.x/100 + q % 13 - 6);
+            const y = parseInt(cam.y/100 + q / 13 - 3);
             const V = get(x, y) << 1;
             if (WALL_MAP[V]) {
                 minimapCtx.fillStyle=WALL_MAP[V][0];

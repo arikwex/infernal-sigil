@@ -9,6 +9,7 @@ function Camera(x, y) {
     const player = getObjectsByTag(TAG_PLAYER)[0];
     x = player.playerHitbox.x;
     y = player.playerHitbox.y;
+    let self = {};
     let anim = 0;
     let shake = 0;
     let tx = x;
@@ -22,8 +23,8 @@ function Camera(x, y) {
     function update(dT) {
         anim += dT;
         shake = Math.max(shake-dT,0);
-        x += (tx - x) * 12 * dT;
-        y += (ty - y) * 12 * dT;
+        x = self.x = x + (tx - x) * 12 * dT;
+        y = self.y = y + (ty - y) * 12 * dT;
         z += (tz - z) * 3 * dT;
         tz += (canvas.width / 1500 - tz) * 4 * dT;
 
@@ -58,14 +59,6 @@ function Camera(x, y) {
         ctx.translate(-x+dx, -y+dy);
     }
 
-    function getX() {
-        return x;
-    }
-
-    function getY() {
-        return y;
-    }
-
     function aim(tx_, ty_, tz_, jump_) {
         tx = tx_;
         ty = ty_;
@@ -83,15 +76,16 @@ function Camera(x, y) {
     bus.on(EVENT_PLAYER_ABILITY_GRANT, shakeIt);
     bus.on(EVENT_PLAYER_CHECKPOINT, shakeIt);
 
-    return {
+    self = {
         update,
         set,
         aim,
-        getX,
-        getY,
+        x, y,
         order: -10000,
         tags: [TAG_CAMERA]
-    }
+    };
+
+    return self;
 }
 
 export default Camera;

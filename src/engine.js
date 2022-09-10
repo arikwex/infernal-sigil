@@ -13,14 +13,12 @@ function tick(currentFrameMs) {
 
     const originalXfm = ctx.getTransform();
     const camera = getObjectsByTag(TAG_CAMERA)[0];
-    const cx = camera.getX();
-    const cy = camera.getY();
     camera.set(ctx);
 
     objectsToRemove.length = 0;
     gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
     if (objectsToRemove.length) { remove(objectsToRemove); }
-    gameObjects.map((g) => { if (g.inView(cx, cy)) { g.render?.(ctx); }});
+    gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
     requestAnimationFrame(tick);
     lastFrameMs = currentFrameMs;
 
