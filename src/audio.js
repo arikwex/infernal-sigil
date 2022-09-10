@@ -37,9 +37,9 @@ function Audio() {
     const sqr = (i) => clamp(Math.sin(i) * 1000, -1, 1);
 
     function generate(duration, fn) {
-        var audioBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
-        var buffer = audioBuffer.getChannelData(0);
-        var N = audioBuffer.length;
+        let audioBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
+        let buffer = audioBuffer.getChannelData(0);
+        let N = audioBuffer.length;
         for (let i = 0; i < N; i++) {
             buffer[i] = fn(i * 44100 / sampleRate) * (1 - i/N);
         }
@@ -196,7 +196,7 @@ function Audio() {
 
     function play(audioBuffer) {
         return () => {
-            var source = audioCtx.createBufferSource();
+            let source = audioCtx.createBufferSource();
             source.buffer = audioBuffer;
             source.connect(audioCtx.destination);
             source.start();

@@ -145,7 +145,7 @@ function Player(x, y) {
         const requestFireball = ignite();
         const requestDash = dash();
 
-        if (requestDash && canDash && hasDash && state != 3 && dashTimer > 0.85) {
+        if (requestDash && canDash && hasDash && state != 3 && dashTimer > 0.8) {
             dashTimer = 0;
             dashing = true;
             attackTime = 0.0;
