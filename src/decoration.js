@@ -109,7 +109,7 @@ function Decoration(x, y, t) {
         });
     }
 
-    function hitCheck([attackHitbox, dir, owner, projectile]) {
+    function hitCheck([attackHitbox,, owner, projectile]) {
         // Decorations do not stop projectiles
         if (!projectile && !isHit && myHitbox.isTouching(attackHitbox)) {
             bus.emit(EVENT_ATTACK_HIT, [owner]);

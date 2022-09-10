@@ -4,12 +4,13 @@ import { color, renderMesh } from "./canvas";
 import { clamp, physicsCheck } from "./utils";
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_SFX_FLAME } from './events';
 import FlameSFX from './flame-sfx';
-import { add, remove } from './engine';
+import { add } from './engine';
 
+let fireballId = 1;
 function Fireball(x, y, dir) {
     let vx = 300 * dir;
     x += dir * 40;
-    let self = this;
+    let self = fireballId++;
     let lifetime = 0;
     let flame = FlameSFX(x, y, 2, 10, dir * 1.57);
     add(flame);
@@ -25,9 +26,9 @@ function Fireball(x, y, dir) {
         }
         // TBD if this can be less aggressive
         bus.emit(EVENT_ATTACK, [myHitbox, dir, self, true]);
-        let _, onGround, onRight, onLeft, onRoof;
-        [_, _, onGround, onRight, onLeft, onRoof] = physicsCheck(myHitbox);
-        if (onGround || onRight || onLeft || onRoof) {
+        let onRight, onLeft;
+        [,,, onRight, onLeft,] = physicsCheck(myHitbox);
+        if (onRight || onLeft) {
             bus.off(EVENT_ATTACK_HIT, onAttackHit);
             flame.end();
             return true;

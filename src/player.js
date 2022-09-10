@@ -222,7 +222,7 @@ function Player(x, y) {
             }
             
             // Fireball
-            if (requestFireball && fireballTime > 1.0 && hasFlame) {
+            if (requestFireball && fireballTime > 0.1 && hasFlame) {
                 fireballTime = 0;
                 attackTime = 0;
                 smoothAttacking = 1;
