@@ -92,7 +92,7 @@ function Audio() {
 
         // Bone collect sound
         boneCollectSound = generate(0.06, (i) => {
-            return 0.03 * saw(i/3);
+            return 0.03 * saw(i/4);
         });
 
         // Switch sound

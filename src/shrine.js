@@ -11,7 +11,6 @@ function Shrine(x, y, grantType) {
     let anim = 0;
     let engaging = 0;
     let used = false;
-    let timeSinceUpgrade = 0;
     let engagedLastFrame = false;
 
     const platformMesh = [
@@ -70,7 +69,6 @@ function Shrine(x, y, grantType) {
             }
         } else {
             engaging = 3;
-            timeSinceUpgrade += dT;
         }
     }
 
@@ -80,7 +78,6 @@ function Shrine(x, y, grantType) {
         symbolMeshes.map((m) => { m[0][0] = '#ee2'; });
         bus.emit(EVENT_BONE_SPAWN, [x,y-100,grantType<4 ? 20 : 0,1]);
         bus.emit(EVENT_PLAYER_ABILITY_GRANT, grantType);
-        timeSinceUpgrade = 0;
     }
 
     function render(ctx) {
