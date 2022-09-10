@@ -10,7 +10,7 @@ import { TAG_CAMERA, TAG_MAP } from './tags';
 
 function Map() {
     let img = new Image();
-    let minimapCanvas = document.createElement('canvas');
+    let m = document.createElement('canvas');
     let minimapCtx;
     let data;
     let W, H;
@@ -35,8 +35,8 @@ function Map() {
         data = ctx.getImageData(0, 0, W, H).data;
 
         // Prepare minimap
-        minimapCanvas.width = minimapCanvas.height = 125;
-        minimapCtx = minimapCanvas.getContext('2d');
+        m.width = m.height = 125;
+        minimapCtx = m.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 
         // Entity placements
@@ -57,7 +57,6 @@ function Map() {
         const vertMap = {};
         forXY((x, y) => {
             const V = get(x, y) << 1;
-            //if (WALL_MAP[V] && (minimapCtx.fillStyle=WALL_MAP[V][0]) && !vertMap[x+','+y]) {
             if (WALL_MAP[V] && !vertMap[x+','+y]) {
                 let q = y;
                 while (q < H) {
@@ -213,7 +212,7 @@ function Map() {
         update,
         tags: [TAG_MAP],
         getTheme,
-        minimapCanvas,
+        m,
     }
 }
 

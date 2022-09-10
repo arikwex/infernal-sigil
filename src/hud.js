@@ -9,9 +9,9 @@ import { TAG_MAP, TAG_PLAYER } from './tags';
 import { holdingMap } from './controls';
 
 function HUD() {
-    let regionTitle = '';
-    let regionTitleTimer = 4;
-    let totalTime = 4;
+    let regionTitle;
+    let regionTitleTimer;
+    let totalTime;
 
     const headMesh = copy(headMeshAsset);
     const boneMesh = copy(boneMeshAsset);
@@ -29,9 +29,8 @@ function HUD() {
             ctx.setTransform(1,0,0,1,0,0);
             ctx.fillStyle='rgba(0,0,0,0.85)';
             ctx.fillRect(0,0,canvas.width, canvas.height);
-            ctx.setTransform(1,0,0,1,canvas.width/2, canvas.height/2);
-            scaleInPlace(4, 125/2, 125/2);
-            ctx.drawImage(getObjectsByTag(TAG_MAP)[0].minimapCanvas, 0, 0);
+            ctx.setTransform(4,0,0,4,canvas.width/2-250, canvas.height/2-250);
+            ctx.drawImage(getObjectsByTag(TAG_MAP)[0].m, 0, 0);
             if (Math.cos(Date.now()/50)<0.5) {
                 const player = getObjectsByTag(TAG_PLAYER)[0].playerHitbox;
                 ctx.fillStyle = '#e22';
