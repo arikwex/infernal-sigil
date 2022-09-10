@@ -7,12 +7,8 @@ import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
 import { treasureMeshAsset } from './assets';
 import { foundTreasure } from './gamestate';
 
-// Values -> 20, 50, 100
+// Bone Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
-const boneMap = [7, 14, 11];
-const skullMap = [1, 3, 7];
-const colorMap = ['#a63', '#889', '#db1'];
-const bgColorMap = ['#742', '#667', '#b90'];
 
 function Treasure(x, y, t) {
     y += 50;
@@ -21,15 +17,15 @@ function Treasure(x, y, t) {
     let hp = 3 * t;
     const myHitbox = BoundingBox(x-25,y-55,0,0,50,55);
 
-    const baseColor = colorMap[t-1];
-    const bgColor = bgColorMap[t-1];
+    const baseColor = ['#a63', '#889', '#db1'][t-1];
+    const bgColor = ['#742', '#667', '#b90'][t-1];
     const treasureMesh = copy(treasureMeshAsset);
     treasureMesh[0][0] = baseColor;
     
     function update(dT) {
         if (hp <= 0) {
-            bus.emit(EVENT_BONE_SPAWN, [x,y-20, boneMap[t-1], 1]);
-            bus.emit(EVENT_BONE_SPAWN, [x,y-20, skullMap[t-1], 2]);
+            bus.emit(EVENT_BONE_SPAWN, [x,y-20, [7, 14, 11][t-1], 1]);
+            bus.emit(EVENT_BONE_SPAWN, [x,y-20, [1, 3, 7][t-1], 2]);
             bus.off(EVENT_ATTACK, hitCheck);
             foundTreasure();
             return true;
@@ -50,7 +46,7 @@ function Treasure(x, y, t) {
     function hitCheck([attackHitbox, dir, owner]) {
         if (myHitbox.isTouching(attackHitbox)) {
             hitTimer = 1;
-            phase = Math.random() * 7;
+            phase += Math.random() * 7;
             hp -= 1;
             bus.emit(EVENT_BONE_SPAWN, [x,y-20,1,1]);
             bus.emit(EVENT_ATTACK_HIT, [owner]);
