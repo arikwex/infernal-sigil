@@ -23,6 +23,14 @@ const symbolMeshAssets = [
     [['#4af', 2, 0], [0, -15, 10, 0, 0, 15, -10, 0, 0, -15]], // Diamond --> End game?
 ];
 
+const treasureMeshAsset = [
+    ['#a63', 8, 0],
+    [20, 0, -20, 0, -28, -23, 28, -23, 20, 0],
+    [-28, -23, -24, -40, 24, -40, 28, -23],
+    ['#ffa', 8, 0],
+    [0, -27, 0, -19],
+];
+
 const regionTitles = [
     'The Crossroads',
     'Undergrowth',
@@ -42,6 +50,7 @@ export {
     headMeshAsset,
     boneMeshAsset,
     symbolMeshAssets,
+    treasureMeshAsset,
     regionTitles,
     makeGradient,
 };

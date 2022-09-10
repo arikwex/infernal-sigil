@@ -136,11 +136,11 @@ function Audio() {
         }
 
         // Generate 5 procedural songs
-        musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 5, 7, 12]), 1.6);
-        musicAsphodelBuffer = compileSong(genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12]), 0.5);
-        musicElysianBuffer = compileSong(genericSongBuilder(3, [0, 2, 3, 7, 8, 12]), 0.9);
-        musicMourningBuffer = compileSong(genericSongBuilder(4, [0, 2, 3, 7, 8, 12]), 1.2);
-        musicThroneBuffer = compileSong(genericSongBuilder(5, [0, 4, 5, 7, 12]), 0.8);
+        // musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 5, 7, 12]), 1.6);
+        // musicAsphodelBuffer = compileSong(genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12]), 0.5);
+        // musicElysianBuffer = compileSong(genericSongBuilder(3, [0, 2, 3, 7, 8, 12]), 0.9);
+        // musicMourningBuffer = compileSong(genericSongBuilder(4, [0, 2, 3, 7, 8, 12]), 1.2);
+        // musicThroneBuffer = compileSong(genericSongBuilder(5, [0, 4, 5, 7, 12]), 0.8);
     }
 
     function genericSongBuilder(seed, melodySignature) {

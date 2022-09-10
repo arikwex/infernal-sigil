@@ -2,8 +2,10 @@ import * as bus from './bus';
 import { scaleInPlace } from './canvas';
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
-import { inView } from './utils';
+import { copy, inView } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
+import { treasureMeshAsset } from './assets';
+import { foundTreasure } from './gamestate';
 
 // Values -> 20, 50, 100
 // Hp -> 3, 6, 9 (1 bone each)
@@ -21,20 +23,15 @@ function Treasure(x, y, t) {
 
     const baseColor = colorMap[t-1];
     const bgColor = bgColorMap[t-1];
-    const treasureMesh = [
-        [baseColor, 8, 0],
-        [20, 0, -20, 0, -28, -23, 28, -23, 20, 0],
-        [baseColor, 8, 0],
-        [-28, -23, -24, -40, 24, -40, 28, -23],
-        ['#ffa', 8, 0],
-        [0, -27, 0, -19],
-    ];
-
+    const treasureMesh = copy(treasureMeshAsset);
+    treasureMesh[0][0] = baseColor;
+    
     function update(dT) {
         if (hp <= 0) {
             bus.emit(EVENT_BONE_SPAWN, [x,y-20, boneMap[t-1], 1]);
             bus.emit(EVENT_BONE_SPAWN, [x,y-20, skullMap[t-1], 2]);
             bus.off(EVENT_ATTACK, hitCheck);
+            foundTreasure();
             return true;
         }
         hitTimer = Math.max(hitTimer - dT, 0);

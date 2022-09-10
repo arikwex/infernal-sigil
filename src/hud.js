@@ -1,7 +1,7 @@
 import * as bus from './bus';
-import { boneMeshAsset, headMeshAsset, regionTitles } from "./assets";
-import { canvas, color, renderMesh, renderText } from "./canvas";
-import { getBones, getDeathCount, getHp } from "./gamestate";
+import { boneMeshAsset, headMeshAsset, regionTitles, treasureMeshAsset } from "./assets";
+import { canvas, color, renderMesh, renderText, scaleInPlace } from "./canvas";
+import { getBones, getDeathCount, getHp, getTreasures } from "./gamestate";
 import { clamp, copy } from "./utils";
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } from './events';
 import { getStartTime } from './engine';
@@ -13,6 +13,7 @@ function HUD() {
 
     const headMesh = copy(headMeshAsset);
     const boneMesh = copy(boneMeshAsset);
+    const treasureMesh = copy(treasureMeshAsset);
 
     function update(dT) {
         regionTitleTimer -= dT;
@@ -35,8 +36,8 @@ function HUD() {
         }
 
         // Render Bone count
-        renderMesh(boneMesh, 50, 103, 0, -regionTitleTimer, 0);
-        renderText(getBones(), 70, 105, 30);
+        renderMesh(boneMesh, 50, 144, 0, -regionTitleTimer, 0);
+        renderText(getBones(), 80, 146, 30);
 
         // Region Title
         if (regionTitleTimer > 0) {
@@ -48,6 +49,11 @@ function HUD() {
             renderText(regionTitle, 36, canvas.height * 1.15, 80);
             ctx.globalAlpha = 1; 
         }
+
+        // Render Treasure count
+        renderText(`${getTreasures()} / 34`, 80, 103, 30);
+        scaleInPlace(0.5, 50, 102);
+        renderMesh(treasureMesh, 50, 120, 0, 0, 0, '#742');
 
         ctx.setTransform(xfm);
     }

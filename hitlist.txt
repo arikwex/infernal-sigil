@@ -1,4 +1,5 @@
 On Deck
+- Treasure counter as tease for completionists (render as asset)
 - Optimize....
 
 - BUG: checkpoint respawn location?!?
