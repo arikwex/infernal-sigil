@@ -386,15 +386,17 @@ function Player(x, y) {
         smoothAirjump += (airJump - smoothAirjump) * 17 * dT;
         
         // Smoother player physics to avoid clipping
-        let N = 3;
         playerHitbox.x = x;
         playerHitbox.y = y;
-        for (let i = 0; i < N; i++) {
-            playerHitbox.x += dT * vx / N;
-            playerHitbox.y += dT * vy / N;
+        for (let i = 0; i < 3; i++) {
+            playerHitbox.x += dT * vx / 3;
+            playerHitbox.y += dT * vy / 3;
             [x, y, _, _, _, onRoof] = physicsCheck(playerHitbox);
             if (onRoof) { vy = 0; }
-            if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
+            if (!isDead) { 
+                playerHitbox.x = x;
+                playerHitbox.y = y;
+            }
         }
 
         groundTime -= dT;

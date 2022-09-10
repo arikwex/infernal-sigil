@@ -153,8 +153,8 @@ function Map() {
         let avgTheme = [0, 0, 0, 0, 0, 0, null];
         const foundThemes = {};
         let N = 0.001;
-        for (let q = 0; q < 25; q++) {
-            const V = get(x + parseInt(q / 5), y + q % 5) << 1;
+        for (let q = 0; q < 49; q++) {
+            const V = get(x + parseInt(q / 7 - 3), y + q % 7 - 3) << 1;
             const wallData = WALL_MAP[V];
             if (wallData) {
                 foundThemes[V] = true;

@@ -78,7 +78,7 @@ function Shrine(x, y, grantType) {
         used = true;
         pentagramMesh[0][0] = '#ee2';
         symbolMeshes.map((m) => { m[0][0] = '#ee2'; });
-        bus.emit(EVENT_BONE_SPAWN, [x,y-100,20,1]);
+        bus.emit(EVENT_BONE_SPAWN, [x,y-100,grantType<4 ? 20 : 0,1]);
         bus.emit(EVENT_PLAYER_ABILITY_GRANT, grantType);
         timeSinceUpgrade = 0;
     }

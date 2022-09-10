@@ -2,7 +2,7 @@ import { renderMesh, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
-import { physicsCheck, groundCheck, inView } from './utils';
+import { physicsCheck, groundCheck, inView, copy } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
 import { TAG_ENEMY, TAG_PHYSICS } from './tags';
 
@@ -57,13 +57,14 @@ function Spider(x, y, type) {
         [-7, 6, -3, 7],
         [7, 6, 3, 7],
     ];
+
     const legMesh = [
         ['#fff', thickness, 10],
-        [6, 0, 0, 0, 0, 0, 0, 0],
-        [-6, 0, 0, 0, 0, 0, 0, 0],
+        [6, 0],
+        [-6, 0],
         ['#fff', thickness, -10],
-        [6, 0, 0, 0, 0, 0, 0, 0],
-        [-6, 0, 0, 0, 0, 0, 0, 0],
+        [6, 0],
+        [-6, 0],
     ];
 
     function update(dT) {
