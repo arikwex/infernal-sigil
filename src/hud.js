@@ -34,7 +34,7 @@ function HUD() {
             if (Math.cos(Date.now()/50)<0.5) {
                 const player = getObjectsByTag(TAG_PLAYER)[0].playerHitbox;
                 ctx.fillStyle = '#e22';
-                ctx.fillRect(player.x/100-0.5, player.y/100-0.5, 2, 2);
+                ctx.fillRect(player.x/100-0.5, player.y/100-1.5, 2, 2);
             }
         }
 
@@ -42,8 +42,7 @@ function HUD() {
         // Render HP
         for (let i = 0 ; i < 3; i++) {
             if (i >= getHp()) {
-                headMesh[0][0] = '#222';
-                headMesh[3][0] = '#222';
+                headMesh[0][0] = headMesh[3][0] = '#555';
             } else {
                 headMesh[0][0] = '#e22';
                 headMesh[3][0] = '#fff';

@@ -37,7 +37,6 @@ function Map() {
         // Prepare minimap
         m.width = m.height = 125;
         minimapCtx = m.getContext('2d');
-        ctx.imageSmoothingEnabled = false;
 
         // Entity placements
         forXY((x, y) => {

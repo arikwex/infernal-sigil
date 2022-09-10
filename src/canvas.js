@@ -3,7 +3,7 @@ import { headMeshAsset } from "./assets";
 const canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = innerWidth;
 canvas.height = innerHeight;
-const ctx = canvas.getContext('2d');
+let ctx;
 
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }
 function scaleInPlace(s, x, y, s2) { ctx.translate(x, y); ctx.scale(s, s2 || s); ctx.translate(-x, -y); }
@@ -46,21 +46,24 @@ function renderText(txt, x, y, size) {
 }
 
 // Favicon
-const ow = canvas.width, oh = canvas.height;
-canvas.width = canvas.height = 64;
-ctx.clearRect(0, 0, 64, 64);
+// const ow = canvas.width, oh = canvas.height;
+const favicon = document.createElement('canvas');
+favicon.width = favicon.height = 64;
+ctx = favicon.getContext('2d');
 renderMesh(headMeshAsset, 32, 48, 0, 0, 0);
+ctx = canvas.getContext('2d');
 let link = document.querySelector("link");
-link.href = canvas.toDataURL();
-canvas.width = ow; canvas.height = oh;
+link.href = favicon.toDataURL();
+// canvas.width = ow; canvas.height = oh;
 
 ctx.textBaseline = 'middle';
 ctx.lineJoin = 'round';
 ctx.lineCap = 'round';
+ctx.imageSmoothingEnabled = false;
 
 // Render "main menu"
-scaleInPlace(3,ow/2,160);
-renderMesh(headMeshAsset, ow/2, 160, 0, 0, 0);
+scaleInPlace(3,canvas.width/2,160);
+renderMesh(headMeshAsset, canvas.width/2, 160, 0, 0, 0);
 ctx.setTransform(1,0,0,1,0,0);
 
 export {
