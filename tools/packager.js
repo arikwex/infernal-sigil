@@ -9,7 +9,7 @@ const dest = {
     base: path.resolve('./'),
     bundle: path.resolve('./dist/build.js'),
     html: path.resolve('./index.html'),
-    zip: path.resolve('./dist/build.zip'),
+    zip: path.resolve('./build.zip'),
 };
 
 module.exports = {
