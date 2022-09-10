@@ -7,7 +7,7 @@ import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } fro
 import { getStartTime } from './engine';
 
 function HUD() {
-    let regionTitle = 'The Styx';
+    let regionTitle = '';
     let regionTitleTimer = 4;
     let totalTime = 4;
 
@@ -42,10 +42,10 @@ function HUD() {
         if (regionTitleTimer > 0) {
             ctx.globalAlpha = clamp(regionTitleTimer, 0, 1) * clamp(-regionTitleTimer + totalTime, 0, 1);
             ctx.lineWidth = 18;
-            renderText(regionTitle, 36, canvas.height * 1.15, 100);
+            renderText(regionTitle, 36, canvas.height * 1.15, 80);
             ctx.strokeStyle = '#000';
             ctx.strokeText(regionTitle, 36, canvas.height * 1.15);
-            renderText(regionTitle, 36, canvas.height * 1.15, 100);
+            renderText(regionTitle, 36, canvas.height * 1.15, 80);
             ctx.globalAlpha = 1; 
         }
 
