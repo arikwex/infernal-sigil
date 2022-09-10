@@ -88,8 +88,6 @@ function Spider(x, y, type) {
             if (onRightWall) { targetFacing = -wx; }
         }
         if (walkPattern == 0) {
-            // if (onRightWall || !hasRight) { targetFacing = -1; }
-            // if (onLeftWall || !hasLeft) { targetFacing = 1; }
             if (onGround && vy > 0) { vy = 0; }
         }
         if (walkPattern == 1) {
@@ -98,8 +96,6 @@ function Spider(x, y, type) {
             if (onLeftWall && vx < 0) { vx = 0; }
         }
         if (walkPattern == 2) {
-            // if (onRightWall || !hasLeft) { targetFacing = 1; }
-            // if (onLeftWall || !hasRight) { targetFacing = -1; }
             if (onRoof && vy < 0) { vy = 0; }
         }
         if (walkPattern == 3) {

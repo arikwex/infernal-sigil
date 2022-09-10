@@ -25,8 +25,7 @@ function Hazard(x, y, t) {
   let placement = (Math.random() - 0.5) * 80;
   let targetExtended = 0;
   let phase = t < 4 ? 1 : 0;
-  let rotatedFace = t % 4;
-  enemyHitbox = BoundingBox(x,y,boundOX[rotatedFace],boundOY[rotatedFace],90,90);
+  enemyHitbox = BoundingBox(x,y,boundOX[t % 4],boundOY[t % 4],90,90);
 
   function update(dT) {
     anim += dT * rate;
