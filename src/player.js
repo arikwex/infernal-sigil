@@ -7,7 +7,7 @@ import { clamp, copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_WALK } from './events';
-import { TAG_CAMERA, TAG_ENEMY, TAG_PHYSICS, TAG_PLAYER } from './tags';
+import { TAG_CAMERA, TAG_ENEMY, TAG_PLAYER } from './tags';
 
 function Player(x, y) {
     const thickness = 9;
@@ -29,6 +29,7 @@ function Player(x, y) {
     let walkTick = 0;
 
     // Climbing
+    let isClimbingWall = false;
     let unstick = 0; // Disallow sticking while positive
     let stick = 0; // How long have you been stuck to the wall
 
@@ -57,11 +58,6 @@ function Player(x, y) {
     let smoothAirjump = 0;
     let timeSinceJump = 0;
     let MAX_NUM_AIRJUMP = 0;
-
-    // STATES (not really using these tbh, just 0 and 3)
-    // IDLE = 0,
-    // CLIMBING = 3,
-    let state = 0;
 
     const MAX_SPEED = 400;
     const TERMINAL_VELOCITY = 800;
@@ -145,7 +141,7 @@ function Player(x, y) {
         const requestFireball = ignite();
         const requestDash = dash();
 
-        if (requestDash && canDash && hasDash && state != 3 && dashTimer > 0.8) {
+        if (requestDash && canDash && hasDash && !isClimbingWall && dashTimer > 0.8) {
             dashTimer = 0;
             dashing = true;
             attackTime = 0.0;
@@ -155,7 +151,7 @@ function Player(x, y) {
         }
 
         // If wall-climbing, respect horizontal control as "up"
-        if (state == 3 && Math.abs(v) < 0.3 && (Math.abs(h) > 0.3 && Math.sign(h) == Math.sign(facing))) {
+        if (isClimbingWall && Math.abs(v) < 0.3 && (Math.abs(h) > 0.3 && Math.sign(h) == Math.sign(facing))) {
             v = 1;
         }
 
@@ -181,7 +177,7 @@ function Player(x, y) {
             vy = 0;
         }
 
-        if (state != 3) {
+        if (!isClimbingWall) {
             // Default controls
             if (!dashing) {
                 if (Math.abs(h) > 0.3) {
@@ -253,7 +249,7 @@ function Player(x, y) {
         }
 
         if (jump() && timeSinceJump > 0.15) {
-            if (state != 3) {
+            if (!isClimbingWall) {
                 // Default jump
                 if (groundTime > 0) {
                     vy = -1000;
@@ -278,7 +274,7 @@ function Player(x, y) {
                 vy = -1000;
                 vx = -facing * 300;
                 unstick = 0.1;
-                state = 0;
+                isClimbingWall = false;
                 numAirjumpsUsed = 0;
                 groundTime = 0;
                 timeSinceJump = 0;
@@ -289,20 +285,20 @@ function Player(x, y) {
 
         if (!onWall) {
             // If not on the wall while moving up, pop upward
-            if (state == 3 && (v > 0.3 || vy < -0.3)) {
+            if (isClimbingWall && (v > 0.3 || vy < -0.3)) {
                 vy = -CLIMB_SPEED * 1.4;
                 vx = facing * 300;
                 unstick = 0.1;
             }
-            state = 0;
+            isClimbingWall = false;
         }
-        else if (onGround && state == 3) {
+        else if (onGround && isClimbingWall) {
             // Touching ground while climbing should release climb
-            state = 0;
+            isClimbingWall = false;
         }
         else if (onWall && !onGround && (attackTime > 0.3 || dashing) && hasClaws) {
             // Touching wall and no ground should enter climbing mode
-            state = 3;
+            isClimbingWall = true;
             dashTimer = 1;
             dashing = false;
             attackTime = 1;
@@ -310,7 +306,7 @@ function Player(x, y) {
         }
         else if (onWall && onGround && v > 0.3 && hasClaws) {
             // Trying to moving up on wall from ground should engage climbing
-            state = 3;
+            isClimbingWall = true;
             dashTimer = 1;
             dashing = false;
             attackTime = 1;
@@ -318,7 +314,7 @@ function Player(x, y) {
         }
 
 
-        if (state == 3) {
+        if (isClimbingWall) {
             canDash = true;
             // Wall climb physics
             if (vy >= 0) {
@@ -350,8 +346,8 @@ function Player(x, y) {
                 attackTime = 0;
                 vx = Math.sign(x - enemyHitbox.x - enemyHitbox.w/2) * 1100;
                 vy = -100;
-                if (state == 3) {
-                    state = 0;
+                if (isClimbingWall) {
+                    isClimbingWall = false;
                     vx = -targetFacing * 300;
                 }
                 bus.emit(EVENT_PLAYER_HIT, 1);
@@ -384,7 +380,7 @@ function Player(x, y) {
         vy = Math.min(vy, TERMINAL_VELOCITY);
         tailWhip += (vy - tailWhip) * 17 * dT;
         smoothGrounded += (((groundTime > 0) ? 1 : 0) - smoothGrounded) * 17 * dT;
-        targetClimbing += (((state == 3) ? 1 : 0) - targetClimbing) * ((state == 3) ? 17 : 8) * dT;
+        targetClimbing += ((isClimbingWall ? 1 : 0) - targetClimbing) * (isClimbingWall ? 17 : 8) * dT;
         smoothAttacking += (((attackTime < 0.35) ? 1 : 0) - smoothAttacking) * 17 * dT;
         smoothAirjump += (airJump - smoothAirjump) * 17 * dT;
         
@@ -402,7 +398,7 @@ function Player(x, y) {
         groundTime -= dT;
         unstick -= dT;
         stick += dT;
-        airJump = Math.max(airJump - ((state==3) ? 3 * dT : dT), 0);
+        airJump = Math.max(airJump - (isClimbingWall ? 3 * dT : dT), 0);
         timeSinceJump += dT;
         injured = Math.max(0, injured - dT);
     }

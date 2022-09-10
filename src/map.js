@@ -196,15 +196,14 @@ function Map() {
 
     function update() {
         const cam = getObjectsByTag(TAG_CAMERA)[0];
-        for (let q = 0; q < 13*8; q++) {
-            const x = parseInt(cam.x/100 + q % 13 - 6);
-            const y = parseInt(cam.y/100 + q / 13 - 3);
+        for (let q = 0; q < 15*9; q++) {
+            const x = parseInt(cam.x/100 + q % 15 - 7);
+            const y = parseInt(cam.y/100) + parseInt(q / 15) - 4;
             const V = get(x, y) << 1;
-            if (WALL_MAP[V]) {
-                d(x, y, WALL_MAP[V][0]);
-            }
-            // Find treasure, write it to the minimap, then erase it from the datastore
-            if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); data[(x + y * W)*4 + 2] = 0; }
+            // Find walls
+            if (WALL_MAP[V]) { d(x, y, WALL_MAP[V][0]); }
+            // Find treasure
+            if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); }
         }
     }
 
@@ -213,6 +212,8 @@ function Map() {
         minimapCtx.fillStyle=c;
         if (c) {
             minimapCtx.fillRect( x, y, 1, 1 );
+            // Write it to the minimap, then erase it from the datastore
+            data[(x + y * W)*4 + 2] = 0;
         } else {
             minimapCtx.clearRect( x, y, 1, 1 );
         }
