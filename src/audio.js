@@ -127,13 +127,13 @@ function Audio() {
         }
 
         // Generate 5 procedural songs
-        musicRegionBuffers = [];
-        //     [[0, 2, 3, 5, 7, 12], 1.6],
-        //     [[0, 2, 3, 5, 7, 8, 11, 12], 0.5],
-        //     [[0, 2, 3, 7, 8, 12], 0.9],
-        //     [[0, 2, 3, 7, 8, 12], 1.2],
-        //     [[0, 4, 5, 7, 12], 0.8]
-        // ].map(genericSongBuilder);
+        musicRegionBuffers = [
+            [[0, 2, 3, 5, 7, 12], 1.6],
+            [[0, 2, 3, 5, 7, 8, 11, 12], 0.5],
+            [[0, 2, 3, 7, 8, 12], 0.9],
+            [[0, 2, 3, 7, 8, 12], 1.2],
+            [[0, 4, 5, 7, 12], 0.8]
+        ].map(genericSongBuilder);
     }
 
     function genericSongBuilder([melodySignature, beat], seed) {

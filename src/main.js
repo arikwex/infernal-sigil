@@ -27,10 +27,10 @@ async function initialize() {
     [gameMap, Camera(), HUD()].map(add);
 
     // FOR DEVELOPMENT
-    getObjectsByTag(TAG_PLAYER)[0].grant(0);
-    getObjectsByTag(TAG_PLAYER)[0].grant(1);
-    getObjectsByTag(TAG_PLAYER)[0].grant(2);
-    getObjectsByTag(TAG_PLAYER)[0].grant(3);
+    // getObjectsByTag(TAG_PLAYER)[0].grant(0);
+    // getObjectsByTag(TAG_PLAYER)[0].grant(1);
+    // getObjectsByTag(TAG_PLAYER)[0].grant(2);
+    // getObjectsByTag(TAG_PLAYER)[0].grant(3);
 
     // Game events
     bus.on(EVENT_FIREBALL, ([x, y, dir]) => add(Fireball(x, y, dir)));
