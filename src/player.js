@@ -3,7 +3,7 @@ import { color, renderMesh } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
-import { copy, physicsCheck } from './utils';
+import { clamp, copy, physicsCheck } from './utils';
 import { getHp } from './gamestate';
 import { headMeshAsset } from './assets';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_WALK } from './events';
@@ -375,7 +375,7 @@ function Player(x, y) {
         facing += (targetFacing - facing) * 15 * dT;
         if (injured <= 0.7) {
             if (!dashing) {
-                vx = Math.max(Math.min(vx, MAX_SPEED), -MAX_SPEED);
+                vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
             }
         }
         vy = Math.min(vy, TERMINAL_VELOCITY);

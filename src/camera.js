@@ -66,10 +66,6 @@ function Camera(x, y) {
         return y;
     }
 
-    function getBgBot() {
-        return bgBot;
-    }
-
     function aim(tx_, ty_, tz_, jump_) {
         tx = tx_;
         ty = ty_;
@@ -93,7 +89,6 @@ function Camera(x, y) {
         aim,
         getX,
         getY,
-        getBgBot,
         order: -10000,
         tags: [TAG_CAMERA]
     }
