@@ -81,9 +81,15 @@ function Spider(x, y, type) {
 
         [hasRight, hasLeft] = groundCheck(enemyHitbox, wx * 1.3 * size, wy * 1.3 * size);
         // TODO: optimize
+        if (modalityX) {
+            if (!hasRight) { targetFacing = -1; }
+            if (!hasLeft) { targetFacing = 1; }
+            if (onLeftWall) { targetFacing = wx; }
+            if (onRightWall) { targetFacing = -wx; }
+        }
         if (walkPattern == 0) {
-            if (onRightWall || !hasRight) { targetFacing = -1; }
-            if (onLeftWall || !hasLeft) { targetFacing = 1; }
+            // if (onRightWall || !hasRight) { targetFacing = -1; }
+            // if (onLeftWall || !hasLeft) { targetFacing = 1; }
             if (onGround && vy > 0) { vy = 0; }
         }
         if (walkPattern == 1) {
@@ -92,8 +98,8 @@ function Spider(x, y, type) {
             if (onLeftWall && vx < 0) { vx = 0; }
         }
         if (walkPattern == 2) {
-            if (onRightWall || !hasLeft) { targetFacing = 1; }
-            if (onLeftWall || !hasRight) { targetFacing = -1; }
+            // if (onRightWall || !hasLeft) { targetFacing = 1; }
+            // if (onLeftWall || !hasRight) { targetFacing = -1; }
             if (onRoof && vy < 0) { vy = 0; }
         }
         if (walkPattern == 3) {

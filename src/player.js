@@ -393,10 +393,7 @@ function Player(x, y) {
             playerHitbox.y += dT * vy / 3;
             [x, y, _, _, _, onRoof] = physicsCheck(playerHitbox);
             if (onRoof) { vy = 0; }
-            if (!isDead) { 
-                playerHitbox.x = x;
-                playerHitbox.y = y;
-            }
+            if (!isDead) { playerHitbox.set(x, y, -14, -55, 28, 50); }
         }
 
         groundTime -= dT;
