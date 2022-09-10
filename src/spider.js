@@ -1,4 +1,4 @@
-import { renderMesh, scaleInPlace } from './canvas';
+import { renderMesh, retainTransform, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
@@ -149,35 +149,35 @@ function Spider(x, y, type) {
 
         const t = facing * 0.6;
         const a = anim * 11;
-        const xfm = ctx.getTransform();
-        scaleInPlace(size, x, y);
+        retainTransform(() => {
+            scaleInPlace(size, x, y);
 
-        const dy = 32 + Math.cos(a);
-        const dx = needJump ? (-10 + 40 * charging * charging) * facing : 0;
-        const pBodyP = (Math.cos(a/2) / 15) * walking + wa + jumping * facing;
+            const dy = 32 + Math.cos(a);
+            const dx = needJump ? (-10 + 40 * charging * charging) * facing : 0;
+            const pBodyP = (Math.cos(a/2) / 15) * walking + wa + jumping * facing;
 
-        // Leg animation
-        for (let i = 0; i < 4; i++) {
-            const s = i % 2 ? 1 : -1;
-            const p = legPhase[i];
-            const L = i < 2 ? -3 : 7;
-            const idx = i < 2 ? 1 + i : 2 + i;
-            legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing * walking);
-            legMesh[idx][3] = (12) * walking;
-            legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing * walking);
-            legMesh[idx][5] = (-5 + Math.cos(a+p) * 4 * walking);
-            legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing * walking);
-            legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0) * walking);
-        }
+            // Leg animation
+            for (let i = 0; i < 4; i++) {
+                const s = i % 2 ? 1 : -1;
+                const p = legPhase[i];
+                const L = i < 2 ? -3 : 7;
+                const idx = i < 2 ? 1 + i : 2 + i;
+                legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing * walking);
+                legMesh[idx][3] = (12) * walking;
+                legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing * walking);
+                legMesh[idx][5] = (-5 + Math.cos(a+p) * 4 * walking);
+                legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing * walking);
+                legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0) * walking);
+            }
 
-        if (injured > 0.2) {
-            ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
-        }
-        renderMesh(legMesh, x+21*wy, y-21*wx, 0, -t * 1.4, wa);
-        renderMesh(bodyMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 0, t/2, t/2 + pBodyP, '#fff');
-        renderMesh(eyeMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 17, -t, -t/2 + pBodyP, '#fff');
-        ctx.globalAlpha = 1;
-        ctx.setTransform(xfm);
+            if (injured > 0.2) {
+                ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
+            }
+            renderMesh(legMesh, x+21*wy, y-21*wx, 0, -t * 1.4, wa);
+            renderMesh(bodyMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 0, t/2, t/2 + pBodyP, '#fff');
+            renderMesh(eyeMesh, x+dy*wy+dx*wx, y-dy*wx+dx*wy, 17, -t, -t/2 + pBodyP, '#fff');
+            ctx.globalAlpha = 1;
+        });
     }
 
     function hitCheck([attackHitbox, dir, owner, isFlame]) {

@@ -1,5 +1,5 @@
 import * as bus from './bus';
-import { scaleInPlace } from './canvas';
+import { retainTransform, scaleInPlace } from './canvas';
 import { renderMesh } from './canvas';
 import { BoundingBox } from './bbox';
 import { copy, inView } from './utils';
@@ -37,10 +37,10 @@ function Treasure(x, y, t) {
         const decay = Math.exp(hitTimer * 6 - 3);
         const dy = 2 + Math.abs(Math.cos(hitTimer * 20) * 12) * decay / 10;
         const da = Math.cos(hitTimer * 30 + phase) * hitTimer * decay / 60;
-        const xfm = ctx.getTransform();
-        scaleInPlace(0.75 + t * 0.15, x, y);
-        renderMesh(treasureMesh, x, y - dy, 0, 0, da, bgColor);
-        ctx.setTransform(xfm);
+        retainTransform(() => {
+            scaleInPlace(0.75 + t * 0.15, x, y);
+            renderMesh(treasureMesh, x, y - dy, 0, 0, da, bgColor);
+        });
     }
 
     function hitCheck([attackHitbox, dir, owner]) {

@@ -1,5 +1,5 @@
 import { horizontal, vertical, jump, holdingJump, attack, ignite, dash } from './controls';
-import { color, renderMesh } from './canvas';
+import { color, renderMesh, retainTransform } from './canvas';
 import { getObjectsByTag } from './engine';
 import { BoundingBox } from './bbox';
 import * as bus from './bus';
@@ -496,24 +496,24 @@ function Player(x, y) {
             (attackSwipeTiming * 0.5 - attackSwipeTiming2 * 0.5) * attacking;
 
         // Back swipe render
-        const xfm = ctx.getTransform();
         const swipe1 = (facing > 0) ? attackSwipePre : attackSwipePre2;
         const swipe2 = (facing > 0) ? attackSwipePre2 : attackSwipePre;
-        color(hasClaws ? '#3af' : '#999');
-        ctx.translate(x, y);
-        if (facing < 0) {
-            ctx.scale(-1, 1);
-        }
-        if (swipe1 < 0.95) {
-            ctx.lineWidth = hasClaws ? 4 : 2;
-            ctx.beginPath();
-            ctx.ellipse(5, -25, 86, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.ellipse(5, -25, 76, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
-            ctx.stroke();
-        }
-        ctx.setTransform(xfm);
+        retainTransform(() => {
+            color(hasClaws ? '#3af' : '#999');
+            ctx.translate(x, y);
+            if (facing < 0) {
+                ctx.scale(-1, 1);
+            }
+            if (swipe1 < 0.95) {
+                ctx.lineWidth = hasClaws ? 4 : 2;
+                ctx.beginPath();
+                ctx.ellipse(5, -25, 86, 20, 0.1, -2.5 + 4 * swipe1, 0.5 + swipe1);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(5, -25, 76, 30, -0.2, -2.5 + 4 * swipe1, 0.5 + swipe1);
+                ctx.stroke();
+            }
+        });
 
         // Body animation
         bodyMesh[1][0] = 10 * heading * notAttack - 7 * climbing * facing + 15 * attacking * facing;
@@ -570,35 +570,36 @@ function Player(x, y) {
         }
         ctx.globalAlpha = 1;
 
-        // Front swipe render
-        color(hasClaws ? '#3af' : '#999');
-        ctx.translate(x, y);
-        if (facing < 0) {
-            ctx.scale(-1, 1);
-        }
-        if (swipe2 < 0.95) {
-            ctx.lineWidth = hasClaws ? 4 : 2;
-            ctx.beginPath();
-            ctx.ellipse(5, -25, 86, 20, 0.2, -swipe2, 3 - 4 * swipe2);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.ellipse(5, -25, 76, 30, 0.1, -swipe2, 3 - 4 * swipe2);
-            ctx.stroke();
-        }
+        retainTransform(() => {
+            // Front swipe render
+            color(hasClaws ? '#3af' : '#999');
+            ctx.translate(x, y);
+            if (facing < 0) {
+                ctx.scale(-1, 1);
+            }
+            if (swipe2 < 0.95) {
+                ctx.lineWidth = hasClaws ? 4 : 2;
+                ctx.beginPath();
+                ctx.ellipse(5, -25, 86, 20, 0.2, -swipe2, 3 - 4 * swipe2);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(5, -25, 76, 30, 0.1, -swipe2, 3 - 4 * swipe2);
+                ctx.stroke();
+            }
 
-        // Dash trail
-        if (dashTimer < 0.24) {
-            ctx.translate(-120, 0);
-            color('#eee');
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.ellipse(5, -36, 80, 10, -0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.ellipse(5, -36, 70, 5, 0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
-            ctx.stroke();
-        }
-        ctx.setTransform(xfm);
+            // Dash trail
+            if (dashTimer < 0.24) {
+                ctx.translate(-120, 0);
+                color('#eee');
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.ellipse(5, -36, 80, 10, -0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.ellipse(5, -36, 70, 5, 0.1, 1 - dashTimer * 8, 3 - dashTimer * 15);
+                ctx.stroke();
+            }
+        });
     }
 
     function reset(x_, y_) {

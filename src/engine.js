@@ -1,4 +1,4 @@
-import { canvas, ctx } from './canvas';
+import { canvas, ctx, retainTransform } from './canvas';
 import { TAG_CAMERA } from './tags';
 
 let gameObjects = [];
@@ -11,18 +11,17 @@ function tick(currentFrameMs) {
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.018);
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    const originalXfm = ctx.getTransform();
-    const camera = getObjectsByTag(TAG_CAMERA)[0];
-    camera.set(ctx);
+    retainTransform(() => {
+        const camera = getObjectsByTag(TAG_CAMERA)[0];
+        camera.set(ctx);
 
-    objectsToRemove.length = 0;
-    gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
-    if (objectsToRemove.length) { remove(objectsToRemove); }
-    gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
-    requestAnimationFrame(tick);
-    lastFrameMs = currentFrameMs;
-
-    ctx.setTransform(originalXfm);
+        objectsToRemove.length = 0;
+        gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
+        if (objectsToRemove.length) { remove(objectsToRemove); }
+        gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
+        requestAnimationFrame(tick);
+        lastFrameMs = currentFrameMs;
+    });
 }
 
 function add(obj) {

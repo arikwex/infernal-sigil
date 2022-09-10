@@ -1,4 +1,4 @@
-import { renderMesh, scaleInPlace } from './canvas';
+import { renderMesh, retainTransform, scaleInPlace } from './canvas';
 import { getObjectsByTag } from './engine';
 import * as bus from './bus';
 import { BoundingBox } from './bbox';
@@ -81,34 +81,34 @@ function Skeleton(x, y, type) {
 
         const t = facing * 0.6;
         const a = anim * 6;
-        const xfm = ctx.getTransform();
-        scaleInPlace(size, x, y);
+        retainTransform(() => {
+            scaleInPlace(size, x, y);
 
-        const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
-        const pHand1X = 7 * t * walking + pBodyP * 50;
-        const pHand1Y =
-            (-33 - 2 * t + Math.cos(a-1)) * walking;
-        const pHand2X = 7 * t * walking + pBodyP * 50;
-        const pHand2Y =
-            (-33 + 2 * t + Math.cos(a+2)) * walking;
-        const pHeadY = (-40 + Math.cos(a+1)) * walking;
+            const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
+            const pHand1X = 7 * t * walking + pBodyP * 50;
+            const pHand1Y =
+                (-33 - 2 * t + Math.cos(a-1)) * walking;
+            const pHand2X = 7 * t * walking + pBodyP * 50;
+            const pHand2Y =
+                (-33 + 2 * t + Math.cos(a+2)) * walking;
+            const pHeadY = (-40 + Math.cos(a+1)) * walking;
 
-        // Leg animation
-        legMesh[1][0] = Math.cos(a) * 8 * facing * walking;
-        legMesh[1][1] = Math.min(0, Math.sin(a)) * 4 * walking;
-        legMesh[1][4] = Math.cos(a+3) * 8 * facing * walking;
-        legMesh[1][5] = Math.min(0, Math.sin(a+3)) * 4 * walking;
+            // Leg animation
+            legMesh[1][0] = Math.cos(a) * 8 * facing * walking;
+            legMesh[1][1] = Math.min(0, Math.sin(a)) * 4 * walking;
+            legMesh[1][4] = Math.cos(a+3) * 8 * facing * walking;
+            legMesh[1][5] = Math.min(0, Math.sin(a+3)) * 4 * walking;
 
-        if (injured > 0.2) {
-            ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
-        }
-        renderMesh(legMesh, x, y, 0, t, 0);
-        renderMesh(handMesh, x + pHand1X, y + pHand1Y, -4, t * 2.1, -t/3);
-        renderMesh(handMesh, x + pHand2X, y + pHand2Y, 4, t * 2.1 + 3.14, -t/3);
-        renderMesh(bodyMesh, x, y, 0, t * 2 - 1.57, pBodyP);
-        renderMesh(headMesh, x, y + pHeadY, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
-        ctx.globalAlpha = 1;
-        ctx.setTransform(xfm);
+            if (injured > 0.2) {
+                ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
+            }
+            renderMesh(legMesh, x, y, 0, t, 0);
+            renderMesh(handMesh, x + pHand1X, y + pHand1Y, -4, t * 2.1, -t/3);
+            renderMesh(handMesh, x + pHand2X, y + pHand2Y, 4, t * 2.1 + 3.14, -t/3);
+            renderMesh(bodyMesh, x, y, 0, t * 2 - 1.57, pBodyP);
+            renderMesh(headMesh, x, y + pHeadY, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
+            ctx.globalAlpha = 1;
+        });
     }
 
     function hitCheck([attackHitbox, dir, owner, isFlame]) {

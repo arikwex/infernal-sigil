@@ -1,5 +1,5 @@
 import { BoundingBox } from "./bbox";
-import { renderMesh, scaleInPlace } from "./canvas";
+import { renderMesh, retainTransform, scaleInPlace } from "./canvas";
 import { add, remove } from "./engine";
 import FlameSFX from "./flame-sfx";
 import * as bus from "./bus";
@@ -94,20 +94,20 @@ function Decoration(x, y, t) {
     }
 
     function render(ctx) {
-        const xfm = ctx.getTransform();
-        scaleInPlace(scale * flip, x, y+50, scale);
-        ctx.globalAlpha = 1 - deathTimer / 0.7;
-        shapeMeshes.map((shapeMesh, idx) => {
-            renderMesh(
-                shapeMesh,
-                x + vx[idx] * deathTimer,
-                y + vy[idx] * deathTimer + deathTimer * deathTimer * 1200,
-                0, 0,
-                leanAngle + omega[idx] * deathTimer
-            );
+        retainTransform(() => {
+            scaleInPlace(scale * flip, x, y+50, scale);
+            ctx.globalAlpha = 1 - deathTimer / 0.7;
+            shapeMeshes.map((shapeMesh, idx) => {
+                renderMesh(
+                    shapeMesh,
+                    x + vx[idx] * deathTimer,
+                    y + vy[idx] * deathTimer + deathTimer * deathTimer * 1200,
+                    0, 0,
+                    leanAngle + omega[idx] * deathTimer
+                );
+            });
+            ctx.globalAlpha = 1;
         });
-        ctx.globalAlpha = 1;
-        ctx.setTransform(xfm);
     }
 
     function hitCheck([attackHitbox, dir, owner, projectile]) {
