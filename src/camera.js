@@ -8,13 +8,13 @@ import { TAG_CAMERA, TAG_MAP, TAG_PLAYER } from './tags';
 function Camera(x, y) {
     const player = getObjectsByTag(TAG_PLAYER)[0];
     x = player.playerHitbox.x;
-    y = player.playerHitbox.y;
+    y = player.playerHitbox.y+200;
     let self = {};
     let anim = 0;
     let shake = 0;
     let tx = x;
     let ty = y;
-    let tz = 1;
+    let tz = 4;
     let z = tz;
 
     let bgBot = [0, 0, 0];
