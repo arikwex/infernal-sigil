@@ -6,6 +6,7 @@ const { minify } = require('uglify-js');
 const { Packer } = require('roadroller');
 
 const dest = {
+    base: path.resolve('./'),
     bundle: path.resolve('./dist/build.js'),
     html: path.resolve('./index.html'),
     zip: path.resolve('./dist/build.zip'),
@@ -47,7 +48,8 @@ module.exports = {
 
     zip: async () => {
         await zip({
-            source: dest.html,
+            cwd: dest.base,
+            source: 'index.html',
             destination: dest.zip
         });
     },
