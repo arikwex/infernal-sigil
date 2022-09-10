@@ -22,11 +22,7 @@ function Audio() {
 
     // Musics
     let musicFocusBuffer;
-    let musicStyxBuffer;
-    let musicAsphodelBuffer;
-    let musicElysianBuffer;
-    let musicMourningBuffer;
-    let musicThroneBuffer;
+    let musicRegionBuffers;
     let musicDrumBuffer;
     
     let drumBuffer;
@@ -132,19 +128,21 @@ function Audio() {
         }
 
         // Generate 5 procedural songs
-        musicStyxBuffer = genericSongBuilder(1, [0, 2, 3, 5, 7, 12], 1.6);
-        musicAsphodelBuffer = genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12], 0.5);
-        musicElysianBuffer = genericSongBuilder(3, [0, 2, 3, 7, 8, 12], 0.9);
-        musicMourningBuffer = genericSongBuilder(4, [0, 2, 3, 7, 8, 12], 1.2);
-        musicThroneBuffer = genericSongBuilder(5, [0, 4, 5, 7, 12], 0.8);
+        musicRegionBuffers = [
+            [[0, 2, 3, 5, 7, 12], 1.6],
+            [[0, 2, 3, 5, 7, 8, 11, 12], 0.5],
+            [[0, 2, 3, 7, 8, 12], 0.9],
+            [[0, 2, 3, 7, 8, 12], 1.2],
+            [[0, 4, 5, 7, 12], 0.8]
+        ].map(genericSongBuilder);
     }
 
-    function genericSongBuilder(seed, melodySignature, beat) {
+    function genericSongBuilder([melodySignature, beat], seed) {
         // Song builder
         const song = [];
         const drums = [];
-        const noteLength = [4,2,0.5,3,4][seed-1];
-        const noteSpace = [1,0.5,0.25,2,2][seed-1];
+        const noteLength = [4,2,0.5,3,4][seed];
+        const noteSpace = [1,0.5,0.25,2,2][seed++];
         const bassNotes = [-15, -20, -19, -12];
         drums.push(
             [((seed * seed * 3) * 0.5) % 2, (seed) % 2],
@@ -207,13 +205,7 @@ function Audio() {
     };
 
     function onRegion(regionId) {
-        music([
-            musicStyxBuffer,
-            musicAsphodelBuffer,
-            musicElysianBuffer,
-            musicMourningBuffer,
-            musicThroneBuffer,
-        ][regionId]);
+        music(musicRegionBuffers[regionId]);
     }
 
     function music(musicBuffer) {
