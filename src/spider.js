@@ -162,12 +162,12 @@ function Spider(x, y, type) {
                 const p = legPhase[i];
                 const L = i < 2 ? -3 : 7;
                 const idx = i < 2 ? 1 + i : 2 + i;
-                legMesh[idx][2] = (11 * s - Math.cos(a+p) * 4 * facing * walking);
-                legMesh[idx][3] = (12) * walking;
-                legMesh[idx][4] = ((40 + L) * s - Math.cos(a+p) * 2 * facing * walking);
-                legMesh[idx][5] = (-5 + Math.cos(a+p) * 4 * walking);
-                legMesh[idx][6] = ((44 + L) * s - Math.cos(a+p) * 9 * facing * walking);
-                legMesh[idx][7] = (20 + Math.min(-Math.sin(a+p) * 10, 0) * walking);
+                legMesh[idx][2] = 11 * s - Math.cos(a+p) * 4 * facing * walking;
+                legMesh[idx][3] = 12 * walking;
+                legMesh[idx][4] = (40 + L) * s - Math.cos(a+p) * 2 * facing * walking;
+                legMesh[idx][5] = -5 + Math.cos(a+p) * 4 * walking;
+                legMesh[idx][6] = (44 + L) * s - Math.cos(a+p) * 9 * facing * walking;
+                legMesh[idx][7] = 20 + Math.min(-Math.sin(a+p) * 10, 0) * walking;
             }
 
             if (injured > 0.2) {

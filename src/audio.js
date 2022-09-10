@@ -67,7 +67,7 @@ function Audio() {
 
         // Player walk sound
         walkSound = generate(0.02, (i) => {
-            return 0.07 * sin(i/40) * Math.exp(-i/100);
+            return 0.06 * sin(i/30) * Math.exp(-i/100);
         });
 
         // Player jump sound

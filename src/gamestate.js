@@ -1,5 +1,3 @@
-import { clamp } from "./utils";
-
 let bones = 0;
 let hp = 3;
 let checkpointId = 0;
@@ -14,7 +12,7 @@ function respawn() { bones = bones>>1; hp = 3; deathCount++; }
 function setCheckpointId(id) { checkpointId = id; hp = 3; }
 function getCheckpointId() { return checkpointId; }
 function getDeathCount() { return deathCount; }
-function foundTreasure() { treasures += 1; }
+function foundTreasure() { treasures++; }
 function getTreasures() { return treasures; }
 
 export {

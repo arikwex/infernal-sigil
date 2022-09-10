@@ -36,20 +36,21 @@ function Treasure(x, y, t) {
         hitTimer = Math.max(hitTimer - dT, 0);
     }
 
-    function render(ctx) {
-        const decay = Math.exp(hitTimer * 6 - 3);
-        const dy = 2 + Math.abs(Math.cos(hitTimer * 20) * 12) * decay / 10;
-        const da = Math.cos(hitTimer * 30 + phase) * hitTimer * decay / 60;
+    function render() {
         retainTransform(() => {
             scaleInPlace(0.75 + t * 0.15, x, y);
-            renderMesh(treasureMesh, x, y - dy, 0, 0, da, bgColor);
+            renderMesh(treasureMesh, 
+                x,
+                y - 2 - Math.abs(Math.cos(hitTimer * 20) * 12) * Math.exp(hitTimer * 6 - 3) / 10, 
+                0, 0, Math.cos(hitTimer * 30 + phase) * hitTimer * Math.exp(hitTimer * 6 - 3) / 60, bgColor
+            );
         });
     }
 
-    function hitCheck([attackHitbox, dir, owner]) {
+    function hitCheck([attackHitbox,, owner]) {
         if (myHitbox.isTouching(attackHitbox)) {
             hitTimer = 1;
-            phase += Math.random() * 7;
+            phase = Math.random() * 7;
             hp -= 1;
             bus.emit(EVENT_BONE_SPAWN, [x,y-20,1,1]);
             bus.emit(EVENT_ATTACK_HIT, [owner]);

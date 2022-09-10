@@ -234,9 +234,8 @@ function Player(x, y) {
             // Climbing controls
             numAirjumpsUsed = 0;
             if (Math.abs(v) > 0.3) {
-                const inf = Math.min(stick * 6, 1);
-                y -= CLIMB_SPEED * Math.sign(v) * dT * inf;
-                climbAnim += 18 * dT * v * inf;
+                y -= CLIMB_SPEED * Math.sign(v) * dT * Math.min(stick * 6, 1);
+                climbAnim += 18 * dT * v * Math.min(stick * 6, 1);
                 walkTick += dT;
                 if (walkTick > 0.13) {
                     bus.emit(EVENT_WALK);
@@ -537,12 +536,12 @@ function Player(x, y) {
             (9 * Math.cos(climbAnim+3) * facing - 8) * climbing;
 
         // Tail animation while running
-        tailMesh[1][3] = Math.cos(a) * 1 + 31-37-tailWhip/50;
-        tailMesh[1][5] = Math.cos(a + 1) * 1 + 31-37-tailWhip/40;
+        tailMesh[1][3] = Math.cos(a) + 31-37-tailWhip/50;
+        tailMesh[1][5] = Math.cos(a + 1) + 31-37-tailWhip/40;
         tailMesh[1][6] = -32-Math.abs(tailWhip/290);
         tailMesh[1][7] = Math.cos(a + 2) * 2 + 22-37-tailWhip/30;
         tailMesh[1][8] = -34+tailWhip/70;
-        tailMesh[1][9] = Math.cos(a + 3) * 1 + 15-37-tailWhip/20;
+        tailMesh[1][9] = Math.cos(a + 3) + 15-37-tailWhip/20;
 
         // Render layers of mesh
         if (injured > 0.1) {
@@ -605,12 +604,11 @@ function Player(x, y) {
         isDead = false;
         playerHitbox.x = x_;
         playerHitbox.y = y_;
-        vx = 0;
-        vy = 0;
+        vx = vy = 0;
         getObjectsByTag(TAG_CAMERA)[0].aim(x_, y_, 1, true);
     }
 
-    function onAttackHit([attack, dir]) {
+    function onAttackHit([, dir]) {
         if (dir) {
             vx = -dir * 300;
         }

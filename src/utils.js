@@ -67,22 +67,14 @@ const groundResult = [false, false];
 function groundCheck(myHitbox, wx = 1, wy = 0) {
     let hasRight = false;
     let hasLeft = false;
-    let ox = myHitbox.x;
-    let oy = myHitbox.y;
     getObjectsByTag(TAG_PHYSICS).map(({ physics }) => {
-        let sx = ox + 40 * wx - 4 * wy;
-        let sy = oy + 4 * wx + 40 * wy;
-        if (containPt(physics, sx, sy)) {
+        if (containPt(physics, myHitbox.x + 40 * wx - 4 * wy, myHitbox.y + 4 * wx + 40 * wy)) {
             hasRight = true;
         }
-        sx = ox - 40 * wx - 4 * wy;
-        sy = oy + 4 * wx - 40 * wy;
-        if (containPt(physics, sx, sy)) {
+        if (containPt(physics, myHitbox.x - 40 * wx - 4 * wy, myHitbox.y + 4 * wx - 40 * wy)) {
             hasLeft = true;
         }
     });
-    myHitbox.x = ox;
-    myHitbox.y = oy;
     groundResult[0] = hasRight;
     groundResult[1] = hasLeft;
     return groundResult;

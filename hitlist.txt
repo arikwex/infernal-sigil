@@ -4,9 +4,9 @@ On Deck
 FIXES FOR ITCH.IO
 - Game pad support
 - Game timer displayed wrong (seconds dont have two digits)
+
 - Main menu => New Game vs Continue
 - GameState that is effectively load/reload (?)
-
 - Map loader + compressor improvements
 - Favicon
 - Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage

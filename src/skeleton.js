@@ -85,13 +85,6 @@ function Skeleton(x, y, type) {
             scaleInPlace(size, x, y);
 
             const pBodyP = (Math.cos(a) / 20) * walking - facing * injured * 0.3;
-            const pHand1X = 7 * t * walking + pBodyP * 50;
-            const pHand1Y =
-                (-33 - 2 * t + Math.cos(a-1)) * walking;
-            const pHand2X = 7 * t * walking + pBodyP * 50;
-            const pHand2Y =
-                (-33 + 2 * t + Math.cos(a+2)) * walking;
-            const pHeadY = (-40 + Math.cos(a+1)) * walking;
 
             // Leg animation
             legMesh[1][0] = Math.cos(a) * 8 * facing * walking;
@@ -103,10 +96,10 @@ function Skeleton(x, y, type) {
                 ctx.globalAlpha = Math.cos(injured*25) > 0 ? 0.2 : 1;
             }
             renderMesh(legMesh, x, y, 0, t, 0);
-            renderMesh(handMesh, x + pHand1X, y + pHand1Y, -4, t * 2.1, -t/3);
-            renderMesh(handMesh, x + pHand2X, y + pHand2Y, 4, t * 2.1 + 3.14, -t/3);
+            renderMesh(handMesh, x + 7 * t * walking + pBodyP * 50, y + (-33 - 2 * t + Math.cos(a-1)) * walking, -4, t * 2.1, -t/3);
+            renderMesh(handMesh, x + 7 * t * walking + pBodyP * 50, y + (-33 + 2 * t + Math.cos(a+2)) * walking, 4, t * 2.1 + 3.14, -t/3);
             renderMesh(bodyMesh, x, y, 0, t * 2 - 1.57, pBodyP);
-            renderMesh(headMesh, x, y + pHeadY, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
+            renderMesh(headMesh, x, y + (-40 + Math.cos(a+1)) * walking, 23 + pBodyP * 70 * facing, -t, -injured * facing * 0.6);
             ctx.globalAlpha = 1;
         });
     }
