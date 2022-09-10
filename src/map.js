@@ -1,17 +1,18 @@
 import terrain from './game-map.png';
 import { ctx } from './canvas';
-import { add } from './engine';
+import { add, getObjectsByTag } from './engine';
 import Wall from './wall';
 import Decoration from './decoration';
 import * as bus from './bus';
 import LOOKUP from './GENERATED-map-lookup';
 import { EVENT_REGION } from './events';
-import { TAG_MAP } from './tags';
+import { TAG_CAMERA, TAG_MAP } from './tags';
 
 function Map() {
     let img = new Image();
     let minimapCanvas = document.createElement('canvas');
-    let data = null;
+    let minimapCtx;
+    let data;
     let W, H;
     const BLOCK_SIZE = 100;
     const WALL_MAP = {};
@@ -35,7 +36,7 @@ function Map() {
 
         // Prepare minimap
         minimapCanvas.width = minimapCanvas.height = 125;
-        let minimapCtx = minimapCanvas.getContext('2d');
+        minimapCtx = minimapCanvas.getContext('2d');
         ctx.imageSmoothingEnabled = false;
 
         // Entity placements
@@ -56,8 +57,8 @@ function Map() {
         const vertMap = {};
         forXY((x, y) => {
             const V = get(x, y) << 1;
-            minimapCtx.fillStyle='rgba(0,0,0,0.7)';
-            if (WALL_MAP[V] && (minimapCtx.fillStyle=WALL_MAP[V][0]) && !vertMap[x+','+y]) {
+            //if (WALL_MAP[V] && (minimapCtx.fillStyle=WALL_MAP[V][0]) && !vertMap[x+','+y]) {
+            if (WALL_MAP[V] && !vertMap[x+','+y]) {
                 let q = y;
                 while (q < H) {
                     const V2 = get(x, q) << 1;
@@ -69,7 +70,6 @@ function Map() {
                 }
                 vertMap[x+','+y] = [y, q, V];
             }
-            minimapCtx.fillRect( x, y, 1, 1 );
         });
 
         // Merge walls horizontally
@@ -195,8 +195,22 @@ function Map() {
         return themeData;
     }
 
+    function update() {
+        const cam = getObjectsByTag(TAG_CAMERA)[0];
+        for (let q = 0; q < 13*8; q++) {
+            const x = parseInt(cam.getX()/100 + q % 13 - 6);
+            const y = parseInt(cam.getY()/100 + q / 13 - 3);
+            const V = get(x, y) << 1;
+            if (WALL_MAP[V]) {
+                minimapCtx.fillStyle=WALL_MAP[V][0];
+                minimapCtx.fillRect( x, y, 1, 1 );
+            }
+        }
+    }
+
     return {
         generate,
+        update,
         tags: [TAG_MAP],
         getTheme,
         minimapCanvas,
