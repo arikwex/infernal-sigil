@@ -1,14 +1,11 @@
 On Deck
-- Self-revealing map top right?
+- If on wall, reset dash timer
 
+FIXES FOR ITCH.IO
+- Game pad support
 - Game timer displayed wrong (seconds dont have two digits)
 - Main menu => New Game vs Continue
-- Talk to spirits / read signs?
-- Collectables...
-- Minimap overlay
-- GameState that is effectively load/reload
-- Death counter / Cone counter
-- Game timer (bottom right for speed runners)
+- GameState that is effectively load/reload (?)
 
 - Map loader + compressor improvements
 - Favicon
