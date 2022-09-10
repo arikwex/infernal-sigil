@@ -136,20 +136,21 @@ function Audio() {
         }
 
         // Generate 5 procedural songs
-        // musicStyxBuffer = compileSong(genericSongBuilder(1, [0, 2, 3, 5, 7, 12]), 1.6);
-        // musicAsphodelBuffer = compileSong(genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12]), 0.5);
-        // musicElysianBuffer = compileSong(genericSongBuilder(3, [0, 2, 3, 7, 8, 12]), 0.9);
-        // musicMourningBuffer = compileSong(genericSongBuilder(4, [0, 2, 3, 7, 8, 12]), 1.2);
-        // musicThroneBuffer = compileSong(genericSongBuilder(5, [0, 4, 5, 7, 12]), 0.8);
+        musicStyxBuffer = genericSongBuilder(1, [0, 2, 3, 5, 7, 12], 1.6);
+        musicAsphodelBuffer = genericSongBuilder(2, [0, 2, 3, 5, 7, 8, 11, 12], 0.5);
+        musicElysianBuffer = genericSongBuilder(3, [0, 2, 3, 7, 8, 12], 0.9);
+        musicMourningBuffer = genericSongBuilder(4, [0, 2, 3, 7, 8, 12], 1.2);
+        musicThroneBuffer = genericSongBuilder(5, [0, 4, 5, 7, 12], 0.8);
     }
 
-    function genericSongBuilder(seed, melodySignature) {
-        const genericSong = [];
-        const genericDrums = [];
+    function genericSongBuilder(seed, melodySignature, beat) {
+        // Song builder
+        const song = [];
+        const drums = [];
         const noteLength = [4,2,0.5,3,4][seed-1];
         const noteSpace = [1,0.5,0.25,2,2][seed-1];
         const bassNotes = [-15, -20, -19, -12];
-        genericDrums.push(
+        drums.push(
             [((seed * seed * 3) * 0.5) % 2, (seed) % 2],
             [((seed * seed * 3 + seed * 9) * 0.5) % 2, (seed+1) % 2],
             [((seed * seed * 2 + seed * 11) * 0.5) % 2, (seed+1) % 2],
@@ -158,18 +159,16 @@ function Audio() {
             const o = i * 8;
             const q = [0,3,-5][i];
             for (let j = 0; j < 8; j++) {
-                genericSong.push([bassNotes[(seed*7+i*2+(j>>1)+j*j*3) % 4]+q, j+o, 6, 1]);
+                song.push([bassNotes[(seed*7+i*2+(j>>1)+j*j*3) % 4]+q, j+o, 6, 1]);
             }
             for (let j = 0; j < 8/noteSpace; j++) {
                 if ((j + j*j + i+seed*3) % 7 < 4) {
-                    genericSong.push([-3+q+melodySignature[(j + j*j*2 + i*i*2+seed) % melodySignature.length], j * noteSpace + o, noteLength, 2]);
+                    song.push([-3+q+melodySignature[(j + j*j*2 + i*i*2+seed) % melodySignature.length], j * noteSpace + o, noteLength, 2]);
                 }
             }
         }
-        return [genericSong, genericDrums];
-    }
 
-    function compileSong([song, drums], beat) {
+        // Song buffer writer
         const targetBuffer = audioCtx.createBuffer(1, sampleRate * 8 * 3 * beat, sampleRate);
         const buffer = targetBuffer.getChannelData(0);
         for (let i = 0; i < song.length; i++) {
