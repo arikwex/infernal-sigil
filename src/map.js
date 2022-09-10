@@ -7,6 +7,7 @@ import * as bus from './bus';
 import LOOKUP from './GENERATED-map-lookup';
 import { EVENT_REGION } from './events';
 import { TAG_CAMERA, TAG_MAP } from './tags';
+import Treasure from './treasure';
 
 function Map() {
     let img = new Image();
@@ -200,9 +201,20 @@ function Map() {
             const y = parseInt(cam.y/100 + q / 13 - 3);
             const V = get(x, y) << 1;
             if (WALL_MAP[V]) {
-                minimapCtx.fillStyle=WALL_MAP[V][0];
-                minimapCtx.fillRect( x, y, 1, 1 );
+                d(x, y, WALL_MAP[V][0]);
             }
+            // Find treasure, write it to the minimap, then erase it from the datastore
+            if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); data[(x + y * W)*4 + 2] = 0; }
+        }
+    }
+
+    // Draw on minimap
+    function d(x,y,c) {
+        minimapCtx.fillStyle=c;
+        if (c) {
+            minimapCtx.fillRect( x, y, 1, 1 );
+        } else {
+            minimapCtx.clearRect( x, y, 1, 1 );
         }
     }
 
@@ -212,6 +224,7 @@ function Map() {
         tags: [TAG_MAP],
         getTheme,
         m,
+        d,
     }
 }
 
