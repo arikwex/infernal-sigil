@@ -1,8 +1,6 @@
 On Deck
-- Treasure counter as tease for completionists (render as asset)
-- Optimize....
+- Self-revealing map top right?
 
-- BUG: checkpoint respawn location?!?
 - Game timer displayed wrong (seconds dont have two digits)
 - Main menu => New Game vs Continue
 - Talk to spirits / read signs?

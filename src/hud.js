@@ -4,7 +4,9 @@ import { canvas, color, renderMesh, renderText, scaleInPlace } from "./canvas";
 import { getBones, getDeathCount, getHp, getTreasures } from "./gamestate";
 import { clamp, copy } from "./utils";
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } from './events';
-import { getStartTime } from './engine';
+import { getObjectsByTag, getStartTime } from './engine';
+import { TAG_MAP, TAG_PLAYER } from './tags';
+import { holdingMap } from './controls';
 
 function HUD() {
     let regionTitle = '';
@@ -21,13 +23,25 @@ function HUD() {
 
     function render(ctx) {
         const xfm = ctx.getTransform();
-        ctx.setTransform(0.8,0,0,0.8,0,0);
+        
+        // Render minimap
+        if (holdingMap()) {
+            ctx.setTransform(1,0,0,1,canvas.width/2, canvas.height/2);
+            scaleInPlace(4, 125/2, 125/2);
+            ctx.drawImage(getObjectsByTag(TAG_MAP)[0].minimapCanvas, 0, 0);
+            if (Math.cos(Date.now()/50)<0.5) {
+                const player = getObjectsByTag(TAG_PLAYER)[0].playerHitbox;
+                ctx.fillStyle = '#e22';
+                ctx.fillRect(player.x/100-0.5, player.y/100-0.5, 2, 2);
+            }
+        }
 
+        ctx.setTransform(0.8,0,0,0.8,0,0);
         // Render HP
         for (let i = 0 ; i < 3; i++) {
             if (i >= getHp()) {
-                headMesh[0][0] = '#555';
-                headMesh[3][0] = '#555';
+                headMesh[0][0] = '#222';
+                headMesh[3][0] = '#222';
             } else {
                 headMesh[0][0] = '#e22';
                 headMesh[3][0] = '#fff';

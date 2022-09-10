@@ -10,6 +10,7 @@ import { TAG_MAP } from './tags';
 
 function Map() {
     let img = new Image();
+    let minimapCanvas = document.createElement('canvas');
     let data = null;
     let W, H;
     const BLOCK_SIZE = 100;
@@ -27,9 +28,15 @@ function Map() {
             img.src = terrain;
         });
 
+        // Extract map data
         ctx.drawImage(img, 0, 0);
         W = img.width; H = img.height;
         data = ctx.getImageData(0, 0, W, H).data;
+
+        // Prepare minimap
+        minimapCanvas.width = minimapCanvas.height = 125;
+        let minimapCtx = minimapCanvas.getContext('2d');
+        ctx.imageSmoothingEnabled = false;
 
         // Entity placements
         forXY((x, y) => {
@@ -49,7 +56,8 @@ function Map() {
         const vertMap = {};
         forXY((x, y) => {
             const V = get(x, y) << 1;
-            if (WALL_MAP[V] && !vertMap[x+','+y]) {
+            minimapCtx.fillStyle='rgba(0,0,0,0.7)';
+            if (WALL_MAP[V] && (minimapCtx.fillStyle=WALL_MAP[V][0]) && !vertMap[x+','+y]) {
                 let q = y;
                 while (q < H) {
                     const V2 = get(x, q) << 1;
@@ -61,6 +69,7 @@ function Map() {
                 }
                 vertMap[x+','+y] = [y, q, V];
             }
+            minimapCtx.fillRect( x, y, 1, 1 );
         });
 
         // Merge walls horizontally
@@ -190,6 +199,7 @@ function Map() {
         generate,
         tags: [TAG_MAP],
         getTheme,
+        minimapCanvas,
     }
 }
 

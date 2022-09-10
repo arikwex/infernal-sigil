@@ -20,6 +20,7 @@ let attack = () => recent('KeyX');
 let dash = () => recent('KeyC');
 let ignite = () => recent('KeyV');
 let holdingJump = () => pressed['KeyZ'];
+let holdingMap = () => pressed['KeyM'];
 
 export {
     horizontal,
@@ -29,4 +30,5 @@ export {
     ignite,
     dash,
     holdingJump,
+    holdingMap,
 }
