@@ -72,7 +72,7 @@ function Web(x, y) {
         }
     }
 
-    function hitCheck([attackHitbox, dir, owner, flames]) {
+    function hitCheck([attackHitbox,, owner, flames]) {
         if (physics.isTouching(attackHitbox)) {
             omx = 10;
             if (flames && !burnup) {

@@ -86,7 +86,6 @@ function Decoration(x, y, t) {
         if (isHit) {
             deathTimer += dT;
             if (deathTimer > 0.7) {
-                if (flameSfx) { remove([flameSfx]); }
                 bus.off(EVENT_ATTACK, hitCheck);
                 return true;
             }
@@ -120,7 +119,7 @@ function Decoration(x, y, t) {
                 vy[idx] = -Math.random() * 200 - 500;
                 omega[idx] = (Math.random() * 4 + 2) * (Math.random() > 0.5 ? 1 : -1);
             });
-            if (flameSfx) { remove([flameSfx]); }
+            flameSfx?.end();
         }
     }
 

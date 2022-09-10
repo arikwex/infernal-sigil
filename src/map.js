@@ -97,8 +97,7 @@ function Map() {
         // Place decorations
         forXY((x, y) => {
             const V = WALL_MAP[get(x, y) << 1];
-            const V2 = get(x, y-1);
-            if (V && !V2 && Math.cos(x*1321+y*2831) > 0.5) {
+            if (V && !get(x, y-1) && Math.cos(x*1321+y*2831) > 0.5) {
                 add(Decoration(x * BLOCK_SIZE, (y - 1) * BLOCK_SIZE, V[8][(x * 13 + y * 17) % V[8].length]));
             }
         });
