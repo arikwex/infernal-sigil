@@ -10,8 +10,6 @@ function Web(x, y) {
     let burnup = false;
     let burntime = 0;
     let anim = 0;
-    let cx = 0;
-    let cy = 0;
     let omx = 0;
     const webMesh = [
         ['#fff', 4, 0]
@@ -34,8 +32,6 @@ function Web(x, y) {
     function update(dT) {
         anim += dT * 56;
         omx -= omx * 5 * dT;
-        cx = omx * Math.cos(anim);
-        cy = omx*0.8 * Math.cos(anim / 1.4);
         updateWebPos();
 
         if (burnup) {
@@ -59,6 +55,8 @@ function Web(x, y) {
     }
 
     function updateWebPos() {
+        let cx = omx * Math.cos(anim);
+        let cy = omx*0.8 * Math.cos(anim / 1.4);
         for (let i = 0; i < 8; i++) {
             webMesh[1 + i][0] = cx;
             webMesh[1 + i][1] = cy;
