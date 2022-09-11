@@ -36,7 +36,7 @@ function Map() {
         data = ctx.getImageData(0, 0, W, H).data;
 
         // Prepare minimap
-        m.width = m.height = 125;
+        m.width = m.height = 126;
         minimapCtx = m.getContext('2d');
 
         // Entity placements
