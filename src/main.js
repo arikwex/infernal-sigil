@@ -11,6 +11,7 @@ import Audio from './audio';
 import { EVENT_ANY_KEY, EVENT_BONE_COLLECT, EVENT_BONE_SPAWN, EVENT_FIREBALL, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_SFX_FLAME } from './events';
 import { TAG_PLAYER } from './tags';
 
+const gameMap = Map();
 async function initialize() {
     // Loading
     bus.off(EVENT_ANY_KEY, initialize);
@@ -20,8 +21,6 @@ async function initialize() {
 
     // Game
     Audio();
-
-    const gameMap = Map();
     await gameMap.generate();
 
     [gameMap, Camera(), HUD()].map(add);

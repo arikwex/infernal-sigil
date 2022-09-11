@@ -12,15 +12,15 @@ onkeydown = (evt) => {
 
 onkeyup = (evt) => delete pressed[evt.code];
 
-let horizontal = () => (pressed['ArrowLeft'] ? -1 : 0) + (pressed['ArrowRight'] ? 1 : 0);
-let vertical = () => (pressed['ArrowUp'] ? 1 : 0) + (pressed['ArrowDown'] ? -1 : 0);
+let horizontal = () => ((pressed['ArrowLeft'] || pressed['KeyA']) ? -1 : 0) + ((pressed['ArrowRight'] || pressed['KeyD']) ? 1 : 0);
+let vertical = () => ((pressed['ArrowUp'] || pressed['KeyW']) ? 1 : 0) + ((pressed['ArrowDown'] || pressed['KeyS']) ? -1 : 0);
 let recent = (f) => (Date.now() - pressed[f]) < 100;
-let jump = () => recent('KeyZ');
-let attack = () => recent('KeyX');
-let dash = () => recent('KeyC');
-let ignite = () => recent('KeyV');
-let holdingJump = () => pressed['KeyZ'];
-let holdingMap = () => pressed['KeyM'];
+let jump = () => recent('KeyZ') || recent('Space');
+let attack = () => recent('KeyX') || recent('KeyJ');
+let dash = () => recent('KeyC') || recent('KeyK');
+let ignite = () => recent('KeyV') || recent('KeyL');
+let holdingJump = () => pressed['KeyZ'] || pressed['Space'];
+let holdingMap = () => pressed['KeyM'] || pressed['KeyN'];
 
 export {
     horizontal,

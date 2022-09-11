@@ -13,14 +13,21 @@ the Underworld and its dangers while searching for a way to regain your strength
 The Throne awaits you...
 
 ## Controls
-```
-[Arrow Keys] to move
-[Z] to jump
-[X] to attack
-[C] Use Aspect 1 (once learned)
-[V] Use Aspect 2 (once learned)
-[M] Show map
-```
+Keyboard Option 1:
+- [Arrow Keys] to move
+- [Z] to jump
+- [X] to attack
+- [C] Use Aspect 1 (once learned)
+- [V] Use Aspect 2 (once learned)
+- [M] Show map
+
+Keyboard Option 2:
+- [WASD] to move
+- [Space] to jump
+- [J] to attack
+- [K] Use Aspect 1 (once learned)
+- [L] Use Aspect 2 (once learned)
+- [N] Show map
 
 ## Development
 ```

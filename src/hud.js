@@ -89,10 +89,10 @@ function HUD() {
         playTimeSeconds -= playTimeMinutes * 60;
 
         regionTitle = [
-            'Twisted Horns - [C] to dash',
+            'Twisted Horns - [C] or [K] to dash',
             'Iron Claws - Climb walls',
-            'Fireball - [V] to cast',
-            'Wingspan - [Z] to use',
+            'Fireball - [V] or [L] to cast',
+            'Wingspan - Jump to use',
             `VICTORY! 🦴${getBones()}  ⌛${playTimeMinutes}:${playTimeSeconds.toFixed(1)}  💀${getDeathCount()}`
         ][a];
         totalTime = a==4 ? 30 : 5;
