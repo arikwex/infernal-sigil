@@ -23,7 +23,7 @@ Keyboard Option 1:
 - [M] Show map
 ```
 
-Keyboard Option 2:
+Keyboard Option 2 (post-JS13k):
 ```
 - [WASD] to move
 - [Space] to jump
@@ -31,6 +31,16 @@ Keyboard Option 2:
 - [K] Use Aspect 1 (once learned)
 - [L] Use Aspect 2 (once learned)
 - [N] Show map
+```
+
+Gamepad (post-JS13k):
+```
+- [Left Analog] or [DPad] to move
+- [South Button] to jump
+- [West Button] to attack
+- [East Button] or [Left Trigger] Use Aspect 1 (once learned)
+- [North Button] Use Aspect 2 (once learned)
+- [Left Bumper] Show map
 ```
 
 ## Development

@@ -1,4 +1,5 @@
 import { canvas, ctx, retainTransform } from './canvas';
+import { updateGameControls } from './controls';
 import { TAG_CAMERA } from './tags';
 
 let gameObjects = [];
@@ -6,11 +7,15 @@ let gameObjectsByTag = {};
 const objectsToRemove = [];
 let lastFrameMs = 0;
 let startTime = 0;
+let startInvoked = false;
 
 function tick(currentFrameMs) {
+    updateGameControls();
+    if (!startInvoked) { requestAnimationFrame(tick); return; }
+    
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.018);
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
+    
     retainTransform(() => {
         const camera = getObjectsByTag(TAG_CAMERA)[0];
         camera.set(ctx);
@@ -19,9 +24,9 @@ function tick(currentFrameMs) {
         gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
         if (objectsToRemove.length) { remove(objectsToRemove); }
         gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
-        requestAnimationFrame(tick);
         lastFrameMs = currentFrameMs;
     });
+    requestAnimationFrame(tick);
 }
 
 function add(obj) {
@@ -52,7 +57,7 @@ function clear() {
 }
 
 function start() {
-    requestAnimationFrame(tick);
+    startInvoked = true;
     startTime = Date.now();
 }
 
@@ -63,6 +68,8 @@ function getObjectsByTag(tag) {
 function getStartTime() {
     return startTime;
 }
+
+requestAnimationFrame(tick);
 
 export {
     start,
