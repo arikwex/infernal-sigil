@@ -36,7 +36,7 @@ function Map() {
         data = ctx.getImageData(0, 0, W, H).data;
 
         // Prepare minimap
-        m.width = m.height = 126;
+        m.width = m.height = 128;
         minimapCtx = m.getContext('2d');
 
         // Entity placements
@@ -200,7 +200,7 @@ function Map() {
             const y = parseInt(cam.y/100) + parseInt(q / 15) - 4;
             const V = get(x, y) << 1;
             // Find walls
-            if (WALL_MAP[V]) { d(x, y, WALL_MAP[V][0]); }
+            if (WALL_MAP[V] && x < 125) { d(x, y, WALL_MAP[V][0]); }
             // Find treasure
             if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); }
         }
