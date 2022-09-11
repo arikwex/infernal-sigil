@@ -17,7 +17,7 @@ async function initialize() {
     bus.off(EVENT_ANY_KEY, initialize);
     const h1 = document.getElementsByTagName('h1')[0];
     h1.innerText='Loading...';
-    await new Promise(setTimeout);
+    await new Promise((r) => setTimeout(r, 100));
 
     // Game
     Audio();
