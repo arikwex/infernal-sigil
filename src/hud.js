@@ -93,7 +93,7 @@ function HUD() {
             'Iron Claws - Climb walls',
             'Fireball - [V] or [L] to cast',
             'Wingspan - Jump to use',
-            `VICTORY! 🦴${getBones()}  ⌛${playTimeMinutes}:${playTimeSeconds.toFixed(1)}  💀${getDeathCount()}`
+            `VICTORY! 🦴${getBones()}  ⌛${playTimeMinutes}:${(playTimeSeconds < 10 ? '0' : '')}${playTimeSeconds.toFixed(1)}  💀${getDeathCount()}`
         ][a];
         totalTime = a==4 ? 30 : 5;
         regionTitleTimer = totalTime;
