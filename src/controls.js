@@ -19,7 +19,7 @@ const GAMEPAD_BUTTON_MAP = {
 function updateGameControls() {
     const gp = getGamePad();
     if (!gp) { return; }
-    Object.entries(GAMEPAD_BUTTON_MAP).map(([btn, code]) => mapPadToKey(gp.buttons[btn], code));
+    Object.entries(GAMEPAD_BUTTON_MAP).map(([btn, code]) => mapPadToKey(gp?.buttons[btn], code));
 }
 
 // KEYBOARD
@@ -40,8 +40,8 @@ window.addEventListener('gamepadconnected', (e) => {
 
 function getGamePad() { return navigator.getGamepads()[currentGamePadId]; }
 function mapPadToKey(button, keyname) {
-    if (!pressed[keyname] && button.value > 0.5) { onkeydown({ code: keyname }); }
-    if (pressed[keyname] && button.value < 0.5) { onkeyup({ code: keyname }); }
+    if (!pressed[keyname] && button?.value > 0.5) { onkeydown({ code: keyname }); }
+    if (pressed[keyname] && button?.value < 0.5) { onkeyup({ code: keyname }); }
 }
 
 let horizontal = () =>

@@ -16,7 +16,7 @@ module.exports = {
     minify: () => {
         const originalBundle = fs.readFileSync(dest.bundle).toString().replaceAll('const ', 'let ');
         fs.writeFileSync(dest.bundle, minify(originalBundle, {
-            toplevel: true,
+            //toplevel: true,
         }).code);
     },
 
