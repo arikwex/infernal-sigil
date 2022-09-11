@@ -29,9 +29,9 @@ nvm use
 npm i
 
 # Build tools
-npm run dev      # Build + watch (build)
-npm run dev:mid  # Build + watch (build + minify)
-npm run build    # Build (build + minify + roadroller)
+npm run dev         # Build + watch (build)
+npm run dev:minify  # Build + watch (build + minify)
+npm run build       # Build (build + minify + roadroller)
 ```
 The build tools will always output:
 - index.html (The single html file you can open in browser to play)
