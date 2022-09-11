@@ -1,7 +1,10 @@
-# Infernal Throne
+# 🔥👑 Infernal Throne 👑🔥
 ## Play it online NOW
-- 🔥👑 INFERNAL THRONE 👑🔥 is a mini Metroidvania compressed in to 13kb.
-- Play online HERE: https://arikwex.github.io/infernal-sigil/
+- INFERNAL THRONE is a mini Metroidvania compressed in to 13kb.
+- https://arikwex.github.io/infernal-sigil/
+
+![400x250-infernal-throne](https://user-images.githubusercontent.com/1320825/189513114-63dc29bb-1fda-45e4-b18a-0f7468794425.png)
+
 
 ## The Story
 Your seat on the Infernal Throne has been overruled. The Demon King has banished 
@@ -10,13 +13,14 @@ the Underworld and its dangers while searching for a way to regain your strength
 The Throne awaits you...
 
 ## Controls
-Gameplay Tutorial:
-- [Arrow Keys] to move
-- [Z] to jump
-- [X] to attack
-- [C] Use Aspect 1 (once learned)
-- [V] Use Aspect 2 (once learned)
-- [M] Show map
+```
+[Arrow Keys] to move
+[Z] to jump
+[X] to attack
+[C] Use Aspect 1 (once learned)
+[V] Use Aspect 2 (once learned)
+[M] Show map
+```
 
 ## Development
 ```
