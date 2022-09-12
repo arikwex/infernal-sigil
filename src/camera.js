@@ -23,21 +23,16 @@ function Camera(x, y) {
     function update(dT) {
         anim += dT;
         shake = Math.max(shake-dT,0);
-        x = self.x = x + (tx - x) * 12 * dT;
-        y = self.y = y + (ty - y) * 12 * dT;
+        x = self.x = x + (tx - x) * 4 * dT;
+        y = self.y = y + (ty - y) * 4 * dT;
         z += (tz - z) * 3 * dT;
         tz += (canvas.width / 1500 - tz) * 4 * dT;
 
         if (getHp() > 0) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
-            const { width, height } = canvas;
-            const W = width / 10;
-            const H = height / 8;
-            if (px < x - W) { tx = px + W; }
-            if (px > x + W) { tx = px - W; }
-            if (py < y - H) { ty = py + H; }
-            if (py > y + H*0.8) { ty = py - H*0.8; }
+            tx = px + player.getVX() * 0.1;
+            ty = py - 120 + Math.max(player.getVY() * 0.15, 0);
         }
 
         // Should technically be in the render loop

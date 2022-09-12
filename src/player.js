@@ -625,6 +625,9 @@ function Player(x, y) {
         playerHitbox,
         grant,
         reset,
+        getDir: () => targetFacing,
+        getVX: () => vx,
+        getVY: () => vy,
     };
 }
 
