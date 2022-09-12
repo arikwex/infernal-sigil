@@ -63,6 +63,9 @@ function Player(x, y) {
     const TERMINAL_VELOCITY = 800;
     const CLIMB_SPEED = 370;
 
+    // True allows using fireball and dash from wall
+    let allowWallAbilities = false;
+
     // Head with no horns
     let headMesh = copy(headMeshAsset);
     headMesh[1].pop(); headMesh[1].pop();
@@ -141,12 +144,22 @@ function Player(x, y) {
         const requestFireball = ignite();
         const requestDash = dash();
 
-        if (requestDash && canDash && hasDash && !isClimbingWall && dashTimer > 0.8) {
+        if (requestDash && canDash && hasDash && (!isClimbingWall || allowWallAbilities) && dashTimer > 0.8) {
             dashTimer = 0;
             dashing = true;
             attackTime = 0.0;
             canDash = false;
-            vx = targetFacing * 1000;
+            if (isClimbingWall && allowWallAbilities) {
+                // Dash away from wall (if applicable)
+                targetFacing *= -1;
+                facing = targetFacing;
+                vx = targetFacing * 1000;
+                x += targetFacing * 10;
+                playerHitbox.x = x;
+                isClimbingWall = false;
+            } else {
+                vx = targetFacing * 1000;
+            }
             bus.emit(EVENT_DASH);
         }
 
@@ -247,6 +260,14 @@ function Player(x, y) {
                 anim += dT;
                 climbAnim -= Math.sin(climbAnim) * 15 * dT;
             }
+
+            // Fireball from wall
+            if (allowWallAbilities && requestFireball && fireballTime > 1 && hasFlame) {
+                fireballTime = 0;
+                facing = -targetFacing;
+                smoothAttacking = 1;
+                bus.emit(EVENT_FIREBALL, [x, y-30, -targetFacing]);
+            }
         }
 
         if (jump() && timeSinceJump > 0.15) {
@@ -300,7 +321,7 @@ function Player(x, y) {
         else if (onWall && !onGround && (attackTime > 0.3 || dashing) && hasClaws) {
             // Touching wall and no ground should enter climbing mode
             isClimbingWall = true;
-            dashTimer = 1;
+            if (dashTimer < 0.7) { dashTimer = 0.7; }
             dashing = false;
             attackTime = 1;
             vx = 0;
@@ -308,7 +329,7 @@ function Player(x, y) {
         else if (onWall && onGround && v > 0.3 && hasClaws) {
             // Trying to moving up on wall from ground should engage climbing
             isClimbingWall = true;
-            dashTimer = 1;
+            if (dashTimer < 0.7) { dashTimer = 0.7; }
             dashing = false;
             attackTime = 1;
             vx = 0;

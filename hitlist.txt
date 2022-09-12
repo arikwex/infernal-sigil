@@ -1,7 +1,15 @@
-- Main menu => New Game vs Continue
+What to do with bones?
+- Buy maps
+- Increase max health
+- Purchase checkpoint
+- Upgrade number of consecutive attack swipes
+- Upgrade dash to deal damage
+- Upgrade air jump +1 flap
+- Upgrade fireball damage (1->3)
+- Upgrade shooting & dashing from wall
+
 - GameState that is effectively load/reload (?)
-- Map loader + compressor improvements
-- Upgrades -> Max health, multiple air jumps, fireball speed, base attack damage
+- Main menu => New Game vs Continue
 - Aim direction
 - Pogo on down-hit
 - (CRITICAL PERFORMANCE) Room loader/unloader mechanism (automatic from map file ideally, grid system)
