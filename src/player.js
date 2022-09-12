@@ -166,7 +166,9 @@ function Player(x, y) {
         }
 
         if (onGround) {
-            vy = 0;
+            if (vy > -100 && !holdingJump()) {
+                vy = 0;
+            }
             groundTime = 0.15;
             numAirjumpsUsed = 0;
             onGround = true;
