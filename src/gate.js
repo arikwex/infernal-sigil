@@ -3,7 +3,8 @@ import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
 import { EVENT_SWITCH } from "./events";
-import { TAG_PHYSICS } from "./tags";
+import { TAG_MAP, TAG_PHYSICS } from "./tags";
+import { getObjectsByTag } from "./engine";
 
 function Gate(x, y, switchNum) {
     let open = false;
@@ -36,6 +37,7 @@ function Gate(x, y, switchNum) {
     function onSwitch([num, state]) {
         if (num == switchNum) {
             open = state;
+            [0,1,2].map((v) => getObjectsByTag(TAG_MAP)[0].d(parseInt(x/100), parseInt(y/100)-v, null));
         }
     }
 

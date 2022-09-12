@@ -8,6 +8,8 @@ import LOOKUP from './GENERATED-map-lookup';
 import { EVENT_REGION } from './events';
 import { TAG_CAMERA, TAG_MAP } from './tags';
 import Treasure from './treasure';
+import Web from './web';
+import Gate from './gate';
 
 function Map() {
     let img = new Image();
@@ -203,6 +205,10 @@ function Map() {
             if (WALL_MAP[V] && x < 125) { d(x, y, WALL_MAP[V][0]); }
             // Find treasure
             if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); }
+            // Find Web
+            if (LOOKUP[V] == Web) { [0,1].map((v)=>d(x, y-v, '#a3f')); }
+            // Find Gate
+            if (LOOKUP[V] == Gate) { [0,1,2].map((v)=>d(x, y-v, '#a3f')); }
         }
     }
 

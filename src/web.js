@@ -3,7 +3,8 @@ import { renderMesh } from "./canvas";
 import * as bus from './bus';
 import { inView } from "./utils";
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_SFX_FLAME, EVENT_WEB_BOING } from "./events";
-import { TAG_PHYSICS } from "./tags";
+import { TAG_MAP, TAG_PHYSICS } from "./tags";
+import { getObjectsByTag } from "./engine";
 
 function Web(x, y) {
     y -= 50;
@@ -38,6 +39,7 @@ function Web(x, y) {
             burntime += dT;
             if (burntime > 1) {
                 bus.off(EVENT_ATTACK, hitCheck);
+                [0,1].map((v) => getObjectsByTag(TAG_MAP)[0].d(parseInt(x/100), parseInt((y+50)/100)-v, null));
                 return true;
             }
         }
