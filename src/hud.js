@@ -92,7 +92,7 @@ function HUD() {
             'Twisted Horns - [C] or [K] to dash',
             'Iron Claws - Climb walls',
             'Fireball - [V] or [L] to cast',
-            'Wingspan - Jump to use',
+            'Wingspan - Double jump to use',
             `VICTORY! 🦴${getBones()}  ⌛${playTimeMinutes}:${(playTimeSeconds < 10 ? '0' : '')}${playTimeSeconds.toFixed(1)}  💀${getDeathCount()}`
         ][a];
         totalTime = a==4 ? 30 : 5;
