@@ -17,6 +17,7 @@ function Camera(x, y) {
     let ty = y;
     let tz = 4;
     let z = tz;
+    let startingUp = 0;
 
     let bgBot = [0, 0, 0];
     let bgTop = [0, 0, 0];
@@ -24,17 +25,21 @@ function Camera(x, y) {
     function update(dT) {
         anim += dT;
         shake = Math.max(shake-dT,0);
+        startingUp += dT;
+
+        const ky = startingUp < 1.5 ? 24 : 12;
         x = self.x = x + (tx - x) * 4 * dT;
-        y = self.y = y + (ty - y) * 12 * dT;
+        y = self.y = y + (ty - y) * ky * dT;
         z += (tz - z) * 3 * dT;
-        tz += (canvas.width / 1700 - tz) * 4 * dT;
+
+        const kz = startingUp < 1.5 ? 1 : 4;
+        tz += (canvas.width / 1700 - tz) * kz * dT;
 
         if (getHp() > 0) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
             const { height } = canvas;
-            const H = height / 6;
-            const W = 50;
+            const H = height / 6 / z;
             tx = px + player.getVX() * 0.1;
             if (py < y - H/2) { ty = py + H/2; }
             if (py > y + H) { ty = py - H; }

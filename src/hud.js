@@ -12,6 +12,7 @@ function HUD() {
     let regionTitle;
     let regionTitleTimer;
     let totalTime;
+    let fadeIn = 0;
 
     const headMesh = copy(headMeshAsset);
     const boneMesh = copy(boneMeshAsset);
@@ -19,6 +20,7 @@ function HUD() {
 
     function update(dT) {
         regionTitleTimer -= dT;
+        fadeIn += dT;
     }
 
     function render(ctx) {
@@ -68,12 +70,19 @@ function HUD() {
             renderText(`${getTreasures()} / ${getTotalNumTreasure()}`, 80, 103, 30);
             scaleInPlace(0.5, 50, 102);
             renderMesh(treasureMesh, 50, 120, 0, 0, 0, '#742');
+
+            // Fade in initial
+            if (fadeIn < 2) {
+                ctx.setTransform(1,0,0,1,0,0);
+                ctx.fillStyle=`rgba(0,0,0,${1-fadeIn*fadeIn/4})`;
+                ctx.fillRect(0,0,canvas.width,canvas.height);
+            }
         });
     }
 
     function onRegionChange(regionId) {
         regionTitle = regionTitles[regionId];
-        totalTime = 4;
+        totalTime = 6;
         regionTitleTimer = totalTime;
     }
 
