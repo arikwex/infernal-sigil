@@ -602,10 +602,10 @@ function Player(x, y) {
 
     function reset(x_, y_) {
         isDead = false;
-        playerHitbox.x = x_;
-        playerHitbox.y = y_;
+        x = x_; y = y_;
+        playerHitbox.set(x, y, -14, -55, 28, 50);
         vx = vy = 0;
-        getObjectsByTag(TAG_CAMERA)[0].aim(x_, y_, 1, true);
+        getObjectsByTag(TAG_CAMERA)[0].aim(x, y, 1, true);
     }
 
     function onAttackHit([, dir]) {
