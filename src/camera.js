@@ -34,7 +34,8 @@ function Camera(x, y) {
             const py = player.playerHitbox.y;
             const { height } = canvas;
             const H = height / 6;
-            tx = px + player.getVX() * 0.2;
+            const W = 50;
+            tx = px + player.getVX() * 0.1;
             if (py < y - H/2) { ty = py + H/2; }
             if (py > y + H) { ty = py - H; }
         }

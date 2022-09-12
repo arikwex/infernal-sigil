@@ -206,9 +206,9 @@ function Map() {
             // Find treasure
             if (LOOKUP[V] == Treasure) { d(x, y, '#ff0'); }
             // Find Web
-            if (LOOKUP[V] == Web) { [0,1].map((v)=>d(x, y-v, '#a3f')); }
+            if (LOOKUP[V] == Web) { [0,1].map((v)=>d(x, y-v, '#24f')); }
             // Find Gate
-            if (LOOKUP[V] == Gate) { [0,1,2].map((v)=>d(x, y-v, '#a3f')); }
+            if (LOOKUP[V] == Gate) { [0,1,2].map((v)=>d(x, y-v, '#24f')); }
         }
     }
 
