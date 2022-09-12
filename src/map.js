@@ -215,10 +215,10 @@ function Map() {
     // Draw on minimap
     function d(x,y,c) {
         minimapCtx.fillStyle=c;
+        // Write it to the minimap, then erase it from the datastore
+        data[(x + y * W)*4 + 2] = 0;
         if (c) {
             minimapCtx.fillRect( x, y, 1, 1 );
-            // Write it to the minimap, then erase it from the datastore
-            data[(x + y * W)*4 + 2] = 0;
         } else {
             minimapCtx.clearRect( x, y, 1, 1 );
         }
