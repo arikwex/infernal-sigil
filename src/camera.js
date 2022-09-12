@@ -1,5 +1,6 @@
 import * as bus from './bus';
 import { canvas } from "./canvas";
+import { vertical } from './controls';
 import { getObjectsByTag } from "./engine"
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT } from './events';
 import { getHp } from './gamestate';
@@ -24,15 +25,18 @@ function Camera(x, y) {
         anim += dT;
         shake = Math.max(shake-dT,0);
         x = self.x = x + (tx - x) * 4 * dT;
-        y = self.y = y + (ty - y) * 4 * dT;
+        y = self.y = y + (ty - y) * 12 * dT;
         z += (tz - z) * 3 * dT;
-        tz += (canvas.width / 1500 - tz) * 4 * dT;
+        tz += (canvas.width / 1700 - tz) * 4 * dT;
 
         if (getHp() > 0) {
             const px = player.playerHitbox.x;
             const py = player.playerHitbox.y;
-            tx = px + player.getVX() * 0.1;
-            ty = py - 120 + Math.max(player.getVY() * 0.15, 0);
+            const { height } = canvas;
+            const H = height / 6;
+            tx = px + player.getVX() * 0.2;
+            if (py < y - H/2) { ty = py + H/2; }
+            if (py > y + H) { ty = py - H; }
         }
 
         // Should technically be in the render loop
@@ -57,7 +61,7 @@ function Camera(x, y) {
     function aim(tx_, ty_, tz_, jump_) {
         tx = tx_;
         ty = ty_;
-        tz = tz_ * canvas.width / 1500;
+        tz = tz_ * canvas.width / 1700;
         if (jump_) {
             x = tx;
             y = ty;
