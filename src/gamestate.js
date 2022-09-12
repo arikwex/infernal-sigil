@@ -3,6 +3,7 @@ let hp = 3;
 let checkpointId = 0;
 let deathCount = 0;
 let treasures = 0;
+let totalTreasures = 0;
 
 function addHp(h) { hp += h; }
 function getHp() { return hp; }
@@ -14,6 +15,8 @@ function getCheckpointId() { return checkpointId; }
 function getDeathCount() { return deathCount; }
 function foundTreasure() { treasures++; }
 function getTreasures() { return treasures; }
+function getTotalNumTreasure() { return totalTreasures; }
+function setTotalNumTreasure(v) { totalTreasures = v; }
 
 export {
     addHp,
@@ -25,5 +28,7 @@ export {
     getDeathCount,
     foundTreasure,
     getTreasures,
+    getTotalNumTreasure,
+    setTotalNumTreasure,
     respawn,
 }

@@ -1,7 +1,7 @@
 import * as bus from './bus';
 import { boneMeshAsset, headMeshAsset, regionTitles, treasureMeshAsset } from "./assets";
 import { canvas, color, renderMesh, renderText, retainTransform, scaleInPlace } from "./canvas";
-import { getBones, getDeathCount, getHp, getTreasures } from "./gamestate";
+import { getBones, getDeathCount, getHp, getTotalNumTreasure, getTreasures } from "./gamestate";
 import { clamp, copy } from "./utils";
 import { EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_REGION } from './events';
 import { getObjectsByTag, getStartTime } from './engine';
@@ -65,7 +65,7 @@ function HUD() {
             }
 
             // Render Treasure count
-            renderText(`${getTreasures()} / 34`, 80, 103, 30);
+            renderText(`${getTreasures()} / ${getTotalNumTreasure()}`, 80, 103, 30);
             scaleInPlace(0.5, 50, 102);
             renderMesh(treasureMesh, 50, 120, 0, 0, 0, '#742');
         });

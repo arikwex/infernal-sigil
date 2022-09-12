@@ -5,7 +5,7 @@ import { BoundingBox } from './bbox';
 import { copy, inView } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_SPAWN } from './events';
 import { treasureMeshAsset } from './assets';
-import { foundTreasure } from './gamestate';
+import { foundTreasure, getTotalNumTreasure, setTotalNumTreasure } from './gamestate';
 import { getObjectsByTag } from './engine';
 import { TAG_MAP } from './tags';
 
@@ -18,6 +18,7 @@ function Treasure(x, y, t) {
     let phase = 0;
     let hp = 3 * t;
     const myHitbox = BoundingBox(x-25,y-55,0,0,50,55);
+    setTotalNumTreasure(getTotalNumTreasure() + 1);
 
     const baseColor = ['#a63', '#889', '#db1'][t-1];
     const bgColor = ['#742', '#667', '#b90'][t-1];
