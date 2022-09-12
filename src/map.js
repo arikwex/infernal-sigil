@@ -195,7 +195,7 @@ function Map() {
 
     function update() {
         const cam = getObjectsByTag(TAG_CAMERA)[0];
-        for (let q = 0; q < 15*9; q++) {
+        for (let q = 0; q < 15*10; q++) {
             const x = parseInt(cam.x/100 + q % 15 - 7);
             const y = parseInt(cam.y/100) + parseInt(q / 15) - 4;
             const V = get(x, y) << 1;
