@@ -1,4 +1,5 @@
 import { containPt } from "./bbox";
+import { canvas } from "./canvas";
 import { getObjectsByTag } from "./engine";
 import { TAG_PHYSICS } from "./tags";
 
@@ -11,7 +12,9 @@ function copy(arr) {
 }
 
 function inView(x, y, cx, cy) {
-    return !(x > cx + 1100 || y > cy + 700 || x < cx - 1100 || y < cy - 700);
+    const dw = 1100;
+    const dh = canvas.height / canvas.width * 1000;
+    return !(x > cx + dw || y > cy + dh || x < cx - dw || y < cy - dh);
 }
 
 const physicsResult = [0, 0, false, false, false, false];

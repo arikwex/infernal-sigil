@@ -3,6 +3,10 @@ import { headMeshAsset } from "./assets";
 const canvas = document.getElementsByTagName('canvas')[0];
 canvas.width = innerWidth;
 canvas.height = innerHeight;
+window.onresize = () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+};
 let ctx;
 
 function color(c, c2) { ctx.strokeStyle = c; ctx.fillStyle = c2 || c; }

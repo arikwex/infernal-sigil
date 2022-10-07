@@ -15,6 +15,9 @@ function tick(currentFrameMs) {
     
     const dT = Math.min((currentFrameMs - lastFrameMs) * 0.001, 0.018);
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
     
     retainTransform(() => {
         const camera = getObjectsByTag(TAG_CAMERA)[0];
