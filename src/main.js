@@ -23,7 +23,7 @@ async function initialize() {
     });
 
     // Adjust UI elements
-    document.getElementsByTagName('h2')[0].remove();
+    document.getElementsByTagName('h2')[0].innerHTML = '&nbsp;';
     h1.innerText='Loading...';
     await new Promise((r) => setTimeout(r, 100));
 
@@ -31,6 +31,7 @@ async function initialize() {
     const audio = Audio();
     await audio.init();
     document.getElementsByTagName('img')[0].remove();
+    document.getElementsByTagName('h2')[0].remove();
     h1.remove();
     
     // Load the game scene
@@ -66,8 +67,8 @@ function mainMenu() {
             this.anim += 1.5 * dT;
         },
         render: function(ctx) {
-            scaleInPlace(3,canvas.width/2,160);
-            renderMesh(headMeshAsset, canvas.width/2, 160, 0, Math.cos(this.anim) * 0.6, Math.cos(this.anim) * 0.08);
+            scaleInPlace(2.5,canvas.width/2,160);
+            renderMesh(headMeshAsset, canvas.width/2, 146, 0, Math.cos(this.anim) * 0.6, Math.cos(this.anim) * 0.08);
             ctx.setTransform(1,0,0,1,0,0);
         },
     });
