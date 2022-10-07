@@ -1,5 +1,5 @@
 import * as bus from './bus';
-import { start, add, getObjectsByTag } from './engine';
+import { start, add, getObjectsByTag, clear } from './engine';
 import { addBones, addHp, respawn, setCheckpointId } from './gamestate';
 import HUD from './hud';
 import Map from './map';
@@ -9,20 +9,33 @@ import Fireball from './fireball';
 import FlameSFX from './flame-sfx';
 import Audio from './audio';
 import { EVENT_ANY_KEY, EVENT_BONE_COLLECT, EVENT_BONE_SPAWN, EVENT_FIREBALL, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_PLAYER_RESET, EVENT_SFX_FLAME } from './events';
-import { TAG_PLAYER } from './tags';
+import { headMeshAsset } from './assets';
+import { canvas, renderMesh, scaleInPlace } from './canvas';
+import controlsImage from "./controls-image.png";
 
 const gameMap = Map();
 async function initialize() {
     // Loading
     bus.off(EVENT_ANY_KEY, initialize);
     const h1 = document.getElementsByTagName('h1')[0];
+    bus.on('load-progress', (p) => {
+        h1.innerText=`Loading... (${parseInt(p * 100)}%)`;
+    });
+
+    // Adjust UI elements
+    document.getElementsByTagName('h2')[0].remove();
     h1.innerText='Loading...';
     await new Promise((r) => setTimeout(r, 100));
 
-    // Game
-    Audio();
+    // load audio and remove ui after
+    const audio = Audio();
+    await audio.init();
+    document.getElementsByTagName('img')[0].remove();
+    h1.remove();
+    
+    // Load the game scene
+    clear();
     await gameMap.generate();
-
     [gameMap, Camera(), HUD()].map(add);
 
     // FOR DEVELOPMENT
@@ -39,9 +52,27 @@ async function initialize() {
     bus.on(EVENT_PLAYER_HIT, (v) => addHp(-v));
     bus.on(EVENT_PLAYER_CHECKPOINT, (v) => setCheckpointId(v));
     bus.on(EVENT_PLAYER_RESET, (v) => respawn());
-
-    start();
-    h1.remove();
 }
 
-bus.on(EVENT_ANY_KEY, initialize);
+function mainMenu() {
+    // Render controls
+    const img = document.getElementsByTagName('img')[0];
+    img.src = controlsImage;
+
+    // Floaty head
+    add({
+        anim: 0,
+        update: function(dT) {
+            this.anim += 1.5 * dT;
+        },
+        render: function(ctx) {
+            scaleInPlace(3,canvas.width/2,160);
+            renderMesh(headMeshAsset, canvas.width/2, 160, 0, Math.cos(this.anim) * 0.6, Math.cos(this.anim) * 0.08);
+            ctx.setTransform(1,0,0,1,0,0);
+        },
+    });
+
+    start();
+    bus.on(EVENT_ANY_KEY, initialize);
+}
+mainMenu();

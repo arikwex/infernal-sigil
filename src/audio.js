@@ -3,8 +3,8 @@ import { clamp } from './utils';
 import { EVENT_ATTACK, EVENT_ATTACK_HIT, EVENT_BONE_COLLECT, EVENT_BONE_DINK, EVENT_DASH, EVENT_FIREBALL, EVENT_FLAP, EVENT_FOCUS, EVENT_FOCUS_STOP, EVENT_JUMP, EVENT_PLAYER_ABILITY_GRANT, EVENT_PLAYER_CHECKPOINT, EVENT_PLAYER_HIT, EVENT_REGION, EVENT_SWITCH, EVENT_WALK, EVENT_WEB_BOING } from './events';
 
 function Audio() {
-    let audioCtx = null;
-    let sampleRate = null;
+    audioCtx = new AudioContext();
+    sampleRate = audioCtx.sampleRate;
 
     // Sounds to be loaded on init
     let attackSound;
@@ -36,79 +36,97 @@ function Audio() {
     const saw = (i) => ((i % 6.28) - 3.14) / 6.28;
     const sqr = (i) => clamp(Math.sin(i) * 1000, -1, 1);
 
-    function generate(duration, fn) {
+    async function _yield() {
+        return new Promise((r) => setTimeout(r, 0));
+    }
+
+    function setProgress(p) {
+        bus.emit('load-progress', p);
+    }
+
+    async function generate(duration, fn) {
         let audioBuffer = audioCtx.createBuffer(1, sampleRate * duration, sampleRate);
         let buffer = audioBuffer.getChannelData(0);
         let N = audioBuffer.length;
         for (let i = 0; i < N; i++) {
             buffer[i] = fn(i * 44100 / sampleRate) * (1 - i/N);
         }
+        await _yield();
         return audioBuffer;
     }
 
-    function init() {
-        audioCtx = new AudioContext();
-        sampleRate = audioCtx.sampleRate;
-
+    async function init() {
         // Player swipe attack sound
-        attackSound = generate(0.2, (i) => {
+        attackSound = await generate(0.2, (i) => {
             return 0.05 * saw(i/(0.3-220*Math.exp(-i/500)));
         });
+        setProgress(0.05);
         
         // Player HIT ENEMY sound
-        attackHitSound = generate(0.2, (i) => {
+        attackHitSound = await generate(0.2, (i) => {
             return 0.1 * (sin(i/(20+i/150))*0.3 + Math.random());
         });
+        setProgress(0.1);
 
         // Player TOOK DAMAGE sound
-        injuredSound = generate(0.5, (i) => {
+        injuredSound = await generate(0.5, (i) => {
             return 0.1 * (sqr(i/(120+i/250))*0.3 + Math.random())*(sqr(i/600)*0.5+0.5);
         });
+        setProgress(0.15);
 
         // Player walk sound
-        walkSound = generate(0.02, (i) => {
+        walkSound = await generate(0.02, (i) => {
             return 0.06 * sin(i/30) * Math.exp(-i/100);
         });
+        setProgress(0.2);
 
         // Player jump sound
-        jumpSound = generate(0.1, (i) => {
+        jumpSound = await generate(0.1, (i) => {
             return 0.02 * sqr(i/(20+150*Math.exp(-i/1600)));
         });
+        setProgress(0.25);
 
         // Player dash sound
-        dashSound = generate(0.3, (i) => {
+        dashSound = await generate(0.3, (i) => {
             return 0.06 * (sin(i/(14+i*i/1e6)) + Math.random()/2);
         });
+        setProgress(0.3);
 
         // Player flap sound
-        flapSound = generate(0.3, (i) => {
+        flapSound = await generate(0.3, (i) => {
             return 0.05 * sin(i/(200 - i / 30));
         });
+        setProgress(0.35);
 
         // Player fireball sound
-        fireballSound = generate(0.4, (i) => {
+        fireballSound = await generate(0.4, (i) => {
             return 0.03 * (sqr(i/(20 + i / 100) + Math.random()));
         });
+        setProgress(0.4);
 
         // Bone collect sound
-        boneCollectSound = generate(0.06, (i) => {
+        boneCollectSound = await generate(0.06, (i) => {
             return 0.03 * saw(i/4);
         });
+        setProgress(0.45);
 
         // Switch sound
-        switchSound = generate(1.5, (i) => {
+        switchSound = await generate(1.5, (i) => {
             return 0.1 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(110));
         });
+        setProgress(0.5);
 
         // Grant ability sound AND Checkpoint sound
-        grantSound = generate(2, (i) => {
+        grantSound = await generate(2, (i) => {
             return 0.04 * sqr(i/(1+i/900));
         });
+        setProgress(0.55);
 
         // Boing when hitting web sound
-        boingSound = generate(0.6, (i) => {
+        boingSound = await generate(0.6, (i) => {
             return 0.06 * sin(i/(20+sin(i/900)+i/1300));
         });
+        setProgress(0.6);
 
         // MUSIC GENERATION
         musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
@@ -118,6 +136,7 @@ function Audio() {
             drumBuffer[j] += 0.01 * (sin(j/(70 + j/300)) + Math.random() / 3) * (1 - j / W);
             drumBuffer[parseInt(0.5 * sampleRate) + j] += 0.01 * Math.random() * (1 - j / W);
         }
+        await _yield();
 
         musicFocusBuffer = audioCtx.createBuffer(1, sampleRate*3, sampleRate);
         const focusBuffer = musicFocusBuffer.getChannelData(0);
@@ -125,18 +144,54 @@ function Audio() {
             const p = j / sampleRate;
             focusBuffer[j] = clamp(Math.sin(j/120) * (10 + sin(j/10000+p*p*p*4) * 10), -1, 1) * p / 50;
         }
+        await _yield();
+        setProgress(0.65);
 
         // Generate 5 procedural songs
-        musicRegionBuffers = [
-            [[0, 2, 3, 5, 7, 12], 1.3],
-            [[0, 2, 3, 5, 7, 8, 11, 12], 0.5],
-            [[0, 2, 3, 7, 8, 12], 0.9],
-            [[0, 2, 3, 7, 8, 12], 1.2],
-            [[0, 4, 5, 7, 12], 0.8]
-        ].map(genericSongBuilder);
+        const song1 = await genericSongBuilder([[0, 2, 3, 5, 7, 12], 1.3]);
+        setProgress(0.7);
+        const song2 = await genericSongBuilder([[0, 2, 3, 5, 7, 8, 11, 12], 0.5]);
+        setProgress(0.75);
+        const song3 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 0.9]);
+        setProgress(0.8);
+        const song4 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 1.2]);
+        setProgress(0.9);
+        const song5 = await genericSongBuilder([[0, 4, 5, 7, 12], 0.8]);
+        setProgress(0.99);
+        musicRegionBuffers = [song1, song2, song3, song4, song5];
+
+        // bus events
+        bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
+        bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
+        bus.on(EVENT_PLAYER_HIT, play(injuredSound));
+        bus.on(EVENT_WALK, play(walkSound));
+        bus.on(EVENT_JUMP, play(jumpSound));
+        bus.on(EVENT_DASH, play(dashSound));
+        bus.on(EVENT_FLAP, play(flapSound));
+        bus.on(EVENT_FIREBALL, play(fireballSound));
+        bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
+        bus.on(EVENT_BONE_DINK, play(boneCollectSound));
+        bus.on(EVENT_SWITCH, play(switchSound));
+        bus.on(EVENT_REGION, onRegion);
+        bus.on(EVENT_FOCUS, () => {
+            focusNode = audioCtx.createBufferSource();
+            focusNode.buffer = musicFocusBuffer;
+            focusNode.connect(audioCtx.destination);
+            focusNode.start(); 
+        });
+        bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
+        bus.on(EVENT_PLAYER_ABILITY_GRANT, play(grantSound));
+        bus.on(EVENT_PLAYER_CHECKPOINT, play(grantSound));
+        bus.on(EVENT_WEB_BOING, play(boingSound));
+        
+        // crossfade gain nodes
+        gainNodeA = new GainNode(audioCtx);
+        gainNodeA.connect(audioCtx.destination);
+        gainNodeB = new GainNode(audioCtx);
+        gainNodeB.connect(audioCtx.destination);
     }
 
-    function genericSongBuilder([melodySignature, beat], seed) {
+    async function genericSongBuilder([melodySignature, beat], seed) {
         // Song builder
         const song = [];
         const drums = [];
@@ -179,6 +234,7 @@ function Audio() {
                     saw(i / (4.03 * 6*(2**(-note/12))*2)) * 7;
                 buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 500;
             }
+            await _yield();
         }
         for (let q = 0; q < 44; q+=2) {
             for (let j = 0; j < drums.length; j++) {
@@ -190,6 +246,7 @@ function Audio() {
                     buffer[k + startOffset] += drumBuffer[k + noteOffset];
                 }
             }
+            await _yield();
         }
         return targetBuffer;
     }
@@ -200,6 +257,7 @@ function Audio() {
             source.buffer = audioBuffer;
             source.connect(audioCtx.destination);
             source.start();
+            console.log(audioCtx.destination);
         }
     };
 
@@ -222,35 +280,9 @@ function Audio() {
         usingA = !usingA;
     }
 
-    // Setup gogogo
-    init();
-    bus.on(EVENT_ATTACK, ([,,,f]) => (f ? 0 : play(attackSound)()));
-    bus.on(EVENT_ATTACK_HIT, play(attackHitSound));
-    bus.on(EVENT_PLAYER_HIT, play(injuredSound));
-    bus.on(EVENT_WALK, play(walkSound));
-    bus.on(EVENT_JUMP, play(jumpSound));
-    bus.on(EVENT_DASH, play(dashSound));
-    bus.on(EVENT_FLAP, play(flapSound));
-    bus.on(EVENT_FIREBALL, play(fireballSound));
-    bus.on(EVENT_BONE_COLLECT, play(boneCollectSound));
-    bus.on(EVENT_BONE_DINK, play(boneCollectSound));
-    bus.on(EVENT_SWITCH, play(switchSound));
-    bus.on(EVENT_REGION, onRegion);
-    bus.on(EVENT_FOCUS, () => {
-        focusNode = audioCtx.createBufferSource();
-        focusNode.buffer = musicFocusBuffer;
-        focusNode.connect(audioCtx.destination);
-        focusNode.start(); 
-    });
-    bus.on(EVENT_FOCUS_STOP, () => focusNode.stop());
-    bus.on(EVENT_PLAYER_ABILITY_GRANT, play(grantSound));
-    bus.on(EVENT_PLAYER_CHECKPOINT, play(grantSound));
-    bus.on(EVENT_WEB_BOING, play(boingSound));
-    
-    gainNodeA = new GainNode(audioCtx);
-    gainNodeA.connect(audioCtx.destination);
-    gainNodeB = new GainNode(audioCtx);
-    gainNodeB.connect(audioCtx.destination);
+    return {
+        init,
+    }
 }
 
 export default Audio;

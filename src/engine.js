@@ -21,12 +21,18 @@ function tick(currentFrameMs) {
     
     retainTransform(() => {
         const camera = getObjectsByTag(TAG_CAMERA)[0];
-        camera.set(ctx);
+        if (camera) {
+            camera.set(ctx);
+        }
 
         objectsToRemove.length = 0;
         gameObjects.map((g) => { if (g.update?.(dT)) { objectsToRemove.push(g); } });
         if (objectsToRemove.length) { remove(objectsToRemove); }
-        gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
+        if (camera) {
+            gameObjects.map((g) => { if (g.inView(camera.x, camera.y)) { g.render?.(ctx); }});
+        } else {
+            gameObjects.map((g) => { g.render?.(ctx); });
+        }
         lastFrameMs = currentFrameMs;
     });
     requestAnimationFrame(tick);

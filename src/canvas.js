@@ -63,17 +63,6 @@ ctx = canvas.getContext('2d');
 let link = document.querySelector("link");
 link.href = favicon.toDataURL();
 
-// Base drawing parameters
-ctx.textBaseline = 'middle';
-ctx.lineJoin = 'round';
-ctx.lineCap = 'round';
-ctx.imageSmoothingEnabled = false;
-
-// Render "main menu"
-scaleInPlace(3,canvas.width/2,160);
-renderMesh(headMeshAsset, canvas.width/2, 160, 0, 0, 0);
-ctx.setTransform(1,0,0,1,0,0);
-
 export {
     canvas,
     ctx,

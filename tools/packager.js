@@ -39,8 +39,9 @@ module.exports = {
         var html = '';
         html += '<html><title>Infernal Throne</title>';
         html += '<link rel="shortcut icon"/>';
-        html += '<style>body{overflow:hidden;background:#000;margin:0px;font-family:sans-serif;}h1{color:#fff;text-align:center;margin-top:150px;}</style>';
-        html += '<h1>🔥 INFERNAL THRONE 👑<br>(Keyboard & Gamepad support)<br>Press any key</h1><canvas/><script>';
+        html += '<style>body{overflow:hidden;background:#000;margin:0px;font-family:sans-serif;}h1{color:#fff;text-align:center;margin-top:30px;}';
+        html += 'img{position:fixed;top:350px;width:600px;left:50%;margin-left:-300px;}h2{color:#666;font-style:italic;text-align:center;}</style>';
+        html += '<h1>🔥 INFERNAL THRONE 👑</h1><h2>(Press any key to start)</h2><canvas></canvas><img src=""/><script>';
         html += fs.readFileSync(dest.bundle);
         html += '</script>';
         fs.writeFileSync(dest.html, html);

@@ -1,5 +1,6 @@
 const path = require('path');
 const esbuild = require('esbuild');
+const fs = require('fs');
 const { minify, optimize, html, zip, stats } = require('./packager');
 const { buildMap, buildMapIndex } = require('./map-compiler');
 
@@ -15,9 +16,16 @@ let postBuildPlugin = {
             buildMapIndex('./src/game-map.png');
         });
 
-        build.onLoad({ filter: /\.png$/ }, (args) => {
+        build.onLoad({ filter: /game-map\.png$/ }, (args) => {
             return {
                 contents: buildMap(args.path),
+                loader: 'dataurl',
+            }
+        })
+
+        build.onLoad({ filter: /controls-image\.png$/ }, (args) => {
+            return {
+                contents: fs.readFileSync(args.path),
                 loader: 'dataurl',
             }
         })
