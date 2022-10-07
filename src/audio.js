@@ -60,73 +60,67 @@ function Audio() {
         attackSound = await generate(0.2, (i) => {
             return 0.05 * saw(i/(0.3-220*Math.exp(-i/500)));
         });
-        setProgress(0.05);
         
         // Player HIT ENEMY sound
         attackHitSound = await generate(0.2, (i) => {
             return 0.1 * (sin(i/(20+i/150))*0.3 + Math.random());
         });
-        setProgress(0.1);
+        setProgress(0.05);
 
         // Player TOOK DAMAGE sound
         injuredSound = await generate(0.5, (i) => {
             return 0.1 * (sqr(i/(120+i/250))*0.3 + Math.random())*(sqr(i/600)*0.5+0.5);
         });
-        setProgress(0.15);
 
         // Player walk sound
         walkSound = await generate(0.02, (i) => {
             return 0.06 * sin(i/30) * Math.exp(-i/100);
         });
-        setProgress(0.2);
+        setProgress(0.1);
 
         // Player jump sound
         jumpSound = await generate(0.1, (i) => {
             return 0.02 * sqr(i/(20+150*Math.exp(-i/1600)));
         });
-        setProgress(0.25);
 
         // Player dash sound
         dashSound = await generate(0.3, (i) => {
             return 0.06 * (sin(i/(14+i*i/1e6)) + Math.random()/2);
         });
-        setProgress(0.3);
+        setProgress(0.15);
 
         // Player flap sound
         flapSound = await generate(0.3, (i) => {
             return 0.05 * sin(i/(200 - i / 30));
         });
-        setProgress(0.35);
 
         // Player fireball sound
         fireballSound = await generate(0.4, (i) => {
             return 0.03 * (sqr(i/(20 + i / 100) + Math.random()));
         });
-        setProgress(0.4);
+        setProgress(0.2);
 
         // Bone collect sound
         boneCollectSound = await generate(0.06, (i) => {
             return 0.03 * saw(i/4);
         });
-        setProgress(0.45);
 
         // Switch sound
         switchSound = await generate(1.5, (i) => {
             return 0.1 * (sqr(i/800) * 0.5 + 0.5) * saw(i/(110));
         });
-        setProgress(0.5);
+        setProgress(0.25);
 
         // Grant ability sound AND Checkpoint sound
         grantSound = await generate(2, (i) => {
             return 0.04 * sqr(i/(1+i/900));
         });
-        setProgress(0.55);
 
         // Boing when hitting web sound
         boingSound = await generate(0.6, (i) => {
             return 0.06 * sin(i/(20+sin(i/900)+i/1300));
         });
-        setProgress(0.6);
+        setProgress(0.3);
 
         // MUSIC GENERATION
         musicDrumBuffer = audioCtx.createBuffer(1, sampleRate, sampleRate);
@@ -145,18 +139,18 @@ function Audio() {
             focusBuffer[j] = clamp(Math.sin(j/120) * (10 + sin(j/10000+p*p*p*4) * 10), -1, 1) * p / 50;
         }
         await _yield();
-        setProgress(0.65);
+        setProgress(0.35);
 
         // Generate 5 procedural songs
-        const song1 = await genericSongBuilder([[0, 2, 3, 5, 7, 12], 1.3]);
+        const song1 = await genericSongBuilder([[0, 2, 3, 5, 7, 12], 1.3], 0, 0.35, 0.45);
         setProgress(0.7);
-        const song2 = await genericSongBuilder([[0, 2, 3, 5, 7, 8, 11, 12], 0.5]);
+        const song2 = await genericSongBuilder([[0, 2, 3, 5, 7, 8, 11, 12], 0.5], 1, 0.45, 0.6);
         setProgress(0.75);
-        const song3 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 0.9]);
+        const song3 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 0.9], 2, 0.6, 0.7);
         setProgress(0.8);
-        const song4 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 1.2]);
+        const song4 = await genericSongBuilder([[0, 2, 3, 7, 8, 12], 1.2], 3, 0.7, 0.85);
         setProgress(0.9);
-        const song5 = await genericSongBuilder([[0, 4, 5, 7, 12], 0.8]);
+        const song5 = await genericSongBuilder([[0, 4, 5, 7, 12], 0.8], 4, 0.85, 0.99);
         setProgress(0.99);
         musicRegionBuffers = [song1, song2, song3, song4, song5];
 
@@ -191,7 +185,7 @@ function Audio() {
         gainNodeB.connect(audioCtx.destination);
     }
 
-    async function genericSongBuilder([melodySignature, beat], seed) {
+    async function genericSongBuilder([melodySignature, beat], seed, prog1, prog2) {
         // Song builder
         const song = [];
         const drums = [];
@@ -203,6 +197,7 @@ function Audio() {
             [((seed * seed * 3 + seed * 9) * 0.5) % 2, (seed+1) % 2],
             [((seed * seed * 2 + seed * 11) * 0.5) % 2, (seed+1) % 2],
         );
+        setProgress(prog1);
         for (let i = 0; i < 3; i++) {
             const o = i * 8;
             const q = [0,3,-5][i];
@@ -235,6 +230,7 @@ function Audio() {
                 buffer[baseIdx + i] += v * Math.min(envelope * Math.exp(-envelope * (10 + amp * 7)) * 100, 1) / 500;
             }
             await _yield();
+            setProgress(prog1 + (prog2 - prog1) * (i/song.length) * 0.8);
         }
         for (let q = 0; q < 44; q+=2) {
             for (let j = 0; j < drums.length; j++) {
@@ -247,6 +243,7 @@ function Audio() {
                 }
             }
             await _yield();
+            setProgress(prog1 + (prog2 - prog1) * (0.8 + 0.2 * (q/44)));
         }
         return targetBuffer;
     }
@@ -257,7 +254,6 @@ function Audio() {
             source.buffer = audioBuffer;
             source.connect(audioCtx.destination);
             source.start();
-            console.log(audioCtx.destination);
         }
     };
 

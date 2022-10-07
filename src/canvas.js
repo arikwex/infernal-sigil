@@ -6,6 +6,7 @@ canvas.height = innerHeight;
 window.onresize = () => {
     canvas.width = innerWidth;
     canvas.height = innerHeight;
+    ctx.imageSmoothingEnabled = false;
 };
 let ctx;
 
@@ -62,6 +63,7 @@ renderMesh(headMeshAsset, 32, 48, 0, 0, 0);
 ctx = canvas.getContext('2d');
 let link = document.querySelector("link");
 link.href = favicon.toDataURL();
+ctx.imageSmoothingEnabled = false;
 
 export {
     canvas,

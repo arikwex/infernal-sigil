@@ -13,7 +13,7 @@ function copy(arr) {
 
 function inView(x, y, cx, cy) {
     const dw = 1100;
-    const dh = canvas.height / canvas.width * 1000;
+    const dh = canvas.height / canvas.width * 1400;
     return !(x > cx + dw || y > cy + dh || x < cx - dw || y < cy - dh);
 }
 
