@@ -188,7 +188,7 @@ module.exports = {
                 const idxBase = (png.width * y + x)
                 const idx = idxBase << 2;
                 const v = (data[idx] << 16) | (data[idx + 1] << 8) | data[idx + 2];
-                
+
                 if (uniqueEntries[v] == undefined) {
                     uniqueEntries[v] = entryId++;
                 }
@@ -217,16 +217,11 @@ module.exports = {
             }
         }
 
-        // Pack it back into a PNG data
-        let buff = PNG.sync.write(png, {
-            filterType: 0,
-            colorType: 0,
-            bitDepth: 8,
-            bgColor: { red: 0, green: 0, blue: 0 },
-        });
-
-        // Write a PNG file
-        fs.writeFileSync('./dist/processed-map.png', buff);
-        return buff;
+        const obj = {
+            data: [...data],
+            width: png.width,
+            height: png.height,
+        };
+        return JSON.stringify(obj);
     }
 };

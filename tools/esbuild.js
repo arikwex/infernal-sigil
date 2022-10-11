@@ -19,7 +19,7 @@ let postBuildPlugin = {
         build.onLoad({ filter: /game-map\.png$/ }, (args) => {
             return {
                 contents: buildMap(args.path),
-                loader: 'dataurl',
+                loader: 'json',
             }
         })
 

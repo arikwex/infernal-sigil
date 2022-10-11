@@ -12,7 +12,6 @@ import Web from './web';
 import Gate from './gate';
 
 function Map() {
-    let img = new Image();
     let m = document.createElement('canvas');
     let minimapCtx;
     let data;
@@ -27,15 +26,9 @@ function Map() {
     const themeLookup = {};
 
     async function generate() {
-        await new Promise((r) => {
-            img.onload = r;
-            img.src = terrain;
-        });
-
         // Extract map data
-        ctx.drawImage(img, 0, 0);
-        W = img.width; H = img.height;
-        data = ctx.getImageData(0, 0, W, H).data;
+        W = terrain.width; H = terrain.height;
+        data = Array.from(terrain.data);
 
         // Prepare minimap
         m.width = m.height = 128;
