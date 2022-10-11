@@ -14,7 +14,7 @@ function Decoration(x, y, t) {
     let shapeMeshes = [];
     let scale = 1;
     let flip = Math.random() > 0.5 ? 1 : -1;
-    
+
     // TORCH
     if (t == 0) {
         shapeMeshes.push([
